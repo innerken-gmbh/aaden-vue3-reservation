@@ -1,0 +1,36 @@
+{
+  "name": "aaden-vue3-reservation",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "biewangle": "^1.0.12",
+    "dayjs": "^1.11.10",
+    "hillo": "^2.0.32",
+    "lodash-es": "^4.17.21",
+    "pinia": "^2.1.7",
+    "vue": "^3.3.11",
+    "vue-draggable-resizable": "^3.0.0-beta.2",
+    "vue-router": "4",
+    "vuetify": "^3.5.1"
+  },
+  "devDependencies": {
+    "@mdi/font": "^7.4.47",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "eslint": ">=5.16.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^9.20.1",
+    "typescript": "*",
+    "vite": "^5.0.8"
+  }
+}
