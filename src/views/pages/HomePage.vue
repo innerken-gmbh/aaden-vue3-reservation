@@ -53,10 +53,10 @@ reservationInfo.reload()
 
     <div
       style="width: calc(100% + 12px);overflow-x: scroll"
-      class="mt-8"
+      class="mt-8 ml-n4 pl-4"
     >
       <div
-        style="display: grid;grid-gap: 0;position: relative"
+        style="display: grid;grid-gap: 0;position: relative;"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
         }"
@@ -66,7 +66,7 @@ reservationInfo.reload()
           v-for="(t,i) in reservationInfo.bigTime"
         >
           <div
-            class="pa-1 text-body-1 font-weight-black d-flex align-center"
+            class="pa-1 text-body-1 d-flex align-center"
             style="width: 100%;height: 100%;grid-column:span 4;
              box-sizing:border-box;
 "
@@ -92,7 +92,6 @@ reservationInfo.reload()
         <div
           class="gridBackground"
           :style="{
-
             height:(reservationInfo.containerHeight+1)+'px',
             width: reservationInfo.containerWidth+'px',
             gridColumn:'0 / '+reservationInfo.timeSlots.length,
@@ -114,7 +113,7 @@ reservationInfo.reload()
 .gridBackground {
   background: linear-gradient(to right, rgba(0, 0, 0, .1) 1px, transparent 1px),
   linear-gradient(to bottom, rgba(0, 0, 0, .1) 1px, transparent 1px),
-  linear-gradient(to right, rgba(0, 0, 0, .2) 2px, transparent 1px),
+  linear-gradient(to right, rgba(0, 0, 0, .1) 2px, transparent 1px),
   linear-gradient(to right, rgba(0, 0, 0, .05) 3px, transparent 1px);
   background-size: 40px 24px,
   40px 24px,
