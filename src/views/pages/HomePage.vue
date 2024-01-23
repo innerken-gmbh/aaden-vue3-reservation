@@ -52,11 +52,47 @@ reservationInfo.reload()
     </v-row>
 
     <div
-      style="width: calc(100% + 12px);overflow-x: scroll"
-      class="mt-8 ml-n4 pl-4"
+      style="width: calc(100% + 24px);"
+      class="mt-8 ml-n4 pl-4 d-flex align-start"
     >
+      <v-card
+        tile
+        rounded="lg"
+        :style="{
+          gridTemplateRows:reservationInfo.ySize+'px',
+        }"
+        style="position: sticky;display:grid;grid-auto-flow: row;
+            left: 0;top:24px; z-index: 4;"
+        flat
+      >
+        <div />
+        <div
+          :style="{height:reservationInfo.ySize+'px'}"
+          class="px-2 text-caption font-weight-black bg-grey-lighten-4"
+        >
+          Seated
+        </div>
+        <div
+          :class="i%2===0?'grey lighten-2':'grey lighten-4'"
+          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2 bg-grey-lighten-4"
+          :style="{height:reservationInfo.ySize+'px'}"
+          style="width: 100%"
+          v-for="(t,i) in reservationInfo.tableList"
+          :key="t.id"
+        >
+          {{ t.tableName }}
+          <v-spacer />
+          <v-icon color="green">
+            mdi-circle-small
+          </v-icon>
+          <div class="font-weight-thin text-caption">
+            {{ t.tableSeatCount }}
+          </div>
+        </div>
+      </v-card>
       <div
-        style="display: grid;grid-gap: 0;position: relative;"
+        class="flex-grow-1"
+        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
         }"
@@ -99,6 +135,29 @@ reservationInfo.reload()
           }"
           style="position: absolute;"
         />
+        <v-card
+          color="transparent"
+          flat
+          tile
+          :width="containerWidth"
+          :height="containerHeight"
+          style="position: absolute;"
+          :style="{
+            gridColumn:'0 / '+timeSlot.length,
+            gridRow:'3 / '+(tableList.length+6)
+          }"
+        >
+          <reservation-card
+            v-for="r in reservations"
+            :key="r.id"
+            :reservation-info="r"
+            :x-size="xSize"
+            :y-size="ySize"
+            @checkin="confirmReservation(r.id)"
+            @open="toggleActiveReservation(r)"
+            @dragstop="(...args)=>onDrag(r,...args)"
+          />
+        </v-card>
       </div>
     </div>
   </v-container>
