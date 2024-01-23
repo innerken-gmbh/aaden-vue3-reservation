@@ -53,7 +53,7 @@ reservationInfo.reload()
 
     <div
       style="width: calc(100% + 12px);overflow-x: scroll"
-      class="mt-4"
+      class="mt-8"
     >
       <div
         style="display: grid;grid-gap: 0;position: relative"
@@ -66,10 +66,9 @@ reservationInfo.reload()
           v-for="(t,i) in reservationInfo.bigTime"
         >
           <div
-            class="bg-grey-lighten-2 pa-1 text-caption d-flex align-center"
+            class="pa-1 text-body-1 font-weight-black d-flex align-center"
             style="width: 100%;height: 100%;grid-column:span 4;
              box-sizing:border-box;
-             border-left: 3px inset rgba(0,0,0,.2) !important;
 "
           >
             {{ t }}
@@ -81,7 +80,7 @@ reservationInfo.reload()
         >
           <div
 
-            class="bg-grey-lighten-5 pa-1 d-flex align-center justify-center text-center text-body-2"
+            class="bg-grey-lighten-5 pa-1 d-flex align-center justify-center text-center text-caption"
             style="width: 100%;height: 100%;grid-column:span 2;"
             :style="{
               borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':'2px inset rgba(0,0,0,.2) !important'

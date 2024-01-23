@@ -6,7 +6,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import hillo from "hillo";
 
 
-hillo.initial('http://192.168.1.178/PHP/')
+hillo.initial('http://ik0001.ngrok.aaden.io/PHP/')
 createApp(App)
     .use(vuetify)
     .use(pinia)
