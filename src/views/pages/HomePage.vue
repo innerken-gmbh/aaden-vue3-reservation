@@ -2,6 +2,8 @@
 import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
 import {dateFormat} from "../../dataLayer/repository/dateRepo.js";
+import ReservationCard from "../items/ReservationCard.vue";
+
 
 
 const reservationInfo = useReservationStore()
@@ -148,14 +150,11 @@ reservationInfo.reload()
           }"
         >
           <reservation-card
-            v-for="r in reservations"
+            v-for="r in reservationInfo.reservationList"
             :key="r.id"
             :reservation-info="r"
-            :x-size="xSize"
-            :y-size="ySize"
-            @checkin="confirmReservation(r.id)"
-            @open="toggleActiveReservation(r)"
-            @dragstop="(...args)=>onDrag(r,...args)"
+            :x-size="reservationInfo.xSize"
+            :y-size="reservationInfo.ySize"
           />
         </v-card>
       </div>

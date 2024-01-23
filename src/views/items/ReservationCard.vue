@@ -12,7 +12,7 @@
     :y="reservationInfo.grid.y"
     :w="reservationInfo.grid.w"
     class-name-dragging="dragging"
-    @dragstop="(...args)=>$emit('dragstop',...args)"
+    @dragstop="(...args)=>emit('dragstop',...args)"
   >
     <v-menu
       offset-y
@@ -36,7 +36,7 @@
             small
             class="mr-2"
             color="white"
-            @click.stop="$emit('open')"
+            @click.stop="emit('open')"
           >
             mdi-arrow-expand
           </v-icon>
@@ -91,7 +91,7 @@
           <v-spacer />
           <v-icon
             class="grey pa-1 lighten-4 rounded-xl"
-            @click="$emit('checkin')"
+            @click="emit('checkin')"
           >
             mdi-location-enter
           </v-icon>
@@ -101,29 +101,22 @@
   </vue-draggable-resizable>
 </template>
 
-<script>
-export default {
-  name: 'ReservationCard',
-  props: {
-    reservationInfo: {},
-    xSize: {},
-    ySize: {}
-  },
-  emits: ['open', 'dragstop', 'checkin'],
-  computed: {
-    color() {
-      if (this.checkedIn) {
-        return 'complete'
-      } else if (this.reservationInfo.cancelled === '1') {
-        return 'red lighten-2'
-      }
-      return 'gradient'
-    },
-    checkedIn() {
-      return this.reservationInfo.completed === '1'
-    }
+<script setup>
+import {computed} from "vue";
+
+const props=defineProps(['reservationInfo','xSize','ySize'])
+const emit=defineEmits(['open', 'dragstop', 'checkin'])
+const checkedIn=computed(()=>{
+  return props.reservationInfo.completed==='1'
+})
+const color=computed(()=>{
+  if (checkedIn.value) {
+    return 'complete'
+  } else if (props.reservationInfo.cancelled === '1') {
+    return 'red lighten-2'
   }
-}
+  return 'gradient'
+})
 </script>
 
 <style scoped>
