@@ -24,8 +24,8 @@
           v-on="on"
           v-bind="attrs"
           :height="ySize"
-          :color="color"
-          class="pa-2 white--text text-caption d-flex align-center reservationCard"
+          :class="color"
+          class="pa-2 text-white text-caption d-flex align-center reservationCard"
           style="position: absolute;width: 100%"
           :style="{
             gridColumn:reservationInfo.grid.xStart+' / '+reservationInfo.grid.xEnd,
@@ -35,7 +35,6 @@
           <v-icon
             small
             class="mr-2"
-            color="white"
             @click.stop="emit('open')"
           >
             mdi-arrow-expand
@@ -50,7 +49,6 @@
             <v-icon
               small
               class="mx-2"
-              color="white"
             >
               mdi-human-child
             </v-icon>
@@ -104,25 +102,23 @@
 <script setup>
 import {computed} from "vue";
 
-const props=defineProps(['reservationInfo','xSize','ySize'])
-const emit=defineEmits(['open', 'dragstop', 'checkin'])
-const checkedIn=computed(()=>{
-  return props.reservationInfo.completed==='1'
+const props = defineProps(['reservationInfo', 'xSize', 'ySize'])
+const emit = defineEmits(['open', 'dragstop', 'checkin'])
+const checkedIn = computed(() => {
+  return props.reservationInfo.completed === '1'
 })
-const color=computed(()=>{
+const color = computed(() => {
+  console.log(props.reservationInfo)
   if (checkedIn.value) {
     return 'complete'
   } else if (props.reservationInfo.cancelled === '1') {
-    return 'red lighten-2'
+    return 'bg-red-lighten-2'
   }
   return 'gradient'
 })
 </script>
 
 <style scoped>
-.reservationCard:hover {
-  background-color: black !important;
-}
 
 .gradient {
   background: #3a7bd5; /* fallback for old browsers */

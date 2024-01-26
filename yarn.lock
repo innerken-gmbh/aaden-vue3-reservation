@@ -2186,6 +2186,13 @@ vue-draggable-resizable@^3.0.0-beta.2:
   resolved "https://registry.yarnpkg.com/vue-draggable-resizable/-/vue-draggable-resizable-3.0.0-beta.2.tgz#7f47bd8dca01c11b2c830b77d834fd477d88090c"
   integrity sha512-BVk7rKw5OdZh9jT+bHQd+wPWZMBTAkBnfmjNRFbZFPsTSwndAvAdV7YI7IJtyDL3Qwq9XNYjSl5wi7/8ivs5mw==
 
+vue-dragscroll@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/vue-dragscroll/-/vue-dragscroll-4.0.5.tgz#b07bbbc0300a5dee892bc48b000942a93d258cd8"
+  integrity sha512-1V4/2rUlNTM8vYC6/y2yfjKjOynuCfp1VRpj+IOGCcj8FWl4/3FMs9GBUJShd5mLoD4BvhY1xveezeuD+9i/mw==
+  dependencies:
+    vue "^3.2.37"
+
 vue-eslint-parser@^9.4.0:
   version "9.4.1"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-9.4.1.tgz#3375106ba45f65c4d6f59ec6635a1f51d0726fa2"
@@ -2206,7 +2213,7 @@ vue-router@4:
   dependencies:
     "@vue/devtools-api" "^6.5.0"
 
-vue@^3.3.11:
+vue@^3.2.37, vue@^3.3.11:
   version "3.4.15"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.4.15.tgz#91f979844ffca9239dff622ba4c79c5d5524b88c"
   integrity sha512-jC0GH4KkWLWJOEQjOpkqU1bQsBwf4R1rsFtw5GQJbjHVKWDzO6P0nWWBTmjp1xSemAioDFj1jdaK1qa3DnMQoQ==

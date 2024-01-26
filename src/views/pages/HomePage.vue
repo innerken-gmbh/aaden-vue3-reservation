@@ -5,7 +5,6 @@ import {dateFormat} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 
 
-
 const reservationInfo = useReservationStore()
 reservationInfo.reload()
 
@@ -94,6 +93,7 @@ reservationInfo.reload()
       </v-card>
       <div
         class="flex-grow-1"
+        v-dragscroll="true"
         style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
@@ -141,12 +141,12 @@ reservationInfo.reload()
           color="transparent"
           flat
           tile
-          :width="containerWidth"
-          :height="containerHeight"
+          :width="reservationInfo.containerWidth"
+          :height="reservationInfo.containerHeight"
           style="position: absolute;"
           :style="{
-            gridColumn:'0 / '+timeSlot.length,
-            gridRow:'3 / '+(tableList.length+6)
+            gridColumn:'0 / '+reservationInfo.timeSlots.length,
+            gridRow:'3 / '+(reservationInfo.tableList.length+6)
           }"
         >
           <reservation-card

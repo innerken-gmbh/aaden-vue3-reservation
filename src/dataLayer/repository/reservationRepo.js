@@ -50,7 +50,7 @@ export const useReservationStore = defineStore('reservation', {
     actions: {
         async loadReservations() {
             this.tableList = await loadReservationTableInfo()
-            this.reservations = (await getReservation(this.date)).map(it => {
+            this.reservationList = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
                     .format('HH:mm') === t)
                 const xStopIndex = this.timeSlots.findIndex(t => dayjs(it.toDateTime)
@@ -64,6 +64,7 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
+            console.log(this.reservationList)
         },
         async reload() {
             await this.loadReservations()

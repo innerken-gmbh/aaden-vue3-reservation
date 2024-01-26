@@ -37,5 +37,11 @@ import HomePage from './views/pages/HomePage.vue';
 <style scoped>
 </style>
 <style>
-@import 'vue-draggable-resizable/style.css';
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  user-select: none;
+}
 </style>
