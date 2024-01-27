@@ -1,14 +1,14 @@
 <script setup>
-import {useHomePageControllerStore, useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
 import {dateFormat} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
-import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
-import FormContainer from "../items/FormContainer.vue";
+import NewReservationDialog from "./NewReservationDialog.vue";
 
 
 const reservationInfo = useReservationStore()
-const controller = useHomePageControllerStore()
+
+
 reservationInfo.reload()
 
 
@@ -153,121 +153,7 @@ reservationInfo.reload()
       </div>
     </div>
   </v-container>
-  <v-dialog
-    persistent
-    max-width="500"
-    v-model="controller.showNewReservationModal"
-  >
-    <v-card class="pa-6 py-8">
-      <div class="text-h5 font-weight-black d-flex align-center">
-        Create a new reservation
-        <v-spacer />
-        <v-icon
-          size="32"
-        >
-          mdi-calendar-clock
-        </v-icon>
-      </div>
-      <template v-if="controller.reservationStep===0">
-        <div class="text-body-1 mt-12">
-          <div class="d-flex align-end">
-            <div class="text-body-2">
-              Person amount
-              <div class="text-h4 font-weight-black">
-                {{ controller.personCount }}
-              </div>
-            </div>
-            <v-spacer />
-            <v-btn
-              flat
-              @click="controller.minusPerson()"
-              icon="mdi-minus"
-              :rounded="0"
-              class="bg-grey-darken-4"
-            />
-            <v-btn
-              flat
-              @click="controller.personCount++"
-              icon="mdi-plus"
-              :rounded="0"
-              class="bg-grey-darken-3"
-            />
-          </div>
-          <div class="mt-8">
-            <div class="d-flex">
-              <div class="text-body-2">
-                Date
-              </div>
-            </div>
-            <v-select
-              class="mt-1"
-              variant="outlined"
-            />
-          </div>
-          <div>
-            <div class="d-flex">
-              <div class="text-body-2">
-                Time
-              </div>
-            </div>
-            <v-select
-              class="mt-1"
-              variant="outlined"
-            />
-          </div>
-        </div>
-        <v-btn
-          @click="controller.reservationStep=1"
-          size="large"
-          color="white"
-          class="mt-4"
-        >
-          Create Reservation
-        </v-btn>
-      </template>
-      <template v-else-if="controller.reservationStep===1">
-        <div class="text-body-1 mt-12">
-          <inline-two-row-container>
-            <form-container label="First Name">
-              <v-text-field
-                placeholder="Max.."
-              />
-            </form-container>
-            <form-container label="Last Name">
-              <v-text-field
-                placeholder="Mustermann.."
-              />
-            </form-container>
-          </inline-two-row-container>
-          <form-container label="Email">
-            <v-text-field
-              placeholder="Max.mustermann@example.com"
-            />
-          </form-container>
-          <form-container label="Tel">
-            <v-text-field
-              placeholder="0123-456789"
-            />
-          </form-container>
-          <form-container label="Note">
-            <v-textarea
-              auto-grow
-              placeholder="0123-456789"
-            />
-          </form-container>
-        </div>
-
-        <v-btn
-          @click="controller.reservationStep=1"
-          size="large"
-          color="white"
-          class="mt-4"
-        >
-          Create Reservation
-        </v-btn>
-      </template>
-    </v-card>
-  </v-dialog>
+  <new-reservation-dialog />
 </template>
 
 <style scoped>

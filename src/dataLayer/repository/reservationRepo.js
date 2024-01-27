@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {sliceTime, today} from "./dateRepo.js";
+import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
 import {getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
@@ -77,7 +77,8 @@ export const useHomePageControllerStore = defineStore('homePageController', {
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
-        startTime: new Date(),
+        date: dayjs().format(dateFormat),
+        startTime: dayjs().format('HH:mm'),
         timeGap: [],
         otherTime: [],
         adultCount: 1,
@@ -97,6 +98,32 @@ export const useHomePageControllerStore = defineStore('homePageController', {
             if (this.personCount > 1) {
                 this.personCount--
             }
+        }
+    }
+})
+
+export const useDatePickerStore = defineStore('datePicker', {
+    state: () => {
+        return {
+            lastDate: null,
+            currentDate: new Date(),
+            showPicker: false,
+            resolve: null,
+        }
+    },
+    actions: {
+        async selectDate() {
+            return new Promise(resolve => {
+                this.showPicker = true
+                this.resolve = resolve
+            })
+        },
+        confirm() {
+            if (this.resolve) {
+                this.resolve(dayjs(this.currentDate).format(dateFormat))
+                this.showPicker = false
+            }
+
         }
     }
 })

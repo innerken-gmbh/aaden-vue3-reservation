@@ -1,6 +1,7 @@
 <script setup>
 import HomePage from './views/pages/HomePage.vue';
 import {useHomePageControllerStore} from "./dataLayer/repository/reservationRepo";
+import GlobalDatePicker from "./views/items/GlobalDatePicker.vue";
 
 const homeController = useHomePageControllerStore()
 </script>
@@ -35,6 +36,7 @@ const homeController = useHomePageControllerStore()
     <v-main>
       <home-page />
     </v-main>
+    <global-date-picker />
   </v-app>
 </template>
 
