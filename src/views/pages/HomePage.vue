@@ -54,40 +54,12 @@ reservationInfo.reload()
       </v-col>
     </v-row>
     <div
-      style="width: calc(100% + 24px);position: relative"
-      class="mt-8 ml-n4 pl-4 d-flex align-start"
+      style="width: calc(100% + 24px);position: relative;overflow-y: scroll;height: calc(100vh - 120px);"
+      class="mt-8 ml-n4 pl-4 d-flex align-start ctr"
     >
-      <v-card
-        tile
-        class="pl-2 pr-2"
-        :style="{
-          gridTemplateRows:reservationInfo.ySize+'px',
-        }"
-        style="position: absolute;display:grid;grid-auto-flow: row;
-            left: 16px;top:72px; z-index: 4;background: linear-gradient(to right , rgba(0,0,0,.7), rgba(0,0,0,.1))"
-        flat
-      >
-        <div
-          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
-          :style="{height:reservationInfo.ySize+'px'}"
-          style="width: 100%"
-          v-for="(t) in reservationInfo.tableList"
-          :key="t.id"
-        >
-          {{ t.tableName }}
-          <v-spacer />
-          <v-icon color="green">
-            mdi-circle-small
-          </v-icon>
-          <div class="font-weight-thin text-caption">
-            {{ t.tableSeatCount }}
-          </div>
-        </div>
-      </v-card>
       <div
         class="flex-grow-1"
-        v-dragscroll="true"
-        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll"
+        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;height: 80vh;"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
         }"
@@ -97,8 +69,8 @@ reservationInfo.reload()
           v-for="(t,i) in reservationInfo.bigTime"
         >
           <div
-            class="pa-2 text-body-1 d-flex align-center"
-            style="width: 100%;height: 100%;grid-column:span 4;
+            class="pa-2 text-body-1 d-flex align-center bg-black"
+            style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
              box-sizing:border-box;
 "
           >
@@ -120,6 +92,26 @@ reservationInfo.reload()
             {{ t.count }}
           </div>
         </template>
+        <div
+          style="position: sticky; z-index: 4;
+          left: 0;
+          width: 72px;
+          background: linear-gradient(to right , rgba(0,0,0,.7),
+             rgba(0,0,0,.1))"
+          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
+          :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
+          v-for="(t,i) in reservationInfo.tableList"
+          :key="t.id"
+        >
+          {{ t.tableName }}
+          <v-spacer />
+          <v-icon color="green">
+            mdi-circle-small
+          </v-icon>
+          <div class="font-weight-thin text-caption">
+            {{ t.tableSeatCount }}
+          </div>
+        </div>
         <div
           class="gridBackground"
           :style="{
