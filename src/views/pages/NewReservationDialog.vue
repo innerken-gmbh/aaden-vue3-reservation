@@ -7,10 +7,12 @@ import {
   useHomePageControllerStore,
   useTimePickerStore
 } from "../../dataLayer/repository/reservationRepo";
+import {watchEffect} from "vue";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
 const timerPicker = useTimePickerStore()
+watchEffect(controller.date)
 </script>
 
 <template>
