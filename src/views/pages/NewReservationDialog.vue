@@ -56,20 +56,6 @@ const timerPicker = useTimePickerStore()
             />
           </div>
           <inline-two-row-container class="mt-8">
-            <form-container label="Time">
-              <div
-                class="text-h5 font-weight-black d-flex align-center"
-                @click="async ()=>controller.startTime=await timerPicker.selectTime()"
-              >
-                {{ controller.startTime }}
-                <v-spacer />
-                <v-icon
-                  size="24"
-                  class="mr-4"
-                  icon="mdi-arrow-right"
-                />
-              </div>
-            </form-container>
             <form-container label="Date">
               <div
                 class="text-h5 font-weight-black d-flex align-center"
@@ -79,6 +65,20 @@ const timerPicker = useTimePickerStore()
                 <v-spacer />
                 <v-icon
                   size="24"
+                  icon="mdi-arrow-right"
+                />
+              </div>
+            </form-container>
+            <form-container label="Time">
+              <div
+                class="text-h5 font-weight-black d-flex align-center"
+                @click="async ()=>controller.startTime=await timerPicker.selectTime()"
+              >
+                {{ controller.startTime ?? 'Select a time' }}
+                <v-spacer />
+                <v-icon
+                  size="24"
+                  class="mr-4"
                   icon="mdi-arrow-right"
                 />
               </div>

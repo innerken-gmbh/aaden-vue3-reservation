@@ -78,7 +78,7 @@ export const useHomePageControllerStore = defineStore('homePageController', {
         personCount: 4,
         reservationStep: 0,
         date: dayjs().format(dateFormat),
-        startTime: dayjs().format('HH:mm'),
+        startTime: null,
         timeGap: [],
         otherTime: [],
         adultCount: 1,
