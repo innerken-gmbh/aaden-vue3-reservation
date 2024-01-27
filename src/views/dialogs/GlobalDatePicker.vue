@@ -1,5 +1,5 @@
 <script setup>
-import {useDatePickerStore} from "../../dataLayer/repository/reservationRepo";
+import {useDatePickerStore} from "../../dataLayer/repository/reservationRepo.js";
 import {dateFormat, today} from "../../dataLayer/repository/dateRepo.js";
 import dayjs from "dayjs";
 

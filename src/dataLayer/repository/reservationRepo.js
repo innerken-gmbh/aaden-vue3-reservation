@@ -127,3 +127,31 @@ export const useDatePickerStore = defineStore('datePicker', {
         }
     }
 })
+
+export const useTimePickerStore = defineStore('timePicker', {
+    state: () => {
+        return {
+            currentTime: null,
+            availableTimes: [
+                '10:00', '20:00', '30:00', '40:00', '50:00', '60:00',
+            ],
+            showPicker: false,
+            resolve: null,
+        }
+    },
+    actions: {
+        async selectTime() {
+            return new Promise(resolve => {
+                this.showPicker = true
+                this.resolve = resolve
+            })
+        },
+        confirm() {
+            if (this.resolve) {
+                this.resolve(this.currentTime)
+                this.showPicker = false
+            }
+
+        }
+    }
+})

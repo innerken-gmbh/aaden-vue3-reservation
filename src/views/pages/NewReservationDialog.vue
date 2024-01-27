@@ -2,10 +2,15 @@
 
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import FormContainer from "../items/FormContainer.vue";
-import {useDatePickerStore, useHomePageControllerStore} from "../../dataLayer/repository/reservationRepo";
+import {
+  useDatePickerStore,
+  useHomePageControllerStore,
+  useTimePickerStore
+} from "../../dataLayer/repository/reservationRepo";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
+const timerPicker = useTimePickerStore()
 </script>
 
 <template>
@@ -54,7 +59,7 @@ const datePicker = useDatePickerStore()
             <form-container label="Time">
               <div
                 class="text-h5 font-weight-black d-flex align-center"
-                @click="async ()=>controller.date=await datePicker.selectDate()"
+                @click="async ()=>controller.startTime=await timerPicker.selectTime()"
               >
                 {{ controller.startTime }}
                 <v-spacer />

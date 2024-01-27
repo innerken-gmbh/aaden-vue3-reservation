@@ -8,19 +8,18 @@ export function today() {
 }
 
 
-export const standardDateTemplate = 'YYYY-MM-DD'
 export const timestampTemplate = 'YYYY-MM-DD HH:mm:ss'
-const onlyTimeTemplate = 'HH:mm'
+export const timeFormat = 'HH:mm'
 
-export function onlyTimeFormat (str) {
-    return dayjs(str).format(onlyTimeTemplate)
+export function onlyTimeFormat(str) {
+    return dayjs(str).format(timeFormat)
 }
 
-export function timeDisplay (str) {
+export function timeDisplay(str) {
     return dayjs(str).format(timestampTemplate)
 }
 
-export function sliceTime (startTimeString, endTimeString, duration = 'PT15M') {
+export function sliceTime(startTimeString, endTimeString, duration = 'PT15M') {
     const [startTime, endTime] = dayjs(startTimeString, timestampTemplate)
         .isBefore(dayjs(endTimeString, timestampTemplate)) ? [dayjs(startTimeString, timestampTemplate), dayjs(endTimeString, timestampTemplate)]
         : [dayjs(endTimeString, timestampTemplate), dayjs(startTimeString, timestampTemplate)]
@@ -30,14 +29,14 @@ export function sliceTime (startTimeString, endTimeString, duration = 'PT15M') {
     let temp = startTime
 
     while (temp.isBefore(endTime)) {
-        res.push(temp.format(onlyTimeTemplate))
+        res.push(temp.format(timeFormat))
         temp = temp.add(durationD)
     }
-    res.push(endTime.format(onlyTimeTemplate))
+    res.push(endTime.format(timeFormat))
     return res
 }
 
-export function timeFromNowInMinute (hour, minute) {
+export function timeFromNowInMinute(hour, minute) {
     return -dayjs().set('h', hour).set('m', minute).diff(dayjs(), 'm')
 }
 

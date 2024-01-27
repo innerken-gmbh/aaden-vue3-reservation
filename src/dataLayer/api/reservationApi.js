@@ -1,6 +1,6 @@
 import hillo from "hillo";
 import dayjs from "dayjs";
-import {sliceTime, standardDateTemplate} from "../repository/dateRepo.js";
+import {dateFormat, sliceTime} from "../repository/dateRepo.js";
 
 export async function loadAllReservable() {
     return (await hillo.get('Tables.php?op=getAllReservable')).content
@@ -29,7 +29,8 @@ export async function addToReservable(tableId) {
 export async function removeFromReservable(tableId) {
     return (await hillo.post('Tables.php?op=removeFromReservable', {tableId}))
 }
-export async function getReservation (date) {
+
+export async function getReservation(date) {
     return (await loadAllReservation(date + ' 00:00:00', date + ' 23:59:59'))
 }
 
@@ -39,6 +40,7 @@ const host = 'https://reservoir.aaden.io/mutlipleUser/'
 export async function loadReserveSettings() {
     return (await hillo.get('Tables.php?op=getReserveSettings')).content
 }
+
 const defaultReservationInfo = {
     tableId: '553',
     fromDateTime: '2022-01-18 17:00:00',
@@ -54,6 +56,7 @@ const defaultReservationInfo = {
     childCount: '0',
     useStroller: '0'
 }
+
 export async function addReservation(reservationInfo) {
     return (await hillo.jsonPost(host + 'reservation/add', Object.assign({}, defaultReservationInfo, reservationInfo)))
 }
@@ -62,7 +65,7 @@ export async function confirmReservation(id) {
     return (await hillo.post('Tables.php?op=completeReservation', Object.assign({}, {reservationId: id})))
 }
 
-export async function moveReservation(reservationId,newTableId) {
+export async function moveReservation(reservationId, newTableId) {
 
     return (await hillo.post('Tables.php?op=moveReservation', {
         reservationId, newTableId
@@ -82,7 +85,7 @@ export async function cancelReservation(reservationId) {
 }
 
 export async function getTimeSlotForDate(date, setting) {
-    const targetDayOfWeek = dayjs(date, standardDateTemplate).isoWeekday()
+    const targetDayOfWeek = dayjs(date, dateFormat).isoWeekday()
     const duration = setting.gap
     console.log((setting.weeklySettings
         .find(it => parseInt(it.dayOfWeek) === targetDayOfWeek)))

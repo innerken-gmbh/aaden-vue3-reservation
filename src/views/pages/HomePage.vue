@@ -54,7 +54,7 @@ reservationInfo.reload()
       </v-col>
     </v-row>
     <div
-      style="width: calc(100% + 24px);position: relative;overflow-y: scroll;height: calc(100vh - 120px);"
+      style="width: calc(100% + 24px);position: relative;"
       class="mt-8 ml-n4 pl-4 d-flex align-start ctr"
     >
       <div
