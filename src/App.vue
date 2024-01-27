@@ -1,13 +1,14 @@
 <script setup>
 import HomePage from './views/pages/HomePage.vue';
+import {useHomePageControllerStore} from "./dataLayer/repository/reservationRepo";
+
+const homeController = useHomePageControllerStore()
 </script>
 
 <template>
   <v-app>
     <v-app-bar
-      dark
       flat
-      color="grey-lighten-4"
     >
       <v-app-bar-nav-icon />
       <div class="flex-grow-1">
@@ -18,7 +19,10 @@ import HomePage from './views/pages/HomePage.vue';
           hide-details
         />
       </div>
-      <v-btn icon="">
+      <v-btn
+        @click="homeController.showNewModal()"
+        icon=""
+      >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-btn icon="">

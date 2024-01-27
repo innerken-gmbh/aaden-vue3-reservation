@@ -1,11 +1,14 @@
 <script setup>
-import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {useHomePageControllerStore, useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
 import {dateFormat} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
+import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
+import FormContainer from "../items/FormContainer.vue";
 
 
 const reservationInfo = useReservationStore()
+const controller = useHomePageControllerStore()
 reservationInfo.reload()
 
 
@@ -21,7 +24,6 @@ reservationInfo.reload()
           <v-btn
             icon=""
             flat
-            class="bg-grey-lighten-4"
             @click="reservationInfo.date=dayjs(reservationInfo.date)
               .add(-1,'d')
               .format(dateFormat)"
@@ -51,34 +53,25 @@ reservationInfo.reload()
         </div>
       </v-col>
     </v-row>
-
     <div
-      style="width: calc(100% + 24px);"
+      style="width: calc(100% + 24px);position: relative"
       class="mt-8 ml-n4 pl-4 d-flex align-start"
     >
       <v-card
         tile
-        rounded="lg"
+        class="pl-2 pr-2"
         :style="{
           gridTemplateRows:reservationInfo.ySize+'px',
         }"
-        style="position: sticky;display:grid;grid-auto-flow: row;
-            left: 0;top:24px; z-index: 4;"
+        style="position: absolute;display:grid;grid-auto-flow: row;
+            left: 16px;top:72px; z-index: 4;background: linear-gradient(to right , rgba(0,0,0,.7), rgba(0,0,0,.1))"
         flat
       >
-        <div />
         <div
-          :style="{height:reservationInfo.ySize+'px'}"
-          class="px-2 text-caption font-weight-black bg-grey-lighten-4"
-        >
-          Seated
-        </div>
-        <div
-          :class="i%2===0?'grey lighten-2':'grey lighten-4'"
-          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2 bg-grey-lighten-4"
+          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
           :style="{height:reservationInfo.ySize+'px'}"
           style="width: 100%"
-          v-for="(t,i) in reservationInfo.tableList"
+          v-for="(t) in reservationInfo.tableList"
           :key="t.id"
         >
           {{ t.tableName }}
@@ -104,7 +97,7 @@ reservationInfo.reload()
           v-for="(t,i) in reservationInfo.bigTime"
         >
           <div
-            class="pa-1 text-body-1 d-flex align-center"
+            class="pa-2 text-body-1 d-flex align-center"
             style="width: 100%;height: 100%;grid-column:span 4;
              box-sizing:border-box;
 "
@@ -117,11 +110,11 @@ reservationInfo.reload()
           :key="t.time"
         >
           <div
-
-            class="bg-grey-lighten-5 pa-1 d-flex align-center justify-center text-center text-caption"
+            class="pa-1 d-flex align-center justify-center text-center text-caption bg-grey-darken-4"
             style="width: 100%;height: 100%;grid-column:span 2;"
             :style="{
-              borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':'2px inset rgba(0,0,0,.2) !important'
+              borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
+                '2px inset rgba(0,0,0,.2) !important'
             }"
           >
             {{ t.count }}
@@ -160,6 +153,121 @@ reservationInfo.reload()
       </div>
     </div>
   </v-container>
+  <v-dialog
+    persistent
+    max-width="500"
+    v-model="controller.showNewReservationModal"
+  >
+    <v-card class="pa-6 py-8">
+      <div class="text-h5 font-weight-black d-flex align-center">
+        Create a new reservation
+        <v-spacer />
+        <v-icon
+          size="32"
+        >
+          mdi-calendar-clock
+        </v-icon>
+      </div>
+      <template v-if="controller.reservationStep===0">
+        <div class="text-body-1 mt-12">
+          <div class="d-flex align-end">
+            <div class="text-body-2">
+              Person amount
+              <div class="text-h4 font-weight-black">
+                {{ controller.personCount }}
+              </div>
+            </div>
+            <v-spacer />
+            <v-btn
+              flat
+              @click="controller.minusPerson()"
+              icon="mdi-minus"
+              :rounded="0"
+              class="bg-grey-darken-4"
+            />
+            <v-btn
+              flat
+              @click="controller.personCount++"
+              icon="mdi-plus"
+              :rounded="0"
+              class="bg-grey-darken-3"
+            />
+          </div>
+          <div class="mt-8">
+            <div class="d-flex">
+              <div class="text-body-2">
+                Date
+              </div>
+            </div>
+            <v-select
+              class="mt-1"
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <div class="d-flex">
+              <div class="text-body-2">
+                Time
+              </div>
+            </div>
+            <v-select
+              class="mt-1"
+              variant="outlined"
+            />
+          </div>
+        </div>
+        <v-btn
+          @click="controller.reservationStep=1"
+          size="large"
+          color="white"
+          class="mt-4"
+        >
+          Create Reservation
+        </v-btn>
+      </template>
+      <template v-else-if="controller.reservationStep===1">
+        <div class="text-body-1 mt-12">
+          <inline-two-row-container>
+            <form-container label="First Name">
+              <v-text-field
+                placeholder="Max.."
+              />
+            </form-container>
+            <form-container label="Last Name">
+              <v-text-field
+                placeholder="Mustermann.."
+              />
+            </form-container>
+          </inline-two-row-container>
+          <form-container label="Email">
+            <v-text-field
+              placeholder="Max.mustermann@example.com"
+            />
+          </form-container>
+          <form-container label="Tel">
+            <v-text-field
+              placeholder="0123-456789"
+            />
+          </form-container>
+          <form-container label="Note">
+            <v-textarea
+              auto-grow
+              placeholder="0123-456789"
+            />
+          </form-container>
+        </div>
+
+        <v-btn
+          @click="controller.reservationStep=1"
+          size="large"
+          color="white"
+          class="mt-4"
+        >
+          Create Reservation
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>
@@ -169,13 +277,13 @@ reservationInfo.reload()
 
 
 .gridBackground {
-  background: linear-gradient(to right, rgba(0, 0, 0, .1) 1px, transparent 1px),
-  linear-gradient(to bottom, rgba(0, 0, 0, .1) 1px, transparent 1px),
-  linear-gradient(to right, rgba(0, 0, 0, .1) 2px, transparent 1px),
-  linear-gradient(to right, rgba(0, 0, 0, .05) 3px, transparent 1px);
-  background-size: 40px 24px,
-  40px 24px,
-  80px 48px,
-  160px 48px
+  background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px, rgba(255, 255, 255, .1) 1px),
+  linear-gradient(to bottom, rgba(0, 0, 0, 1) 1px, transparent 1px),
+  linear-gradient(to right, rgba(0, 0, 0, 1) 2px, transparent 1px),
+  linear-gradient(to right, rgba(0, 0, 0, 1) 3px, transparent 1px);
+  background-size: 40px 36px,
+  40px 36px,
+  80px 72px,
+  160px 72px
 }
 </style>

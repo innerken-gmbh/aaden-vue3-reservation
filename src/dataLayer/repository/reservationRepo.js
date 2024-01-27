@@ -11,7 +11,7 @@ export const useReservationStore = defineStore('reservation', {
         date: today(),
         tableList: [],
         xSize: 40,
-        ySize: 24,
+        ySize: 36,
         activeReservationId: null,
         timeSlots: Array.from(Array(24 - 7 + 3).keys())
             .map(it => (it + 7) % 24).map(it => Array
@@ -68,6 +68,35 @@ export const useReservationStore = defineStore('reservation', {
         },
         async reload() {
             await this.loadReservations()
+        }
+    }
+})
+
+export const useHomePageControllerStore = defineStore('homePageController', {
+    state: () => ({
+        showNewReservationModal: false,
+        personCount: 4,
+        reservationStep: 0,
+        startTime: new Date(),
+        timeGap: [],
+        otherTime: [],
+        adultCount: 1,
+        childCount: 0,
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+        note: '',
+        useStroller: false
+    }),
+    actions: {
+        showNewModal() {
+            this.showNewReservationModal = true
+        },
+        minusPerson() {
+            if (this.personCount > 1) {
+                this.personCount--
+            }
         }
     }
 })
