@@ -131,16 +131,24 @@ reservationInfo.reload()
           style="position: absolute;"
           :style="{
             gridColumn:'0 / '+reservationInfo.timeSlots.length,
-            gridRow:'3 / '+(reservationInfo.tableList.length+6)
+            gridRow:'3 / '+(reservationInfo.tableList.length+3)
           }"
         >
-          <reservation-card
-            v-for="r in reservationInfo.reservationList"
-            :key="r.id"
-            :reservation-info="r"
-            :x-size="reservationInfo.xSize"
-            :y-size="reservationInfo.ySize"
-          />
+          <div
+            style="position: relative"
+            :style="{
+              width:reservationInfo.containerWidth+'px',
+              height:reservationInfo.containerHeight+'px'
+            }"
+          >
+            <reservation-card
+              v-for="r in reservationInfo.reservationList"
+              :key="r.id"
+              :reservation-info="r"
+              :x-size="reservationInfo.xSize"
+              :y-size="reservationInfo.ySize"
+            />
+          </div>
         </v-card>
       </div>
     </div>
@@ -163,5 +171,9 @@ reservationInfo.reload()
   40px 36px,
   80px 72px,
   160px 72px
+}
+
+.vdr {
+ position: absolute;
 }
 </style>

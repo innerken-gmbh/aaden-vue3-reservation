@@ -7,12 +7,23 @@ import {
   useHomePageControllerStore,
   useTimePickerStore
 } from "../../dataLayer/repository/reservationRepo";
+import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
 import {watchEffect} from "vue";
+import {storeToRefs} from "pinia";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
 const timerPicker = useTimePickerStore()
-watchEffect(controller.date)
+
+const {personCount, date} = storeToRefs(controller)
+watchEffect(async () => {
+  console.log('*change')
+  controller.startTime = null
+  timerPicker.availableTimes = await checkTableTimeAvailable(date.value,
+      '00:00', personCount.value, 1)
+  console.log(timerPicker.availableTimes)
+})
+
 </script>
 
 <template>
@@ -91,17 +102,25 @@ watchEffect(controller.date)
           @click="controller.reservationStep=1"
           size="large"
           color="white"
+          :disabled="!controller.startTime"
           class="mt-8"
         >
-          Check Available Slots
+          Fill Detailed Information
+          <template #append>
+            <v-icon>mdi-arrow-right</v-icon>
+          </template>
         </v-btn>
       </template>
       <template v-else-if="controller.reservationStep===1">
         <div class="text-h5 font-weight-black d-flex align-center">
-          {{ controller.startTime }}
-          <div class="text-body-2">
-            @{{ reservationInfo.date }}
+          <div>
+            {{ controller.personCount }} People
+            <div class="text-body-2">
+              <span class="font-weight-regular">{{ controller.startTime }}</span>@{{ controller.date }}
+            </div>
           </div>
+
+
           <v-spacer />
           <v-icon
             size="32"
@@ -113,11 +132,13 @@ watchEffect(controller.date)
           <inline-two-row-container>
             <form-container label="First Name">
               <v-text-field
+                v-model="controller.reservationExtraInfo.firstName"
                 placeholder="Max.."
               />
             </form-container>
             <form-container label="Last Name">
               <v-text-field
+                v-model="controller.reservationExtraInfo.lastName"
                 placeholder="Mustermann.."
               />
             </form-container>
@@ -125,32 +146,39 @@ watchEffect(controller.date)
           <inline-two-row-container>
             <form-container label="Email">
               <v-text-field
+                v-model="controller.reservationExtraInfo.email"
                 placeholder="Max.mustermann@example.com"
               />
             </form-container>
             <form-container label="Tel">
               <v-text-field
+                v-model="controller.reservationExtraInfo.tel"
                 placeholder="0123-456789"
               />
             </form-container>
           </inline-two-row-container>
           <form-container label="Note">
             <v-textarea
+              v-model="controller.reservationExtraInfo.note"
               auto-grow
               placeholder="Note about extra wishes"
             />
           </form-container>
           <v-chip
-            @click="controller.useStroller=!controller.useStroller"
+            @click="controller.reservationExtraInfo.useStroller=!controller.reservationExtraInfo.useStroller"
             variant="tonal"
             rounded="sm"
           >
             <template #prepend>
               <v-icon
                 class="mr-2"
-                v-if="controller.useStroller"
               >
-                mdi-check-circle
+                <template v-if="controller.reservationExtraInfo.useStroller">
+                  mdi-checkbox-marked
+                </template>
+                <template v-else>
+                  mdi-checkbox-blank-outline
+                </template>
               </v-icon>
             </template>
 
@@ -159,7 +187,8 @@ watchEffect(controller.date)
         </div>
 
         <v-btn
-          @click="controller.reservationStep=1"
+          :loading="controller.loading"
+          @click="controller.addReservation()"
           size="large"
           color="white"
           class="mt-4"

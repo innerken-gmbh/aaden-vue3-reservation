@@ -1,13 +1,12 @@
 <template>
   <vue-draggable-resizable
     :draggable="!checkedIn"
-    :grid="[xSize,ySize]"
     :h="ySize"
+    :grid="[xSize,ySize]"
     :parent="true"
     :prevent-deactivation="false"
     active-class=""
     :resizable="false"
-    :snap="true"
     :x="reservationInfo.grid.x"
     :y="reservationInfo.grid.y"
     :w="reservationInfo.grid.w"
@@ -21,11 +20,12 @@
     >
       <template #activator="{ on,attrs }">
         <v-card
+          rounded="0"
           v-on="on"
           v-bind="attrs"
           :height="ySize"
-          :class="color"
-          class="pa-2 text-white text-caption d-flex align-center reservationCard"
+          :color="color"
+          class="pa-2 text-caption d-flex align-center reservationCard"
           style="position: absolute;width: 100%"
           :style="{
             gridColumn:reservationInfo.grid.xStart+' / '+reservationInfo.grid.xEnd,
@@ -114,7 +114,7 @@ const color = computed(() => {
   } else if (props.reservationInfo.cancelled === '1') {
     return 'bg-red-lighten-2'
   }
-  return 'gradient'
+  return 'white'
 })
 </script>
 

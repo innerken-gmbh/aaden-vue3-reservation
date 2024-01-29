@@ -73,42 +73,34 @@ export async function moveReservation(reservationId, newTableId) {
 }
 
 export async function cancelReservation(reservationId) {
-    const res = await IKUtils.showConfirmAsyn(
-        i18n.t('EmailWillBeSentIfReservationIsCancelled'),
-        i18n.t('AreYouSureToCancelTheReservation')
-    )
-    if (res.isConfirmed) {
-        return (await hillo.post('Tables.php?op=cancelReservation', {
-            reservationId
-        }))
-    }
+
+    return (await hillo.post('Tables.php?op=cancelReservation', {
+        reservationId
+    }))
+
 }
 
 export async function getTimeSlotForDate(date, setting) {
     const targetDayOfWeek = dayjs(date, dateFormat).isoWeekday()
     const duration = setting.gap
-    console.log((setting.weeklySettings
-        .find(it => parseInt(it.dayOfWeek) === targetDayOfWeek)))
     return (setting.weeklySettings
         .find(it => parseInt(it.dayOfWeek) === targetDayOfWeek)?.openingTimespan ?? [])
         .map(it => sliceTime(date + ' ' + it.from, date + ' ' + it.to, duration))
         .flat()
 }
 
-export async function checkTableTimeAvailable(date, time, personCount, id) {
+export async function checkTableTimeAvailable(date, time,
+                                              personCount, id) {
     const getTableTime = (await hillo.jsonPost(host + 'reservableTable/getTableTime', {
-        reserveTime: time, reserveDate: date, peopleCount: personCount, userId: id
+        reserveTime: time, reserveDate: date, peopleCount: personCount,
+        userId: id
     }))
     const res = getTableTime.data
-    console.log(getTableTime, 'getTableTime')
-    if (getTableTime.message === '请设置该人数的规则') {
-        return '请设置该人数的规则'
+
+    if (getTableTime.code === 200) {
+        return res.data
     } else {
-        if (res.check === true) {
-            return false
-        } else {
-            return res.data
-        }
+        return '请设置该人数的规则'
     }
 }
 

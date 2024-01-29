@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {getReservation} from "../api/reservationApi.js";
+import {addReservation, getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
 
 
@@ -56,6 +56,7 @@ export const useReservationStore = defineStore('reservation', {
                 const xStopIndex = this.timeSlots.findIndex(t => dayjs(it.toDateTime)
                     .format('HH:mm') === t)
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
+                console.log(yIndex,yIndex*this.ySize)
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
                 it.grid = {
                     x: xIndex * this.xSize,
@@ -79,19 +80,37 @@ export const useHomePageControllerStore = defineStore('homePageController', {
         reservationStep: 0,
         date: dayjs().format(dateFormat),
         startTime: null,
+        loading: false,
         timeGap: [],
         otherTime: [],
-        adultCount: 1,
-        childCount: 0,
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        note: '',
-        useStroller: false
+        reservationExtraInfo: {
+            firstName: '',
+            lastName: '',
+            phone: '',
+            email: '',
+            note: '',
+            useStroller: false
+        },
     }),
+    getters: {
+        reservationAddModel() {
+            return Object.assign({fromDateTime: this.date + ' ' + this.startTime, userId: 1},
+                this.reservationExtraInfo, {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
+        }
+    },
     actions: {
+        async addReservation() {
+            this.loading = true
+            const res = await addReservation(this.reservationAddModel)
+            if (res.code === 200) {
+                await useReservationStore().reload()
+                this.showNewReservationModal = false
+            }
+            this.loading = false
+
+        },
         showNewModal() {
+            this.reservationStep = 0
             this.showNewReservationModal = true
         },
         minusPerson() {
@@ -124,6 +143,11 @@ export const useDatePickerStore = defineStore('datePicker', {
                 this.showPicker = false
             }
 
+        }
+    },
+    getters: {
+        date(state) {
+            return dayjs(state.currentDate).format(dateFormat)
         }
     }
 })
