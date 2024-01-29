@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {onBeforeUnmount, ref} from "vue";
 
 export const dateFormat = 'YYYY-MM-DD'
 
@@ -40,3 +41,17 @@ export function timeFromNowInMinute(hour, minute) {
     return -dayjs().set('h', hour).set('m', minute).diff(dayjs(), 'm')
 }
 
+
+export const useCurrentTime = () => {
+    const currentTime = ref(new Date());
+    const updateCurrentTime = () => {
+        currentTime.value = new Date();
+    };
+    const updateTimeInterval = setInterval(updateCurrentTime, 60*1000);
+    onBeforeUnmount(() => {
+        clearInterval(updateTimeInterval);
+    });
+    return {
+        currentTime,
+    };
+};

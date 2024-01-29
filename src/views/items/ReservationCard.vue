@@ -11,7 +11,7 @@
     :y="reservationInfo.grid.y"
     :w="reservationInfo.grid.w"
     class-name-dragging="dragging"
-    @dragstop="(...args)=>emit('dragstop',...args)"
+    @drag-stop="(...args)=>emit('dragStop',...args)"
   >
     <v-menu
       offset-y
@@ -20,12 +20,13 @@
     >
       <template #activator="{ on,attrs }">
         <v-card
+          variant="outlined"
           rounded="0"
           v-on="on"
           v-bind="attrs"
           :height="ySize"
           :color="color"
-          class="pa-2 text-caption d-flex align-center reservationCard"
+          class="pa-2 text-caption d-flex align-center reservationCard bg-black"
           style="position: absolute;width: 100%"
           :style="{
             gridColumn:reservationInfo.grid.xStart+' / '+reservationInfo.grid.xEnd,
@@ -55,8 +56,7 @@
             {{ reservationInfo.childCount }}
           </template>
           <div
-            style="font-size: 0.5rem;width: 0"
-            class="text-no-wrap text-truncate text-right ml-2 flex-grow-1"
+            class="text-body-2 text-no-wrap text-truncate text-right ml-2 flex-grow-1"
           >
             {{ reservationInfo.note }}
           </div>
@@ -103,16 +103,17 @@
 import {computed} from "vue";
 
 const props = defineProps(['reservationInfo', 'xSize', 'ySize'])
-const emit = defineEmits(['open', 'dragstop', 'checkin'])
+const emit = defineEmits(['open', 'dragStop', 'checkin'])
 const checkedIn = computed(() => {
   return props.reservationInfo.completed === '1'
 })
 const color = computed(() => {
-  console.log(props.reservationInfo)
-  if (checkedIn.value) {
-    return 'complete'
-  } else if (props.reservationInfo.cancelled === '1') {
-    return 'bg-red-lighten-2'
+  if (props.reservationInfo.overTime) {
+    return 'red-darken-1'
+  } else if (checkedIn.value) {
+    return 'green-darken-1'
+  } else if (props.reservationInfo.haveOverlap) {
+    return 'yellow-darken-1'
   }
   return 'white'
 })

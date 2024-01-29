@@ -3,6 +3,7 @@ import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
 import {addReservation, getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
+import {groupBy, intersection} from "lodash-es";
 
 
 export const useReservationStore = defineStore('reservation', {
@@ -11,7 +12,7 @@ export const useReservationStore = defineStore('reservation', {
         date: today(),
         tableList: [],
         xSize: 40,
-        ySize: 36,
+        ySize: 28,
         activeReservationId: null,
         timeSlots: Array.from(Array(24 - 7 + 3).keys())
             .map(it => (it + 7) % 24).map(it => Array
@@ -50,14 +51,15 @@ export const useReservationStore = defineStore('reservation', {
     actions: {
         async loadReservations() {
             this.tableList = await loadReservationTableInfo()
-            this.reservationList = (await getReservation(this.date)).map(it => {
+            const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
                     .format('HH:mm') === t)
                 const xStopIndex = this.timeSlots.findIndex(t => dayjs(it.toDateTime)
                     .format('HH:mm') === t)
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
-                console.log(yIndex,yIndex*this.ySize)
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
+                it.overTime = it.completed !== '1' && dayjs(it.fromDateTime).isBefore(dayjs())
+                console.log(it.overTime)
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
@@ -65,7 +67,16 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
-            console.log(this.reservationList)
+            const overlaps = Object.entries(groupBy(list, 'tableId')).map(([, value]) => {
+                return value.map(it => {
+                    it.haveOverlap = value.some(that => that.id !== it.id && intersection(it.timeMap, that.timeMap).length > 1)
+                    return it
+                }).filter(it => it.haveOverlap).map(it => it.id)
+            }).flat()
+            this.reservationList = list.map(it => {
+                it.haveOverlap = overlaps.includes(it.id)
+                return it
+            })
         },
         async reload() {
             await this.loadReservations()
@@ -102,6 +113,7 @@ export const useHomePageControllerStore = defineStore('homePageController', {
         async addReservation() {
             this.loading = true
             const res = await addReservation(this.reservationAddModel)
+            console.log(res)
             if (res.code === 200) {
                 await useReservationStore().reload()
                 this.showNewReservationModal = false

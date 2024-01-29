@@ -1,16 +1,46 @@
 <script setup>
 import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {dateFormat} from "../../dataLayer/repository/dateRepo.js";
+import {dateFormat, timestampTemplate, useCurrentTime} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
+import {moveReservation} from "../../dataLayer/api/reservationApi.js";
+import {onMounted, ref, watchEffect} from "vue";
 
 
 const reservationInfo = useReservationStore()
+const currentTimeX = ref(0)
+const {currentTime} = useCurrentTime()
+watchEffect(() => {
+  currentTimeX.value = Math.ceil((dayjs(currentTime.value).subtract(2, "hours")
+          .diff(dayjs().set("hours", 5), 'minutes') / (19 * 60))
+      * reservationInfo.containerWidth)
+  console.log(currentTimeX.value)
+})
+const container = ref(null)
+
+async function init() {
+  await reservationInfo.reload()
+  console.log(currentTimeX.value, 'here')
+  container.value.scroll({top: 0, left: currentTimeX.value})
+}
 
 
-reservationInfo.reload()
+async function onMoveReservation(r, positionInfo) {
+  const [x, y] = positionInfo
+  const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
+  const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
+  const reservationLength = Math.abs(dayjs(r.fromDateTime).diff(dayjs(r.toDateTime), 'minutes'))
+  const [hour, minute] = timeSlot.split(':')
+  const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute)
+  const newEnd = newStart.add(reservationLength, 'minutes').format(timestampTemplate)
+  await moveReservation(r.id, table.tableId, newStart.format(timestampTemplate), newEnd)
+  await reservationInfo.reload()
+}
 
+onMounted(() => {
+  init()
+})
 
 </script>
 
@@ -55,28 +85,49 @@ reservationInfo.reload()
     </v-row>
     <div
       style="width: calc(100% + 24px);position: relative;"
-      class="mt-8 ml-n4 pl-4 d-flex align-start ctr"
+      class="mt-8 ml-n4 pl-4 d-flex align-start"
     >
       <div
         class="flex-grow-1"
+        ref="container"
         style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;height: 80vh;"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
         }"
       >
-        <template
-          :key="i"
-          v-for="(t,i) in reservationInfo.bigTime"
+        <div
+          style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 8"
         >
           <div
-            class="pa-2 text-body-1 d-flex align-center bg-black"
-            style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
+            style="width: 100%;position: relative;display: grid;"
+            :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
+                     gridTemplateRows:'repeat(1,'+reservationInfo.ySize+'px)',
+            }"
+          >
+            <div
+              style="position: absolute;width:4px;height: 12px;z-index: 20;top:16px;left: 0;
+"
+              :style="{
+                transform: `translateX(${currentTimeX}px)`
+              }"
+              class="bg-white rounded-b-pill"
+            />
+            <template
+              :key="i"
+              v-for="(t,i) in reservationInfo.bigTime"
+            >
+              <div
+                class="pa-2 text-body-1 d-flex align-center bg-black"
+                style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
              box-sizing:border-box;
 "
-          >
-            {{ t }}
+              >
+                {{ t }}
+              </div>
+            </template>
           </div>
-        </template>
+        </div>
+
         <template
           v-for="t in reservationInfo.seatedInfo"
           :key="t.time"
@@ -145,6 +196,7 @@ reservationInfo.reload()
               v-for="r in reservationInfo.reservationList"
               :key="r.id"
               :reservation-info="r"
+              @drag-stop="(...args)=>onMoveReservation(r,args)"
               :x-size="reservationInfo.xSize"
               :y-size="reservationInfo.ySize"
             />
@@ -167,13 +219,13 @@ reservationInfo.reload()
   linear-gradient(to bottom, rgba(0, 0, 0, 1) 1px, transparent 1px),
   linear-gradient(to right, rgba(0, 0, 0, 1) 2px, transparent 1px),
   linear-gradient(to right, rgba(0, 0, 0, 1) 3px, transparent 1px);
-  background-size: 40px 36px,
-  40px 36px,
+  background-size: 40px 28px,
+  40px 28px,
   80px 72px,
   160px 72px
 }
 
 .vdr {
- position: absolute;
+  position: absolute;
 }
 </style>
