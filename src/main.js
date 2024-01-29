@@ -7,7 +7,8 @@ import hillo from "hillo";
 import VueDragscroll from "vue-dragscroll";
 import './styles/main.scss';
 
-hillo.initial('http://ik0001.ngrok.aaden.io/PHP/')
+const deviceId = '0001'
+hillo.initial(`http://ik${deviceId}.ngrok.aaden.io/PHP/`)
 createApp(App)
     .use(vuetify)
     .use(VueDragscroll)

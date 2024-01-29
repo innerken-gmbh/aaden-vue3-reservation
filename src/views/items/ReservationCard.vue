@@ -20,13 +20,14 @@
     >
       <template #activator="{ on,attrs }">
         <v-card
-          variant="outlined"
+          elevation="4"
+          :variant="variants"
           rounded="0"
           v-on="on"
           v-bind="attrs"
           :height="ySize"
           :color="color"
-          class="pa-2 text-caption d-flex align-center reservationCard bg-black"
+          class="px-2 text-caption d-flex align-center reservationCard bg-black"
           style="position: absolute;width: 100%"
           :style="{
             gridColumn:reservationInfo.grid.xStart+' / '+reservationInfo.grid.xEnd,
@@ -40,10 +41,10 @@
           >
             mdi-arrow-expand
           </v-icon>
-          <div class="text-body-1 font-weight-black mr-4">
-            {{ reservationInfo.personCount }}
+          <div class="text-body-1 font-weight-black mr-2">
+            {{ reservationInfo.personCount }}P
           </div>
-          <div class="text-body-2 font-weight-regular">
+          <div class="text-body-2 font-weight-regular text-no-wrap text-truncate">
             {{ reservationInfo.firstName }} {{ reservationInfo.lastName }}
           </div>
           <template v-if="reservationInfo.childCount>0">
@@ -60,7 +61,14 @@
           >
             {{ reservationInfo.note }}
           </div>
-
+          <v-icon
+            v-if="haveShareTable"
+            small
+            :color="reservationInfo.shareColor"
+            class="ml-2"
+          >
+            mdi-link-variant
+          </v-icon>
           <v-icon
             v-if="checkedIn"
             small
@@ -107,16 +115,30 @@ const emit = defineEmits(['open', 'dragStop', 'checkin'])
 const checkedIn = computed(() => {
   return props.reservationInfo.completed === '1'
 })
+const haveShareTable = computed(() => {
+  return props.reservationInfo.haveShareTable
+})
 const color = computed(() => {
   if (props.reservationInfo.overTime) {
-    return 'red-darken-1'
+    return 'red-darken-3'
   } else if (checkedIn.value) {
-    return 'green-darken-1'
+    return 'green-darken-3'
   } else if (props.reservationInfo.haveOverlap) {
-    return 'yellow-darken-1'
+    return 'yellow-darken-3'
   }
   return 'white'
 })
+const variants = computed(() => {
+  if (props.reservationInfo.overTime) {
+    return 'flat'
+  } else if (checkedIn.value) {
+    return 'flat'
+  } else if (props.reservationInfo.haveOverlap) {
+    return 'flat'
+  }
+  return 'flat'
+})
+
 </script>
 
 <style scoped>

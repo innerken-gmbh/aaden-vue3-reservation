@@ -19,10 +19,15 @@ watchEffect(() => {
 })
 const container = ref(null)
 
+function resetCurrentScrollPos() {
+  container.value.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
+}
+
+
 async function init() {
   await reservationInfo.reload()
-  console.log(currentTimeX.value, 'here')
-  container.value.scroll({top: 0, left: currentTimeX.value})
+  resetCurrentScrollPos()
+
 }
 
 
@@ -52,6 +57,14 @@ onMounted(() => {
           Reservations
           <v-spacer />
           <v-btn
+            class="mr-2"
+            icon=""
+            flat
+            @click="resetCurrentScrollPos"
+          >
+            <v-icon>mdi-crosshairs-gps</v-icon>
+          </v-btn>
+          <v-btn
             icon=""
             flat
             @click="reservationInfo.date=dayjs(reservationInfo.date)
@@ -73,7 +86,7 @@ onMounted(() => {
           </div>
           <v-btn
             flat
-            class="bg-grey-lighten-4"
+            class="bg-grey-darken-4"
             icon=""
             @click="reservationInfo.date=dayjs(reservationInfo.date)
               .add(1,'d').format(dateFormat)"
@@ -85,7 +98,7 @@ onMounted(() => {
     </v-row>
     <div
       style="width: calc(100% + 24px);position: relative;"
-      class="mt-8 ml-n4 pl-4 d-flex align-start"
+      class="ml-n4 mt-8 pl-4 d-flex align-start"
     >
       <div
         class="flex-grow-1"

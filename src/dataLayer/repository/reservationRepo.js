@@ -59,7 +59,6 @@ export const useReservationStore = defineStore('reservation', {
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
                 it.overTime = it.completed !== '1' && dayjs(it.fromDateTime).isBefore(dayjs())
-                console.log(it.overTime)
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
@@ -73,8 +72,20 @@ export const useReservationStore = defineStore('reservation', {
                     return it
                 }).filter(it => it.haveOverlap).map(it => it.id)
             }).flat()
+
+            const shareTable = (Object.values(groupBy(list, 'batch')).filter(it => it.length > 1).flat()
+                .map(it => it.id))
+            const batchColorCache = {}
             this.reservationList = list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
+                it.haveShareTable = shareTable.includes(it.id)
+                if (it.haveShareTable) {
+                    if (!batchColorCache[it.batch]) {
+                        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+                        batchColorCache[it.batch] = '#' + randomColor
+                    }
+                    it.shareColor = batchColorCache[it.batch]
+                }
                 return it
             })
         },
@@ -165,6 +176,33 @@ export const useDatePickerStore = defineStore('datePicker', {
 })
 
 export const useTimePickerStore = defineStore('timePicker', {
+    state: () => {
+        return {
+            currentTime: null,
+            availableTimes: [
+                '10:00', '20:00', '30:00', '40:00', '50:00', '60:00',
+            ],
+            showPicker: false,
+            resolve: null,
+        }
+    },
+    actions: {
+        async selectTime() {
+            return new Promise(resolve => {
+                this.showPicker = true
+                this.resolve = resolve
+            })
+        },
+        confirm() {
+            if (this.resolve) {
+                this.resolve(this.currentTime)
+                this.showPicker = false
+            }
+
+        }
+    }
+})
+export const useScanQrStore = defineStore('scanQR', {
     state: () => {
         return {
             currentTime: null,
