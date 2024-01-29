@@ -205,16 +205,13 @@ export const useTimePickerStore = defineStore('timePicker', {
 export const useScanQrStore = defineStore('scanQR', {
     state: () => {
         return {
-            currentTime: null,
-            availableTimes: [
-                '10:00', '20:00', '30:00', '40:00', '50:00', '60:00',
-            ],
+            currentQRText: null,
             showPicker: false,
             resolve: null,
         }
     },
     actions: {
-        async selectTime() {
+        async scanQR() {
             return new Promise(resolve => {
                 this.showPicker = true
                 this.resolve = resolve
@@ -222,7 +219,7 @@ export const useScanQrStore = defineStore('scanQR', {
         },
         confirm() {
             if (this.resolve) {
-                this.resolve(this.currentTime)
+                this.resolve(this.currentQRText)
                 this.showPicker = false
             }
 
