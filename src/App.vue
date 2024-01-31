@@ -6,6 +6,7 @@ import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
 import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
 import image from './assets/calendar.png'
+import {useDisplay} from "vuetify";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
