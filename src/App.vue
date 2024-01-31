@@ -11,7 +11,7 @@ import {useDisplay} from "vuetify";
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
-const { smAndUp } = useDisplay()
+const {smAndUp} = useDisplay()
 </script>
 
 <template>
@@ -19,9 +19,9 @@ const { smAndUp } = useDisplay()
     <v-app-bar
       flat
     >
-      <div class="px-6 d-flex align-center">
+      <div class="px-6 d-flex align-center flex-grow-1">
         <v-img
-          class="mr-4"
+          class="mr-4 flex-grow-0"
           width="24"
           :src="image"
         />
@@ -34,10 +34,6 @@ const { smAndUp } = useDisplay()
             v0.0.2
           </div>
         </div>
-      </div>
-
-
-      <div class="flex-grow-1">
         <v-text-field
           v-model="reservationStore.search"
           prepend-inner-icon="mdi-magnify"
