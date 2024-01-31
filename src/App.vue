@@ -5,6 +5,7 @@ import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
 import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
+import image from './assets/calendar.png'
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
@@ -16,7 +17,14 @@ const reservationStore = useReservationStore()
     <v-app-bar
       flat
     >
-      <v-app-bar-nav-icon />
+      <div class="px-6">
+        <v-img
+          width="24"
+          :src="image"
+        />
+      </div>
+
+
       <div class="flex-grow-1">
         <v-text-field
           v-model="reservationStore.search"
