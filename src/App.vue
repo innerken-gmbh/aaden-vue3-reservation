@@ -11,7 +11,7 @@ import {useDisplay} from "vuetify";
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
-const { mobile } = useDisplay()
+const { smAndUp } = useDisplay()
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const { mobile } = useDisplay()
         />
         <div
           class="text-body-2"
-          v-if="!mobile"
+          v-if="smAndUp"
         >
           <span class="font-weight-black">Aaden</span> POS
           <div class="text-caption mt-n1">
