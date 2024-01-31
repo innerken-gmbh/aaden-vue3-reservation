@@ -3,7 +3,7 @@ import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
 import {addReservation, confirmReservation, getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
-import {groupBy, intersection} from "lodash-es";
+import {groupBy, intersection, maxBy} from "lodash-es";
 
 
 export const useReservationStore = defineStore('reservation', {
@@ -32,8 +32,8 @@ export const useReservationStore = defineStore('reservation', {
             return (this.tableList.length * this.ySize)
         },
         seatedInfo() {
-            const list = this.timeSlots.filter(it => it.endsWith('00') || it.endsWith('30'))
-            return list.map(it => {
+            const list = this.timeSlots.filter(it =>
+                it.endsWith('00') || it.endsWith('30')).map(it => {
                 let seatCount = 0
                 const target = dayjs(this.date + ' ' + it)
                 this.reservationList.forEach(r => {
@@ -46,6 +46,12 @@ export const useReservationStore = defineStore('reservation', {
                     time: it,
                     count: seatCount
                 }
+            })
+            const maxCount = maxBy(list, 'count').count
+            return list.map(it => {
+                it.ratio = it.count / maxCount * 100
+                console.log(it.ratio)
+                return it
             })
         },
         activeReservation() {
@@ -107,7 +113,8 @@ export const useReservationStore = defineStore('reservation', {
         }
     }
 })
-export const useHomePageControllerStore = defineStore('homePageController', {
+export const useHomePageControllerStore
+    = defineStore('homePageController', {
     state: () => ({
         showNewReservationModal: false,
         personCount: 4,

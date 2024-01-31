@@ -149,14 +149,27 @@ onMounted(() => {
           :key="t.time"
         >
           <div
-            class="pa-1 d-flex align-center justify-center text-center text-caption bg-grey-darken-4"
-            style="width: 100%;height: 100%;grid-column:span 2;"
+            class="pa-1 d-flex align-center justify-center text-center
+             text-caption bg-grey-darken-4"
+            style="width: 100%;height: 100%;grid-column:span 2;position: relative"
             :style="{
               borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
                 '2px inset rgba(0,0,0,.2) !important'
             }"
           >
-            {{ t.count }}
+            <div
+              class="bg-amber"
+              style="position: absolute;bottom: 0;left: 0;right: 0;"
+              :style="{
+                height:t.ratio+'%'
+              }"
+            />
+            <div
+              style="z-index: 2"
+              class="font-weight-black"
+            >
+              {{ t.count }}
+            </div>
           </div>
         </template>
         <div

@@ -8,9 +8,9 @@ import VueDragscroll from "vue-dragscroll";
 import './styles/main.scss';
 
 
-const deviceId = '0001'
+const deviceId = '1162'
 hillo.initial(`http://ik${deviceId}.ngrok.aaden.io/PHP/`)
-createApp(App) 
+createApp(App)
     .use(vuetify)
     .use(VueDragscroll)
     .use(pinia)
