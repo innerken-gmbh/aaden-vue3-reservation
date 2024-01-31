@@ -6,10 +6,11 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import hillo from "hillo";
 import VueDragscroll from "vue-dragscroll";
 import './styles/main.scss';
+import IKUtils from "innerken-js-utils";
 
 
-const deviceId = '0001'
-hillo.initial(`http://ik${deviceId}.ngrok.aaden.io/PHP/`)
+const deviceId = IKUtils.getQueryString('Base') || '0001'
+hillo.initial(`https://ik${deviceId}.ngrok.aaden.io/PHP/`)
 createApp(App)
     .use(vuetify)
     .use(VueDragscroll)

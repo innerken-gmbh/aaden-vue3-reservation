@@ -164,6 +164,16 @@ export const useHomePageControllerStore
         },
         showNewModal() {
             this.reservationStep = 0
+            this.startTime = null
+            this.personCount = 4
+            this.reservationExtraInfo = {
+                firstName: '',
+                lastName: '',
+                phone: '',
+                email: '',
+                note: '',
+                useStroller: false
+            }
             this.showNewReservationModal = true
         },
         minusPerson() {

@@ -17,11 +17,18 @@ const reservationStore = useReservationStore()
     <v-app-bar
       flat
     >
-      <div class="px-6">
+      <div class="px-6 d-flex align-center">
         <v-img
+          class="mr-4"
           width="24"
           :src="image"
         />
+        <div class="text-body-2">
+          <span class="font-weight-black">Aaden</span> POS
+          <div class="text-caption mt-n1">
+            v0.0.2
+          </div>
+        </div>
       </div>
 
 

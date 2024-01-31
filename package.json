@@ -12,6 +12,7 @@
     "biewangle": "^1.0.12",
     "dayjs": "^1.11.10",
     "hillo": "^2.0.32",
+    "innerken-js-utils": "^2.0.2",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "vue": "^3.3.11",
