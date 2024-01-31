@@ -1,11 +1,19 @@
 <script setup>
 import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {dateFormat, timestampTemplate, useCurrentTime} from "../../dataLayer/repository/dateRepo.js";
+import {
+  dateFormat,
+  timestampTemplate,
+  today,
+  toOnlyTimeFormat,
+  useCurrentTime
+} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
 import {moveReservation} from "../../dataLayer/api/reservationApi.js";
-import {onMounted, ref, watchEffect} from "vue";
+import {onMounted, ref, watch, watchEffect} from "vue";
+import {storeToRefs} from "pinia";
+import PlaceHolder from "../components/PlaceHolder.vue";
 
 
 const reservationInfo = useReservationStore()
@@ -17,14 +25,24 @@ watchEffect(() => {
       * reservationInfo.containerWidth)
 })
 const container = ref(null)
+const loading = ref(true)
 
 function resetCurrentScrollPos() {
   container.value?.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
+  reservationInfo.date = today()
 }
 
+const {date} = storeToRefs(reservationInfo)
+watch(date, async () => {
+  loading.value = true
+  await reservationInfo.reload()
+  loading.value = false
+})
 
 async function init() {
+  loading.value = true
   await reservationInfo.reload()
+  loading.value = false
   resetCurrentScrollPos()
 
 }
@@ -56,8 +74,36 @@ onMounted(() => {
     <v-row>
       <v-col>
         <div class="text-h4 d-flex font-weight-black align-center">
-          Reservations
-          <v-spacer />
+          <v-btn
+            class="mr-2"
+            icon=""
+            flat
+            @click="reservationInfo.listView=!reservationInfo.listView"
+          >
+            <v-icon>
+              <template v-if="reservationInfo.listView">
+                mdi-format-list-text
+              </template>
+              <template v-else>
+                mdi-chart-timeline
+              </template>
+            </v-icon>
+          </v-btn>
+          <v-btn
+            class="mr-2"
+            icon=""
+            flat
+            @click="reservationInfo.showAll=!reservationInfo.showAll"
+          >
+            <v-icon>
+              <template v-if="!reservationInfo.showAll">
+                mdi-eye-closed
+              </template>
+              <template v-else>
+                mdi-eye
+              </template>
+            </v-icon>
+          </v-btn>
           <v-btn
             class="mr-2"
             icon=""
@@ -66,6 +112,8 @@ onMounted(() => {
           >
             <v-icon>mdi-crosshairs-gps</v-icon>
           </v-btn>
+          <v-spacer />
+
           <v-btn
             icon=""
             flat
@@ -98,142 +146,188 @@ onMounted(() => {
         </div>
       </v-col>
     </v-row>
-    <div
-      style="width: calc(100% + 24px);position: relative;"
-      class="ml-n4 mt-8 pl-4 d-flex align-start"
-    >
+    <template v-if="loading">
+      <place-holder
+        title=" "
+        hint=" "
+        icon="mdi-cloud"
+      >
+        <v-progress-circular indeterminate />
+      </place-holder>
+    </template>
+    <template v-else>
       <div
-        class="flex-grow-1"
-        ref="container"
-        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;
-        height:calc(100vh - 170px);"
-        :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
-                 gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
-        }"
+        v-if="!reservationInfo.listView"
+        style="width: calc(100% + 24px);position: relative;"
+        class="ml-n4 mt-8 pl-4 d-flex align-start"
       >
         <div
-          style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 8"
+          class="flex-grow-1"
+          ref="container"
+          style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;
+        height:calc(100vh - 170px);"
+          :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
+                   gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
+          }"
         >
           <div
-            style="width: 100%;position: relative;display: grid;"
-            :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
-                     gridTemplateRows:'repeat(1,'+reservationInfo.ySize+'px)',
-            }"
+            style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 8"
           >
             <div
-              style="position: absolute;width:4px;height: 12px;z-index: 20;top:16px;left: 0;
-"
-              :style="{
-                transform: `translateX(${currentTimeX}px)`
+              style="width: 100%;position: relative;display: grid;"
+              :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
+                       gridTemplateRows:'repeat(1,'+reservationInfo.ySize+'px)',
               }"
-              class="bg-white rounded-b-pill"
-            />
-            <template
-              :key="i"
-              v-for="(t,i) in reservationInfo.bigTime"
             >
               <div
-                class="pa-2 text-body-1 d-flex align-center bg-black"
-                style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
+                style="position: absolute;width:4px;height: 12px;z-index: 20;top:16px;left: 0;
+"
+                :style="{
+                  transform: `translateX(${currentTimeX}px)`
+                }"
+                class="bg-white rounded-b-pill"
+              />
+              <template
+                :key="i"
+                v-for="(t,i) in reservationInfo.bigTime"
+              >
+                <div
+                  class="pa-2 text-body-1 d-flex align-center bg-black"
+                  style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
              box-sizing:border-box;
 "
-              >
-                {{ t }}
-              </div>
-            </template>
-          </div>
-        </div>
-
-        <template
-          v-for="t in reservationInfo.seatedInfo"
-          :key="t.time"
-        >
-          <div
-            class="pa-1 d-flex align-center justify-center text-center
-             text-caption bg-grey-darken-4"
-            style="width: 100%;height: 100%;grid-column:span 2;position: relative"
-            :style="{
-              borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
-                '2px inset rgba(0,0,0,.2) !important'
-            }"
-          >
-            <div
-              class="bg-amber"
-              style="position: absolute;bottom: 0;left: 0;right: 0;"
-              :style="{
-                height:t.ratio+'%'
-              }"
-            />
-            <div
-              style="z-index: 2"
-              class="font-weight-black"
-            >
-              {{ t.count }}
+                >
+                  {{ t }}
+                </div>
+              </template>
             </div>
           </div>
-        </template>
-        <div
-          style="position: sticky; z-index: 4;
+
+          <template
+            v-for="t in reservationInfo.seatedInfo"
+            :key="t.time"
+          >
+            <div
+              class="pa-1 d-flex align-center justify-center text-center
+             text-caption bg-grey-darken-4"
+              style="width: 100%;height: 100%;grid-column:span 2;position: relative"
+              :style="{
+                borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
+                  '2px inset rgba(0,0,0,.2) !important'
+              }"
+            >
+              <div
+                class="bg-amber-darken-1"
+                style="position: absolute;bottom: 0;left: 0;right: 0;"
+                :style="{
+                  height:t.ratio+'%'
+                }"
+              />
+              <div
+                style="z-index: 2"
+                class="font-weight-black"
+              >
+                {{ t.count }}
+              </div>
+            </div>
+          </template>
+          <div
+            style="position: sticky; z-index: 4;
           left: 0;
           width: 72px;
           background: linear-gradient(to right , rgba(0,0,0,.7),
              rgba(0,0,0,.1))"
-          class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
-          :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
-          v-for="(t,i) in reservationInfo.tableList"
-          :key="t.id"
-        >
-          {{ t.tableName }}
-          <v-spacer />
-          <v-icon color="green">
-            mdi-circle-small
-          </v-icon>
-          <div class="font-weight-thin text-caption">
-            {{ t.tableSeatCount }}
+            class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
+            :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
+            v-for="(t,i) in reservationInfo.tableList"
+            :key="t.id"
+          >
+            {{ t.tableName }}
+            <v-spacer />
+            <v-icon color="green">
+              mdi-circle-small
+            </v-icon>
+            <div class="font-weight-thin text-caption">
+              {{ t.tableSeatCount }}
+            </div>
           </div>
-        </div>
-        <div
-          class="gridBackground"
-          :style="{
-            height:(reservationInfo.containerHeight+1)+'px',
-            width: reservationInfo.containerWidth+'px',
-            gridColumn:'0 / '+reservationInfo.timeSlots.length,
-            gridRow:'3 / '+(reservationInfo.tableList.length+6)
-          }"
-          style="position: absolute;"
-        />
-        <v-card
-          color="transparent"
-          flat
-          tile
-          :width="reservationInfo.containerWidth"
-          :height="reservationInfo.containerHeight"
-          style="position: absolute;"
-          :style="{
-            gridColumn:'0 / '+reservationInfo.timeSlots.length,
-            gridRow:'3 / '+(reservationInfo.tableList.length+3)
-          }"
-        >
           <div
-            style="position: relative"
+            class="gridBackground"
             :style="{
-              width:reservationInfo.containerWidth+'px',
-              height:reservationInfo.containerHeight+'px'
+              height:(reservationInfo.containerHeight+1)+'px',
+              width: reservationInfo.containerWidth+'px',
+              gridColumn:'0 / '+reservationInfo.timeSlots.length,
+              gridRow:'3 / '+(reservationInfo.tableList.length+6)
+            }"
+            style="position: absolute;"
+          />
+          <v-card
+            color="transparent"
+            flat
+            tile
+            :width="reservationInfo.containerWidth"
+            :height="reservationInfo.containerHeight"
+            style="position: absolute;"
+            :style="{
+              gridColumn:'0 / '+reservationInfo.timeSlots.length,
+              gridRow:'3 / '+(reservationInfo.tableList.length+3)
             }"
           >
-            <reservation-card
-              v-for="r in reservationInfo.reservationList"
-              :key="r.id"
-              @open="reservationInfo.showReservationWithId(r.remoteId)"
-              :reservation-info="r"
-              @drag-stop="(...args)=>onMoveReservation(r,args)"
-              :x-size="reservationInfo.xSize"
-              :y-size="reservationInfo.ySize"
-            />
+            <div
+              style="position: relative"
+              :style="{
+                width:reservationInfo.containerWidth+'px',
+                height:reservationInfo.containerHeight+'px'
+              }"
+            >
+              <reservation-card
+                v-for="r in reservationInfo.filteredReservationList"
+                :key="r.id"
+                @open="reservationInfo.showReservationWithId(r.remoteId)"
+                :reservation-info="r"
+                @drag-stop="(...args)=>onMoveReservation(r,args)"
+                :x-size="reservationInfo.xSize"
+                :y-size="reservationInfo.ySize"
+              />
+            </div>
+          </v-card>
+        </div>
+      </div>
+      <div
+        class="mt-8"
+        v-else
+        style="max-height: calc(100vh - 160px);overflow-y: scroll"
+      >
+        <v-card
+          color="grey-darken-3"
+          class="pa-3 px-4 mb-2 d-flex align-center"
+          v-for="r in reservationInfo.filteredReservationList"
+          :key="r.id"
+          @click="reservationInfo.showReservationWithId(r.remoteId)"
+        >
+          <div>
+            <div class="text-body-1 font-weight-black">
+              {{ toOnlyTimeFormat(r.fromDateTime) }} - {{ toOnlyTimeFormat(r.toDateTime) }}
+            </div>
+            <div class="text-h5 font-weight-black d-flex align-baseline">
+              {{ r.personCount }}P
+              <div class="text-body-1 ml-4">
+                {{ r.firstName }} {{ r.lastName }}
+              </div>
+            </div>
           </div>
+          <v-spacer />
+          <v-icon
+            v-if="r.completed==='1'"
+            small
+            color="white"
+            class="ml-2"
+          >
+            mdi-location-enter
+          </v-icon>
         </v-card>
       </div>
-    </div>
+    </template>
   </v-container>
   <new-reservation-dialog />
 </template>

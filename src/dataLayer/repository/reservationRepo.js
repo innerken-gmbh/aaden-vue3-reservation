@@ -9,7 +9,10 @@ import {groupBy, intersection, maxBy} from "lodash-es";
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
         reservationList: [],
+        listView: false,
         date: today(),
+        search: '',
+        showAll: true,
         tableList: [],
         xSize: 40,
         ySize: 28,
@@ -56,6 +59,13 @@ export const useReservationStore = defineStore('reservation', {
         },
         activeReservation() {
             return this.reservationList.find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
+        },
+        filteredReservationList() {
+            return this.reservationList.filter(it => {
+                return (!this.search || Object.values(it).some(s => s.toString().toLowerCase()
+                    .includes(this.search.toLowerCase()) ?? false)) && (this.showAll ||
+                    it.completed !== '1')
+            })
         }
     },
     actions: {
@@ -119,6 +129,7 @@ export const useHomePageControllerStore
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
+
         date: dayjs().format(dateFormat),
         startTime: null,
         loading: false,

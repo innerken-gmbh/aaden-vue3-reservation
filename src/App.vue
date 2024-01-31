@@ -1,6 +1,6 @@
 <script setup>
 import HomePage from './views/pages/HomePage.vue';
-import {useHomePageControllerStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
+import {useHomePageControllerStore, useReservationStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
@@ -8,6 +8,7 @@ import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
+const reservationStore = useReservationStore()
 </script>
 
 <template>
@@ -18,6 +19,7 @@ const qrController = useScanQrStore()
       <v-app-bar-nav-icon />
       <div class="flex-grow-1">
         <v-text-field
+          v-model="reservationStore.search"
           prepend-inner-icon="mdi-magnify"
           variant="solo-filled"
           flat
