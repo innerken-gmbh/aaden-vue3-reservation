@@ -62,7 +62,8 @@ export async function addReservation(reservationInfo) {
 }
 
 export async function confirmReservation(id) {
-    return (await hillo.post('Tables.php?op=completeReservation', Object.assign({}, {reservationId: id})))
+    return (await hillo.post('Tables.php?op=completeReservation',
+        Object.assign({}, {reservationId: id})))
 }
 
 export async function moveReservation(reservationId, newTableId, fromDateTime, toDateTime) {

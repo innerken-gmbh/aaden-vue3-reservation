@@ -15,12 +15,11 @@ watchEffect(() => {
   currentTimeX.value = Math.ceil((dayjs(currentTime.value).subtract(2, "hours")
           .diff(dayjs().set("hours", 5), 'minutes') / (19 * 60))
       * reservationInfo.containerWidth)
-  console.log(currentTimeX.value)
 })
 const container = ref(null)
 
 function resetCurrentScrollPos() {
-  container.value.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
+  container.value?.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
 }
 
 
@@ -50,7 +49,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-container fluid>
+  <v-container
+    fluid
+    class="pb-0"
+  >
     <v-row>
       <v-col>
         <div class="text-h4 d-flex font-weight-black align-center">
@@ -103,7 +105,8 @@ onMounted(() => {
       <div
         class="flex-grow-1"
         ref="container"
-        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;height: 80vh;"
+        style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;
+        height:calc(100vh - 170px);"
         :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                  gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
         }"
@@ -208,6 +211,7 @@ onMounted(() => {
             <reservation-card
               v-for="r in reservationInfo.reservationList"
               :key="r.id"
+              @open="reservationInfo.showReservationWithId(r.remoteId)"
               :reservation-info="r"
               @drag-stop="(...args)=>onMoveReservation(r,args)"
               :x-size="reservationInfo.xSize"

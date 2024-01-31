@@ -12,8 +12,11 @@ export function today() {
 export const timestampTemplate = 'YYYY-MM-DD HH:mm:ss'
 export const timeFormat = 'HH:mm'
 
-export function onlyTimeFormat(str) {
+export function toOnlyTimeFormat(str) {
     return dayjs(str).format(timeFormat)
+}
+export function toDateFormat(str) {
+    return dayjs(str).format(dateFormat)
 }
 
 export function timeDisplay(str) {
@@ -55,3 +58,5 @@ export const useCurrentTime = () => {
         currentTime,
     };
 };
+
+

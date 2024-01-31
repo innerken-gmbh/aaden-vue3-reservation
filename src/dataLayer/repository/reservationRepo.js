@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {addReservation, getReservation} from "../api/reservationApi.js";
+import {addReservation, confirmReservation, getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
 import {groupBy, intersection} from "lodash-es";
 
@@ -13,7 +13,8 @@ export const useReservationStore = defineStore('reservation', {
         tableList: [],
         xSize: 40,
         ySize: 28,
-        activeReservationId: null,
+        activeReservationId: 32165,
+        showDetailDialog: false,
         timeSlots: Array.from(Array(24 - 7 + 3).keys())
             .map(it => (it + 7) % 24).map(it => Array
                 .from(Array(4).keys())
@@ -46,6 +47,9 @@ export const useReservationStore = defineStore('reservation', {
                     count: seatCount
                 }
             })
+        },
+        activeReservation() {
+            return this.reservationList.find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
         }
     },
     actions: {
@@ -88,13 +92,21 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
+            console.log(this.reservationList)
         },
         async reload() {
             await this.loadReservations()
+        },
+        async checkIn(id) {
+            await confirmReservation(id)
+            await this.reload()
+        },
+        async showReservationWithId(remoteId) {
+            this.activeReservationId = remoteId
+            this.showDetailDialog = true
         }
     }
 })
-
 export const useHomePageControllerStore = defineStore('homePageController', {
     state: () => ({
         showNewReservationModal: false,
@@ -143,7 +155,6 @@ export const useHomePageControllerStore = defineStore('homePageController', {
         }
     }
 })
-
 export const useDatePickerStore = defineStore('datePicker', {
     state: () => {
         return {
@@ -174,7 +185,6 @@ export const useDatePickerStore = defineStore('datePicker', {
         }
     }
 })
-
 export const useTimePickerStore = defineStore('timePicker', {
     state: () => {
         return {
@@ -202,27 +212,44 @@ export const useTimePickerStore = defineStore('timePicker', {
         }
     }
 })
-export const useScanQrStore = defineStore('scanQR', {
-    state: () => {
-        return {
-            currentQRText: null,
-            showPicker: false,
-            resolve: null,
-        }
-    },
-    actions: {
-        async scanQR() {
-            return new Promise(resolve => {
-                this.showPicker = true
-                this.resolve = resolve
-            })
-        },
-        confirm() {
-            if (this.resolve) {
-                this.resolve(this.currentQRText)
-                this.showPicker = false
-            }
+export const useScanQrStore =
+    defineStore('scanQR', {
+        state: () => {
+            return {
 
+                showPicker: false,
+                loading: false,
+                error: false,
+                resolve: null,
+                paused: false,
+            }
+        },
+        actions: {
+            rescan() {
+                this.paused = false
+                this.error = false
+            },
+            async scanQR() {
+                const qrInfo = await new Promise(resolve => {
+                    this.paused = false
+                    this.error = false
+                    this.showPicker = true
+                    this.resolve = resolve
+                })
+                if (qrInfo.batch && qrInfo.remoteId) {
+                    const infoStore = useReservationStore()
+                    await infoStore.showReservationWithId(qrInfo.remoteId)
+                }
+            },
+            confirm(info) {
+                if (this.resolve) {
+                    this.resolve(info)
+                    this.showPicker = false
+                }
+
+            }
         }
-    }
-})
+    })
+
+
+

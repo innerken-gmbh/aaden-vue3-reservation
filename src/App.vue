@@ -1,10 +1,13 @@
 <script setup>
 import HomePage from './views/pages/HomePage.vue';
-import {useHomePageControllerStore} from "./dataLayer/repository/reservationRepo";
+import {useHomePageControllerStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
+import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
+import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
 
 const homeController = useHomePageControllerStore()
+const qrController = useScanQrStore()
 </script>
 
 <template>
@@ -27,18 +30,20 @@ const homeController = useHomePageControllerStore()
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
-      <v-btn icon="">
+      <v-btn
+        @click="qrController.scanQR()"
+        icon=""
+      >
         <v-icon>mdi-qrcode-scan</v-icon>
-      </v-btn>
-      <v-btn icon="">
-        <v-icon>mdi-cog</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
       <home-page />
     </v-main>
+    <scan-q-r-dialog />
     <global-date-picker />
     <global-time-picker />
+    <reservation-detail-dialog />
   </v-app>
 </template>
 
