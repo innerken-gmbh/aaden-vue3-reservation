@@ -10,6 +10,7 @@ import image from './assets/calendar.png'
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
+const { mobile } = useDisplay()
 </script>
 
 <template>
@@ -23,7 +24,10 @@ const reservationStore = useReservationStore()
           width="24"
           :src="image"
         />
-        <div class="text-body-2">
+        <div
+          class="text-body-2"
+          v-if="!mobile"
+        >
           <span class="font-weight-black">Aaden</span> POS
           <div class="text-caption mt-n1">
             v0.0.2
