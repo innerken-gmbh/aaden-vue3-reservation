@@ -15,9 +15,8 @@
   >
     <v-card
       @contextmenu="tryUnlock"
-      elevation="0"
+      rounded="0"
       :variant="variants"
-      rounded="md"
       :height="ySize"
       :color="color"
       class="px-2 text-caption d-flex align-center reservationCard bg-black"
@@ -129,8 +128,8 @@ const color = computed(() => {
 })
 
 const variants = computed(() => {
-  const defaultVariant = 'flat'
-  const overrideVariant = 'flat'
+  const defaultVariant = 'outlined'
+  const overrideVariant = 'outlined'
   if (props.reservationInfo.overTime) {
     return defaultVariant
   } else if (checkedIn.value) {
