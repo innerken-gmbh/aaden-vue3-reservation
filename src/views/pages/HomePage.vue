@@ -1,19 +1,15 @@
 <script setup>
-import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {useDatePickerStore, useDragStore, useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {
-  dateFormat,
-  timestampTemplate,
-  today,
-  toOnlyTimeFormat,
-  useCurrentTime
-} from "../../dataLayer/repository/dateRepo.js";
+import {dateFormat, timestampTemplate, today, useCurrentTime} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
 import {moveReservation} from "../../dataLayer/api/reservationApi.js";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import PlaceHolder from "../components/PlaceHolder.vue";
+import {useDisplay} from "vuetify";
+import { dragscroll } from 'vue-dragscroll'
 
 
 const reservationInfo = useReservationStore()
@@ -31,6 +27,8 @@ function resetCurrentScrollPos() {
   container.value?.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
   reservationInfo.date = today()
 }
+
+const dragController = useDragStore()
 
 const {date} = storeToRefs(reservationInfo)
 watch(date, async () => {
@@ -63,6 +61,15 @@ async function onMoveReservation(r, positionInfo) {
 onMounted(() => {
   init()
 })
+const datePicker = useDatePickerStore()
+
+async function selectNewDate() {
+  const newDate = await datePicker.selectDate()
+  console.log(newDate, 'date')
+  date.value = newDate
+}
+
+const {smAndUp} = useDisplay()
 
 </script>
 
@@ -105,6 +112,7 @@ onMounted(() => {
             </v-icon>
           </v-btn>
           <v-btn
+            v-if="!reservationInfo.listView"
             class="mr-2"
             icon=""
             flat
@@ -123,14 +131,23 @@ onMounted(() => {
           >
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
-          <div class="d-flex mx-2 align-center">
-            <div class="text-caption">
+          <div
+            class="d-flex mx-2 align-center"
+            @click="selectNewDate"
+          >
+            <div
+              class="text-caption"
+              v-if="smAndUp"
+            >
               {{ dayjs(reservationInfo.date).format('dddd') }}
             </div>
             <div class="font-weight-black text-h5 mx-2">
               {{ dayjs(reservationInfo.date).format('DD') }}
             </div>
-            <div class="text-body-2 font-weight-black">
+            <div
+              class="text-body-2 font-weight-black"
+              v-if="smAndUp"
+            >
               {{ dayjs(reservationInfo.date).format('MMMM') }}
             </div>
           </div>
@@ -157,14 +174,15 @@ onMounted(() => {
     </template>
     <template v-else>
       <div
-        v-if="!reservationInfo.listView"
+        v-if="!reservationInfo.displayList"
         style="width: calc(100% + 24px);position: relative;"
         class="ml-n4 mt-8 pl-4 d-flex align-start"
       >
         <div
           class="flex-grow-1"
           ref="container"
-          style="display: grid;grid-gap: 0;position: relative;width: 0;overflow-x: scroll;
+          v-dragscroll="dragController.globalDragEnable"
+          style="display: grid;grid-gap: 0;position: relative;width: 0;overflow:hidden;
         height:calc(100vh - 170px);"
           :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                    gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
@@ -193,7 +211,8 @@ onMounted(() => {
               >
                 <div
                   class="pa-2 text-body-1 d-flex align-center bg-black"
-                  style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;z-index: 6;
+                  style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;
+                  z-index: 6;
              box-sizing:border-box;
 "
                 >
@@ -202,32 +221,39 @@ onMounted(() => {
               </template>
             </div>
           </div>
-
           <template
             v-for="t in reservationInfo.seatedInfo"
             :key="t.time"
           >
             <div
-              class="pa-1 d-flex align-center justify-center text-center
-             text-caption bg-grey-darken-4"
-              style="width: 100%;height: 100%;grid-column:span 2;position: relative"
+              class="
+              text-caption
+              bg-grey-darken-4"
+              style="width: 100%;height: 100%;
+              grid-column:span 2;position: sticky;
+              top: 28px;z-index: 3"
               :style="{
                 borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
                   '2px inset rgba(0,0,0,.2) !important'
               }"
             >
               <div
-                class="bg-amber-darken-1"
-                style="position: absolute;bottom: 0;left: 0;right: 0;"
-                :style="{
-                  height:t.ratio+'%'
-                }"
-              />
-              <div
-                style="z-index: 2"
-                class="font-weight-black"
+                class="pa-1 text-center d-flex align-center justify-center"
+                style="position: relative;width: 100%;height: 100%"
               >
-                {{ t.count }}
+                <div
+                  style="z-index: 2"
+                  class="font-weight-black"
+                >
+                  {{ t.count }}
+                </div>
+                <div
+                  class="bg-amber-darken-1"
+                  style="position: absolute;bottom: 0;left: 0;right: 0;"
+                  :style="{
+                    height:t.ratio+'%'
+                  }"
+                />
               </div>
             </div>
           </template>
@@ -333,6 +359,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+div{
+  overscroll-behavior: none;
+}
 ::-webkit-scrollbar {
   display: none;
 }

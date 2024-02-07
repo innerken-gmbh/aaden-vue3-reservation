@@ -24,6 +24,7 @@ const {smAndUp} = useDisplay()
           prepend-inner-icon="mdi-magnify"
           variant="solo-filled"
           flat
+          clearable
           hide-details
         />
       </v-app-bar-title>

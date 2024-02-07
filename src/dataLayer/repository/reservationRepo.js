@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {addReservation, confirmReservation, getReservation} from "../api/reservationApi.js";
+import {addReservation, cancelReservation, confirmReservation, getReservation} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
 import {groupBy, intersection, maxBy} from "lodash-es";
 
@@ -15,6 +15,7 @@ export const useReservationStore = defineStore('reservation', {
         showAll: true,
         tableList: [],
         xSize: 40,
+        loading: false,
         ySize: 28,
         activeReservationId: 32165,
         showDetailDialog: false,
@@ -53,7 +54,6 @@ export const useReservationStore = defineStore('reservation', {
             const maxCount = maxBy(list, 'count').count
             return list.map(it => {
                 it.ratio = it.count / maxCount * 100
-                console.log(it.ratio)
                 return it
             })
         },
@@ -66,6 +66,9 @@ export const useReservationStore = defineStore('reservation', {
                     .includes(this.search.toLowerCase()) ?? false)) && (this.showAll ||
                     it.completed !== '1')
             })
+        },
+        displayList() {
+            return this.listView || this.search
         }
     },
     actions: {
@@ -86,14 +89,16 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
-            const overlaps = Object.entries(groupBy(list, 'tableId')).map(([, value]) => {
+            const overlaps = Object.entries(groupBy(list.filter(it=>it.cancelled==='0'), 'tableId'))
+                .map(([, value]) => {
                 return value.map(it => {
                     it.haveOverlap = value.some(that => that.id !== it.id && intersection(it.timeMap, that.timeMap).length > 1)
                     return it
                 }).filter(it => it.haveOverlap).map(it => it.id)
             }).flat()
 
-            const shareTable = (Object.values(groupBy(list, 'batch')).filter(it => it.length > 1).flat()
+            const shareTable = (Object.values(groupBy(list, 'batch'))
+                .filter(it => it.length > 1).flat()
                 .map(it => it.id))
             const batchColorCache = {}
             this.reservationList = list.map(it => {
@@ -108,14 +113,21 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
-            console.log(this.reservationList)
         },
         async reload() {
             await this.loadReservations()
         },
         async checkIn(id) {
+            this.loading = true
             await confirmReservation(id)
             await this.reload()
+            this.loading = false
+        },
+        async cancel(id) {
+            this.loading = true
+            await cancelReservation(id)
+            await this.reload()
+            this.loading = false
         },
         async showReservationWithId(remoteId) {
             this.activeReservationId = remoteId
@@ -129,12 +141,13 @@ export const useHomePageControllerStore
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
-
-        date: dayjs().format(dateFormat),
+        date: today(),
         startTime: null,
         loading: false,
         timeGap: [],
         otherTime: [],
+        error: false,
+        errorMessage: '',
         reservationExtraInfo: {
             firstName: '',
             lastName: '',
@@ -154,10 +167,12 @@ export const useHomePageControllerStore
         async addReservation() {
             this.loading = true
             const res = await addReservation(this.reservationAddModel)
-            console.log(res)
             if (res.code === 200) {
                 await useReservationStore().reload()
                 this.showNewReservationModal = false
+            } else {
+                this.error = true
+                this.errorMessage = res.message
             }
             this.loading = false
 
@@ -166,6 +181,9 @@ export const useHomePageControllerStore
             this.reservationStep = 0
             this.startTime = null
             this.personCount = 4
+            this.date = useReservationStore().date
+            this.errorMessage = ''
+            this.error = false
             this.reservationExtraInfo = {
                 firstName: '',
                 lastName: '',
@@ -195,6 +213,7 @@ export const useDatePickerStore = defineStore('datePicker', {
     actions: {
         async selectDate() {
             return new Promise(resolve => {
+                this.currentDate = new Date()
                 this.showPicker = true
                 this.resolve = resolve
             })
@@ -278,6 +297,25 @@ export const useScanQrStore =
             }
         }
     })
+
+export const useDragStore = defineStore('drag', {
+    state: () => {
+        return {
+            globalDragEnable: true,
+            draggableItemId: null,
+        }
+    },
+    actions: {
+        startDrag(id) {
+            this.globalDragEnable = false
+            this.draggableItemId = id
+        },
+        stopDrag() {
+            this.globalDragEnable = true
+            this.draggableItemId = null
+        }
+    }
+})
 
 
 

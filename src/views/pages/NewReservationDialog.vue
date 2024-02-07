@@ -26,7 +26,6 @@ watchEffect(async () => {
 
 <template>
   <v-dialog
-    persistent
     max-width="500"
     v-model="controller.showNewReservationModal"
   >
@@ -73,25 +72,14 @@ watchEffect(async () => {
                 @click="async ()=>controller.date=await datePicker.selectDate()"
               >
                 {{ controller.date }}
-                <v-spacer />
-                <v-icon
-                  size="24"
-                  icon="mdi-arrow-right"
-                />
               </div>
             </form-container>
             <form-container label="Time">
               <div
-                class="text-h5 font-weight-black d-flex align-center"
+                class="text-h5 font-weight-black d-flex align-center text-no-wrap"
                 @click="async ()=>controller.startTime=await timerPicker.selectTime()"
               >
                 {{ controller.startTime ?? 'Select a time' }}
-                <v-spacer />
-                <v-icon
-                  size="24"
-                  class="mr-4"
-                  icon="mdi-arrow-right"
-                />
               </div>
             </form-container>
           </inline-two-row-container>
@@ -183,7 +171,16 @@ watchEffect(async () => {
             Need Stroller
           </v-chip>
         </div>
-
+        <v-sheet
+          rounded
+          class="mt-4 bg-red pa-4 text-body-2 d-flex align-center"
+          v-if="controller.error"
+        >
+          <v-icon class="mr-2">
+            mdi-alert-circle
+          </v-icon>
+          {{ controller.errorMessage }}
+        </v-sheet>
         <v-btn
           :loading="controller.loading"
           @click="controller.addReservation()"

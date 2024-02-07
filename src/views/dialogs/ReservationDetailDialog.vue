@@ -10,6 +10,10 @@ const info = computed(() => {
   return controller.activeReservation
 })
 
+const canEdit = computed(() => {
+  return info.value?.completed !== '1' && info.value.cancelled !== '1'
+})
+
 const status = computed(() => {
   if (info.value?.completed === '1') {
     return 'checkedIn'
@@ -22,6 +26,11 @@ const status = computed(() => {
 
 async function onConfirm() {
   await controller.checkIn(info.value?.id)
+  controller.showDetailDialog = false
+}
+
+async function onCancel() {
+  await controller.cancel(info.value?.id)
   controller.showDetailDialog = false
 }
 
@@ -122,10 +131,14 @@ async function onConfirm() {
             {{ info.note }}
           </div>
         </div>
-        <div class="d-flex mt-8">
+        <div
+          class="d-flex mt-8"
+          v-if="canEdit"
+        >
           <v-btn
+            :loading="controller.loading"
             @click="onConfirm"
-            v-if="info.completed!=='1'"
+
             color="white"
             class="mr-2 flex-grow-1"
           >
@@ -135,7 +148,8 @@ async function onConfirm() {
             Check in
           </v-btn>
           <v-btn
-            v-if="info.cancelled!=='1'"
+            @click="onCancel"
+            :loading="controller.loading"
             color="white"
             class="mr-2"
           >

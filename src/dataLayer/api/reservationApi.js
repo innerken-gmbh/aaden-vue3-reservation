@@ -18,7 +18,7 @@ export async function setReservable(tableId, newState) {
 
 export async function loadAllReservation(fromDateTime, toDateTime) {
     return (await hillo.get('Tables.php?op=getReservationByTimeSpan', {
-        fromDateTime, toDateTime
+        fromDateTime, toDateTime, ignoreCancelled: 0
     })).content
 }
 
