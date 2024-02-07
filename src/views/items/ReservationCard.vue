@@ -15,9 +15,9 @@
   >
     <v-card
       @contextmenu="tryUnlock"
-      elevation="4"
+      elevation="0"
       :variant="variants"
-      rounded="0"
+      rounded="md"
       :height="ySize"
       :color="color"
       class="px-2 text-caption d-flex align-center reservationCard bg-black"
@@ -129,13 +129,13 @@ const color = computed(() => {
 })
 const variants = computed(() => {
   if (props.reservationInfo.overTime) {
-    return 'flat'
+    return 'outlined'
   } else if (checkedIn.value) {
-    return 'flat'
+    return 'outlined'
   } else if (props.reservationInfo.haveOverlap) {
-    return 'flat'
+    return 'outlined'
   }
-  return 'flat'
+  return 'outlined'
 })
 const canDrag = computed(() => {
   return draggableItemId.value === props.reservationInfo.id

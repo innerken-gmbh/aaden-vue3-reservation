@@ -1,15 +1,26 @@
 <script setup>
-import {useDatePickerStore, useDragStore, useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {
+  useDatePickerStore,
+  useDragStore,
+  useReservationChangeVM,
+  useReservationStore
+} from "../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {dateFormat, timestampTemplate, today, useCurrentTime} from "../../dataLayer/repository/dateRepo.js";
+import {
+  dateFormat,
+  timestampTemplate,
+  today,
+  toOnlyTimeFormat,
+  useCurrentTime
+} from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
-import {moveReservation} from "../../dataLayer/api/reservationApi.js";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import PlaceHolder from "../components/PlaceHolder.vue";
 import {useDisplay} from "vuetify";
-import { dragscroll } from 'vue-dragscroll'
+import {dragscroll} from 'vue-dragscroll'
+import IKUtils from "innerken-js-utils";
 
 
 const reservationInfo = useReservationStore()
@@ -24,7 +35,7 @@ const container = ref(null)
 const loading = ref(true)
 
 function resetCurrentScrollPos() {
-  container.value?.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 2)})
+  container.value?.scroll({top: 0, left: currentTimeX.value - (window.innerWidth / 3)})
   reservationInfo.date = today()
 }
 
@@ -41,21 +52,27 @@ async function init() {
   loading.value = true
   await reservationInfo.reload()
   loading.value = false
+  await IKUtils.wait(2 * 1000)
   resetCurrentScrollPos()
 
 }
 
+const reservationChangeVM = useReservationChangeVM()
 
 async function onMoveReservation(r, positionInfo) {
   const [x, y] = positionInfo
+  if (x === r.grid.x && y === r.grid.y) {
+    reservationChangeVM.addToChanges(r.id, null)
+    return
+  }
   const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
   const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
   const reservationLength = Math.abs(dayjs(r.fromDateTime).diff(dayjs(r.toDateTime), 'minutes'))
   const [hour, minute] = timeSlot.split(':')
   const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute)
   const newEnd = newStart.add(reservationLength, 'minutes').format(timestampTemplate)
-  await moveReservation(r.id, table.tableId, newStart.format(timestampTemplate), newEnd)
-  await reservationInfo.reload()
+  reservationChangeVM.addToChanges(r.id, table.tableId,
+      newStart.format(timestampTemplate), newEnd)
 }
 
 onMounted(() => {
@@ -231,7 +248,7 @@ const {smAndUp} = useDisplay()
               bg-grey-darken-4"
               style="width: 100%;height: 100%;
               grid-column:span 2;position: sticky;
-              top: 28px;z-index: 3"
+              top: 28px;z-index: 8"
               :style="{
                 borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
                   '2px inset rgba(0,0,0,.2) !important'
@@ -243,13 +260,13 @@ const {smAndUp} = useDisplay()
               >
                 <div
                   style="z-index: 2"
-                  class="font-weight-black"
+                  class="font-weight-black text-body-2"
                 >
                   {{ t.count }}
                 </div>
                 <div
-                  class="bg-amber-darken-1"
-                  style="position: absolute;bottom: 0;left: 0;right: 0;"
+                  style="position: absolute;top: 0;left: 0;right: 0;
+                  background: rgba(155,248,12,0.6)"
                   :style="{
                     height:t.ratio+'%'
                   }"
@@ -318,6 +335,34 @@ const {smAndUp} = useDisplay()
             </div>
           </v-card>
         </div>
+        <v-card
+          v-if="reservationChangeVM.changesCount>0"
+          style="position: fixed;right: 64px;bottom: 64px"
+          class="pa-2 pl-8 font-weight-black"
+          color="white"
+          elevation="8"
+        >
+          {{ reservationChangeVM.changesCount }} Changes
+          <v-btn
+            elevation="0"
+            @click="reservationChangeVM.cancelAllChanges()"
+            class="mx-2"
+            rounded="0"
+            icon=""
+            color="white"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+          <v-btn
+            @click="reservationChangeVM.applyAllChanges()"
+            elevation="0"
+            rounded="0"
+            icon=""
+            color="white"
+          >
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+        </v-card>
       </div>
       <div
         class="mt-8"
@@ -359,9 +404,10 @@ const {smAndUp} = useDisplay()
 </template>
 
 <style scoped>
-div{
+div {
   overscroll-behavior: none;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
@@ -376,6 +422,16 @@ div{
   40px 28px,
   80px 72px,
   160px 72px
+}
+
+.stripeBackground {
+  background: repeating-linear-gradient(
+      to right,
+      #f6ba52,
+      #f6ba52 10px,
+      #ffd180 10px,
+      #ffd180 20px
+  );
 }
 
 .vdr {

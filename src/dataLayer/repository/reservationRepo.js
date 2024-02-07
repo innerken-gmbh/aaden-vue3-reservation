@@ -1,9 +1,16 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {addReservation, cancelReservation, confirmReservation, getReservation} from "../api/reservationApi.js";
+import {
+    addReservation,
+    cancelReservation,
+    confirmReservation,
+    getReservation,
+    moveReservation
+} from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
 import {groupBy, intersection, maxBy} from "lodash-es";
+import IKUtils from "innerken-js-utils";
 
 
 export const useReservationStore = defineStore('reservation', {
@@ -63,8 +70,9 @@ export const useReservationStore = defineStore('reservation', {
         filteredReservationList() {
             return this.reservationList.filter(it => {
                 return (!this.search || Object.values(it).some(s => s.toString().toLowerCase()
-                    .includes(this.search.toLowerCase()) ?? false)) && (this.showAll ||
-                    it.completed !== '1')
+                        .includes(this.search.toLowerCase()) ?? false)) &&
+                    (this.showAll ||
+                        (it.completed !== '1' && it.cancelled !== '1'))
             })
         },
         displayList() {
@@ -89,18 +97,20 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return it
             })
-            const overlaps = Object.entries(groupBy(list.filter(it=>it.cancelled==='0'), 'tableId'))
+            const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
                 .map(([, value]) => {
-                return value.map(it => {
-                    it.haveOverlap = value.some(that => that.id !== it.id && intersection(it.timeMap, that.timeMap).length > 1)
-                    return it
-                }).filter(it => it.haveOverlap).map(it => it.id)
-            }).flat()
+                    return value.map(it => {
+                        it.haveOverlap = value.some(that => that.id !== it.id && intersection(it.timeMap, that.timeMap).length > 1)
+                        return it
+                    }).filter(it => it.haveOverlap).map(it => it.id)
+                }).flat()
 
             const shareTable = (Object.values(groupBy(list, 'batch'))
                 .filter(it => it.length > 1).flat()
                 .map(it => it.id))
             const batchColorCache = {}
+            this.reservationList = []
+            await IKUtils.wait(50)
             this.reservationList = list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
                 it.haveShareTable = shareTable.includes(it.id)
@@ -313,6 +323,47 @@ export const useDragStore = defineStore('drag', {
         stopDrag() {
             this.globalDragEnable = true
             this.draggableItemId = null
+        }
+    }
+})
+
+export const useReservationChangeVM = defineStore('reservationChange', {
+    state: () => ({
+        changes: {},
+        loading: false,
+    }),
+    actions: {
+        addToChanges(id, tableId, start, end) {
+            if (!tableId) {
+                delete this.changes[id]
+            } else {
+                this.changes[id] = {tableId, start, end}
+            }
+
+        },
+
+        async applyAllChanges() {
+            this.loading = true
+            const infos = Object.entries(this.changes)
+                .map(([key, value]) => ({...value, id: key}))
+            for (const info of infos) {
+                await moveReservation(info.id, info.tableId, info.start, info.end)
+            }
+            const reservationInfo = useReservationStore()
+            await reservationInfo.reload()
+            this.loading = false
+            this.changes = {}
+        },
+
+        async cancelAllChanges() {
+            this.changes = {}
+            const reservationInfo = useReservationStore()
+            await reservationInfo.reload()
+        }
+    },
+    getters: {
+        changesCount() {
+            return Object.values(this.changes).length
         }
     }
 })
