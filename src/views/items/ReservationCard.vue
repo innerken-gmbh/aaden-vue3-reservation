@@ -113,7 +113,7 @@ const haveShareTable = computed(() => {
   return props.reservationInfo.haveShareTable
 })
 const color = computed(() => {
-  if(canDrag.value){
+  if (canDrag.value) {
     return 'pink'
   }
   if (props.reservationInfo.overTime) {
@@ -122,21 +122,25 @@ const color = computed(() => {
     return 'green-darken-3'
   } else if (props.reservationInfo.haveOverlap) {
     return 'yellow-darken-3'
-  }else if(cancelled.value){
+  } else if (cancelled.value) {
     return 'grey-darken-3'
   }
   return 'white'
 })
+
 const variants = computed(() => {
+  const defaultVariant = 'flat'
+  const overrideVariant = 'flat'
   if (props.reservationInfo.overTime) {
-    return 'outlined'
+    return defaultVariant
   } else if (checkedIn.value) {
-    return 'outlined'
+    return defaultVariant
   } else if (props.reservationInfo.haveOverlap) {
-    return 'outlined'
+    return defaultVariant
   }
-  return 'outlined'
+  return overrideVariant
 })
+
 const canDrag = computed(() => {
   return draggableItemId.value === props.reservationInfo.id
 })
@@ -159,7 +163,7 @@ function stopDrag(...args) {
 </script>
 
 <style scoped>
-div{
+div {
   user-select: none;
   overscroll-behavior: none;
 }

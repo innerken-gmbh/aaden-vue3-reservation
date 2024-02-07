@@ -15,7 +15,7 @@ import {
 } from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
-import {onMounted, ref, watch, watchEffect} from "vue";
+import {computed, onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import PlaceHolder from "../components/PlaceHolder.vue";
 import {useDisplay} from "vuetify";
@@ -243,6 +243,7 @@ const {smAndUp} = useDisplay()
             :key="t.time"
           >
             <div
+
               class="
               text-caption
               bg-grey-darken-4"
@@ -265,10 +266,10 @@ const {smAndUp} = useDisplay()
                   {{ t.count }}
                 </div>
                 <div
-                  style="position: absolute;top: 0;left: 0;right: 0;
-                  background: rgba(155,248,12,0.6)"
+                  style="position: absolute;top: 0;left: 0;right: 0;"
                   :style="{
-                    height:t.ratio+'%'
+                    height:t.ratio+'%',
+                    background:t.ratio===100?'rgba(66,99,198,0.6)':'rgba(155,248,12,0.6)'
                   }"
                 />
               </div>
