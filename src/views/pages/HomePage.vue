@@ -243,7 +243,6 @@ const {smAndUp} = useDisplay()
             :key="t.time"
           >
             <div
-
               class="
               text-caption
               bg-grey-darken-4"
@@ -377,11 +376,19 @@ const {smAndUp} = useDisplay()
           :key="r.id"
           @click="reservationInfo.showReservationWithId(r.remoteId)"
         >
-          <div>
-            <div class="text-body-1 font-weight-black">
+          <div
+            :class="r.cancelled==='1'?'text-decoration-line-through':''"
+          >
+            <div
+              :class="r.completed==='1'?'text-green':''"
+              class="text-body-1 font-weight-black "
+            >
               {{ toOnlyTimeFormat(r.fromDateTime) }} - {{ toOnlyTimeFormat(r.toDateTime) }}
             </div>
-            <div class="text-h5 font-weight-black d-flex align-baseline">
+            <div
+              :class="r.completed==='1'?'text-green':''"
+              class="text-h5 font-weight-black d-flex align-baseline"
+            >
               {{ r.personCount }}P
               <div class="text-body-1 ml-4">
                 {{ r.firstName }} {{ r.lastName }}
@@ -390,9 +397,17 @@ const {smAndUp} = useDisplay()
           </div>
           <v-spacer />
           <v-icon
-            v-if="r.completed==='1'"
+            v-if="r.cancelled==='1'"
             small
             color="white"
+            class="ml-2"
+          >
+            mdi-cancel
+          </v-icon>
+          <v-icon
+            v-if="r.completed==='1'"
+            small
+            color="green"
             class="ml-2"
           >
             mdi-location-enter
