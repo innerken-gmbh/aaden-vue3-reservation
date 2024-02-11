@@ -14,6 +14,18 @@ import {createI18n} from "vue-i18n";
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
 dayjs.extend(isoWeek)
+const aadenTheme = {
+    dark: true,
+    colors: {
+        background: '#060606',
+        surface: '#30302e',
+        'on-surface': '#e8eadd',
+        primary: '#e8eadd',
+        secondary: '#54a560',
+        error: '#e74983',
+        info: '#124bbe',
+    },
+}
 
 export const vuetify = createVuetify({
     icons: {
@@ -34,8 +46,16 @@ export const vuetify = createVuetify({
     components,
     directives,
     theme: {
-        defaultTheme: 'dark'
-    }
+        variations: {
+            colors: ['primary', 'secondary','surface'],
+            lighten: 5,
+            darken: 5,
+        },
+        defaultTheme: 'aadenTheme',
+        themes: {
+            aadenTheme,
+        },
+    },
 })
 export const i18n = createI18n({
     // something vue-i18n options here ...

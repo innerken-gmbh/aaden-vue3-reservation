@@ -12,6 +12,11 @@ import {loadReservationTableInfo} from "../api/tableApi.js";
 import {groupBy, intersection, maxBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 
+export const ReservationStatus = {
+    Cancelled: 'Cancelled',
+    Complete: 'Complete',
+    Normal: 'Normal'
+}
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
@@ -65,12 +70,14 @@ export const useReservationStore = defineStore('reservation', {
             })
         },
         activeReservation() {
-            return this.reservationList.find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
+            return this.reservationList
+                .find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
-                return (!this.search || Object.values(it).some(s => s.toString().toLowerCase()
-                        .includes(this.search.toLowerCase()) ?? false)) &&
+                return (!this.search || Object.values(it)
+                        .some(s => s?.toString()?.toLowerCase()
+                            .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||
                         (it.completed !== '1' && it.cancelled !== '1'))
             })
@@ -95,6 +102,7 @@ export const useReservationStore = defineStore('reservation', {
                     w: (xStopIndex - xIndex) * this.xSize,
                     y: yIndex * this.ySize
                 }
+                it.status =getReservationStatus(it)
                 return it
             })
             const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
@@ -151,6 +159,7 @@ export const useHomePageControllerStore
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
+        showMorePerson: false,
         date: today(),
         startTime: null,
         loading: false,
@@ -169,8 +178,14 @@ export const useHomePageControllerStore
     }),
     getters: {
         reservationAddModel() {
-            return Object.assign({fromDateTime: this.date + ' ' + this.startTime, userId: 1},
-                this.reservationExtraInfo, {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
+            return Object.assign({
+                    fromDateTime: this.date + ' ' +
+                        this.startTime,
+                    userId: 1,
+                    personCount: this.personCount,
+                },
+                this.reservationExtraInfo,
+                {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
         }
     },
     actions: {
@@ -190,6 +205,7 @@ export const useHomePageControllerStore
         showNewModal() {
             this.reservationStep = 0
             this.startTime = null
+            this.showMorePerson = false
             this.personCount = 4
             this.date = useReservationStore().date
             this.errorMessage = ''
@@ -369,4 +385,35 @@ export const useReservationChangeVM = defineStore('reservationChange', {
 })
 
 
+export function getReservationColor(reservation) {
+    if (reservation) {
+        const overTime = reservation.overTime
+        const haveOverlap = reservation.haveOverlap
+        const status = getReservationStatus(reservation)
+        if (overTime) {
+            return 'red-darken-3'
+        } else if (status === ReservationStatus.Complete) {
+            return 'green-darken-3'
+        } else if (haveOverlap) {
+            return 'yellow-darken-3'
+        } else if (status === ReservationStatus.Cancelled) {
+            return 'transparent'
+        }
+    }
 
+    return 'primary'
+
+}
+
+export function getReservationStatus(reservation) {
+    if (reservation.status) {
+        return reservation.status
+    }
+    if (reservation?.completed === '1') {
+        return ReservationStatus.Complete
+    } else if (reservation?.cancelled === '1') {
+        return ReservationStatus.Cancelled
+    } else {
+        return ReservationStatus.Normal
+    }
+}

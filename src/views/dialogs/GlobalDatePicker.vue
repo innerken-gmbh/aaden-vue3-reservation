@@ -18,14 +18,14 @@ function confirm() {
   >
     <v-card>
       <v-date-picker
-        color="white"
+        color="primary"
         :min="today()"
         :max="dayjs(today()).add(14,'days').format(dateFormat)"
         v-model="dateStore.currentDate"
       />
       <v-btn
         @click="confirm"
-        color="white"
+        color="primary"
         size="large"
       >
         OK

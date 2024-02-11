@@ -15,32 +15,42 @@
   >
     <v-card
       @contextmenu="tryUnlock"
-      rounded="0"
-      :variant="variants"
+      rounded="md"
       :height="ySize"
-      :color="color"
-      class="px-2 text-caption d-flex align-center reservationCard bg-black"
+      class="pr-2 text-caption d-flex align-center reservationCard gradient "
       style="position: absolute;width: 100%"
       :style="{
         gridColumn:reservationInfo.grid.xStart+' / '+reservationInfo.grid.xEnd,
         gridRow:reservationInfo.grid.y
       }"
     >
-      <v-icon
-        v-if="!canDrag"
-        small
-        class="mr-2"
-        @click.stop="emit('open')"
+      <v-card
+        :width="ySize"
+        :height="ySize"
+        :color="color"
+        class="mr-2 flex-shrink-0 d-flex align-center justify-center"
       >
-        mdi-arrow-expand
-      </v-icon>
-      <v-icon
-        v-else
-        small
-        class="mr-2"
-      >
-        mdi-cursor-move
-      </v-icon>
+        <v-icon
+          :color="haveShareTable?reservationInfo.shareColor:''"
+          small
+          @click.stop="emit('open')"
+        >
+          <template v-if="reservationInfo.haveOverlap">
+            mdi-flash-triangle
+          </template>
+          <template v-else-if="!canDrag">
+            <template v-if="haveShareTable">
+              mdi-link-variant
+            </template>
+            <template v-else>
+              mdi-arrow-expand
+            </template>
+          </template>
+          <template v-else>
+            mdi-cursor-move
+          </template>
+        </v-icon>
+      </v-card>
       <div class="text-body-1 font-weight-black mr-2">
         {{ reservationInfo.personCount }}P
       </div>
@@ -61,18 +71,11 @@
       >
         {{ reservationInfo.note }}
       </div>
-      <v-icon
-        v-if="haveShareTable"
-        small
-        :color="reservationInfo.shareColor"
-        class="ml-2"
-      >
-        mdi-link-variant
-      </v-icon>
+
       <v-icon
         v-if="cancelled"
         small
-        color="white"
+        color="primary"
         class="ml-2"
       >
         mdi-cancel
@@ -80,7 +83,7 @@
       <v-icon
         v-if="checkedIn"
         small
-        color="white"
+        color="primary"
         class="ml-2"
       >
         mdi-location-enter
@@ -91,7 +94,7 @@
 
 <script setup>
 import {computed} from "vue";
-import {useDragStore} from "../../dataLayer/repository/reservationRepo.js";
+import {getReservationColor, useDragStore} from "../../dataLayer/repository/reservationRepo.js";
 import {storeToRefs} from "pinia";
 
 const props = defineProps(['reservationInfo', 'xSize', 'ySize'])
@@ -115,30 +118,9 @@ const color = computed(() => {
   if (canDrag.value) {
     return 'pink'
   }
-  if (props.reservationInfo.overTime) {
-    return 'red-darken-3'
-  } else if (checkedIn.value) {
-    return 'green-darken-3'
-  } else if (props.reservationInfo.haveOverlap) {
-    return 'yellow-darken-3'
-  } else if (cancelled.value) {
-    return 'grey-darken-3'
-  }
-  return 'white'
+  return getReservationColor(props.reservationInfo)
 })
 
-const variants = computed(() => {
-  const defaultVariant = 'outlined'
-  const overrideVariant = 'outlined'
-  if (props.reservationInfo.overTime) {
-    return defaultVariant
-  } else if (checkedIn.value) {
-    return defaultVariant
-  } else if (props.reservationInfo.haveOverlap) {
-    return defaultVariant
-  }
-  return overrideVariant
-})
 
 const canDrag = computed(() => {
   return draggableItemId.value === props.reservationInfo.id
@@ -169,7 +151,7 @@ div {
 
 .gradient {
   background: #3a7bd5; /* fallback for old browsers */
-  background: linear-gradient(to right bottom, rgba(0, 0, 0, .56), #341d33);
+  background: linear-gradient(to right bottom, rgba(0, 0, 0, .56), rgba(52, 29, 51, 0.94));
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 

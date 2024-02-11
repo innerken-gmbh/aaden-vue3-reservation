@@ -15,11 +15,10 @@ import {
 } from "../../dataLayer/repository/dateRepo.js";
 import ReservationCard from "../items/ReservationCard.vue";
 import NewReservationDialog from "./NewReservationDialog.vue";
-import {computed, onMounted, ref, watch, watchEffect} from "vue";
+import {onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import PlaceHolder from "../components/PlaceHolder.vue";
 import {useDisplay} from "vuetify";
-import {dragscroll} from 'vue-dragscroll'
 import IKUtils from "innerken-js-utils";
 
 
@@ -29,7 +28,7 @@ const {currentTime} = useCurrentTime()
 watchEffect(() => {
   currentTimeX.value = Math.ceil((dayjs(currentTime.value).subtract(2, "hours")
           .diff(dayjs().set("hours", 5), 'minutes') / (19 * 60))
-      * reservationInfo.containerWidth)
+      * reservationInfo.containerWidth+reservationInfo.xSize*2)
 })
 const container = ref(null)
 const loading = ref(true)
@@ -170,7 +169,6 @@ const {smAndUp} = useDisplay()
           </div>
           <v-btn
             flat
-            class="bg-grey-darken-4"
             icon=""
             @click="reservationInfo.date=dayjs(reservationInfo.date)
               .add(1,'d').format(dateFormat)"
@@ -199,14 +197,28 @@ const {smAndUp} = useDisplay()
           class="flex-grow-1"
           ref="container"
           v-dragscroll="dragController.globalDragEnable"
-          style="display: grid;grid-gap: 0;position: relative;width: 0;overflow:hidden;
+          style="display: grid;grid-gap: 0;position: relative;
+          width: 0;overflow:hidden;
         height:calc(100vh - 170px);"
           :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                    gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
           }"
         >
           <div
-            style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 8"
+            class="border-primary"
+            style="position: absolute;width:8px;
+              z-index: 4;top:0;left: 0;
+              backdrop-filter: grayscale(100%);
+              background: linear-gradient(to right ,rgba(0,0,0,0) 0,rgba(0,0,0,0.05) 80%,rgba(0,0,0,.5) 100%);
+              border-right: 2px solid;"
+            :style="{
+              width: `${currentTimeX}px`,
+              height:(reservationInfo.containerHeight
+                +2*reservationInfo.ySize)+'px',
+            }"
+          />
+          <div
+            style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 2"
           >
             <div
               style="width: 100%;position: relative;display: grid;"
@@ -214,21 +226,14 @@ const {smAndUp} = useDisplay()
                        gridTemplateRows:'repeat(1,'+reservationInfo.ySize+'px)',
               }"
             >
-              <div
-                style="position: absolute;width:4px;height: 12px;z-index: 20;top:16px;left: 0;
-"
-                :style="{
-                  transform: `translateX(${currentTimeX}px)`
-                }"
-                class="bg-white rounded-b-pill"
-              />
               <template
                 :key="i"
                 v-for="(t,i) in reservationInfo.bigTime"
               >
                 <div
-                  class="pa-2 text-body-1 d-flex align-center bg-black"
-                  style="width: 100%;height: 100%;grid-column:span 4;position: sticky;top:0;
+                  class="pa-2 text-body-1 d-flex align-center bg-surface"
+                  style="width: 100%;height: 100%;grid-column:span 4;
+                  position: sticky;top:0;
                   z-index: 6;
              box-sizing:border-box;
 "
@@ -243,14 +248,13 @@ const {smAndUp} = useDisplay()
             :key="t.time"
           >
             <div
-              class="
-              text-caption
-              bg-grey-darken-4"
+              class="text-caption bg-surface-darken-1"
               style="width: 100%;height: 100%;
               grid-column:span 2;position: sticky;
-              top: 28px;z-index: 8"
+              top: 28px;z-index: 3"
               :style="{
-                borderLeft:t.time.endsWith('00')?'3px inset rgba(0,0,0,.2) !important':
+                borderLeft:t.time.endsWith('00')?
+                  '3px inset rgba(0,0,0,.2) !important':
                   '2px inset rgba(0,0,0,.2) !important'
               }"
             >
@@ -266,9 +270,9 @@ const {smAndUp} = useDisplay()
                 </div>
                 <div
                   style="position: absolute;top: 0;left: 0;right: 0;"
+                  :class="t.ratio===100?'bg-error':'bg-secondary'"
                   :style="{
-                    height:t.ratio+'%',
-                    background:t.ratio===100?'rgba(66,99,198,0.6)':'rgba(155,248,12,0.6)'
+                    height:t.ratio+'%'
                   }"
                 />
               </div>
@@ -280,14 +284,15 @@ const {smAndUp} = useDisplay()
           width: 72px;
           background: linear-gradient(to right , rgba(0,0,0,.7),
              rgba(0,0,0,.1))"
-            class="d-flex align-center pl-2 pr-1 font-weight-black text-body-2"
+            class="d-flex align-center pl-2 pr-1
+             font-weight-black text-body-2"
             :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
             v-for="(t,i) in reservationInfo.tableList"
             :key="t.id"
           >
             {{ t.tableName }}
             <v-spacer />
-            <v-icon color="green">
+            <v-icon color="secondary">
               mdi-circle-small
             </v-icon>
             <div class="font-weight-thin text-caption">
@@ -310,14 +315,14 @@ const {smAndUp} = useDisplay()
             tile
             :width="reservationInfo.containerWidth"
             :height="reservationInfo.containerHeight"
-            style="position: absolute;"
+            style="position: absolute;z-index: 8;"
             :style="{
               gridColumn:'0 / '+reservationInfo.timeSlots.length,
               gridRow:'3 / '+(reservationInfo.tableList.length+3)
             }"
           >
             <div
-              style="position: relative"
+              style="position: relative;"
               :style="{
                 width:reservationInfo.containerWidth+'px',
                 height:reservationInfo.containerHeight+'px'
@@ -339,7 +344,7 @@ const {smAndUp} = useDisplay()
           v-if="reservationChangeVM.changesCount>0"
           style="position: fixed;right: 64px;bottom: 64px"
           class="pa-2 pl-8 font-weight-black"
-          color="white"
+          color="primary"
           elevation="8"
         >
           {{ reservationChangeVM.changesCount }} Changes
@@ -349,7 +354,7 @@ const {smAndUp} = useDisplay()
             class="mx-2"
             rounded="0"
             icon=""
-            color="white"
+            color="primary"
           >
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
@@ -358,7 +363,7 @@ const {smAndUp} = useDisplay()
             elevation="0"
             rounded="0"
             icon=""
-            color="white"
+            color="primary"
           >
             <v-icon>mdi-check</v-icon>
           </v-btn>
@@ -399,7 +404,7 @@ const {smAndUp} = useDisplay()
           <v-icon
             v-if="r.cancelled==='1'"
             small
-            color="white"
+            color="primary"
             class="ml-2"
           >
             mdi-cancel
@@ -431,9 +436,9 @@ div {
 
 .gridBackground {
   background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px, rgba(255, 255, 255, .1) 1px),
-  linear-gradient(to bottom, rgba(0, 0, 0, 1) 1px, transparent 1px),
-  linear-gradient(to right, rgba(0, 0, 0, 1) 2px, transparent 1px),
-  linear-gradient(to right, rgba(0, 0, 0, 1) 3px, transparent 1px);
+  linear-gradient(to bottom, rgba(6, 6, 6, 1) 1px, transparent 1px),
+  linear-gradient(to right, rgba(6, 6, 6, 1) 2px, transparent 1px),
+  linear-gradient(to right, rgba(6, 6, 6, 1) 3px, transparent 1px);
   background-size: 40px 28px,
   40px 28px,
   80px 72px,

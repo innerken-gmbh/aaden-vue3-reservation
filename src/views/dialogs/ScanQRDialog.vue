@@ -2,6 +2,7 @@
 import {useScanQrStore} from "../../dataLayer/repository/reservationRepo.js";
 import {QrcodeStream} from 'vue-qrcode-reader'
 import PlaceHolder from "../components/PlaceHolder.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 
 const controller = useScanQrStore()
 
@@ -27,31 +28,29 @@ function onDetect(e) {
 </script>
 
 <template>
-  <v-dialog
+  <base-dialog
     v-model="controller.showPicker"
-    max-width="500px"
   >
-    <v-card class="pa-6">
-      <div class="text-h4 d-flex align-center font-weight-black">
+    <template #header>
+      <div>
         <div>
-          <div>
-            Scan Qr
-          </div>
-          <div class="text-body-2">
-            Please scan the qrcode on the confirmation emails
-          </div>
+          Scan Qr
         </div>
-        <v-spacer />
-        <v-icon>mdi-qrcode</v-icon>
+        <div class="text-body-2">
+          Please scan the qrcode on the confirmation emails
+        </div>
       </div>
-
-      <v-card class="mt-4">
+      <v-spacer />
+      <v-icon>mdi-qrcode</v-icon>
+    </template>
+    <template #default>
+      <div>
         <template v-if="controller.error">
           <place-holder :hint="' This QR code is not valid'">
             <v-btn
               @click="controller.rescan()"
               class="mt-4"
-              color="white"
+              color="primary"
             >
               <template #prepend>
                 <v-icon>mdi-refresh</v-icon>
@@ -65,9 +64,9 @@ function onDetect(e) {
           :paused="controller.paused"
           @detect="onDetect"
         />
-      </v-card>
-    </v-card>
-  </v-dialog>
+      </div>
+    </template>
+  </base-dialog>
 </template>
 
 <style scoped>

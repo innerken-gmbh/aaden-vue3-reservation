@@ -17,13 +17,15 @@ const {smAndUp} = useDisplay()
   <v-app>
     <v-app-bar
       flat
+      color="primary"
     >
       <v-app-bar-title>
         <v-text-field
           v-model="reservationStore.search"
           prepend-inner-icon="mdi-magnify"
-          variant="solo-filled"
+          variant="outlined"
           flat
+          density="compact"
           clearable
           hide-details
         />
@@ -43,7 +45,19 @@ const {smAndUp} = useDisplay()
       </v-btn>
     </v-app-bar>
     <v-main>
-      <home-page />
+      <div
+        style="width: 100%;height: 100%;"
+        class="bg-primary pt-2"
+      >
+        <div
+          style="border-top-left-radius: 24px;z-index: 2;overflow: visible;min-height: calc(100svh - 72px);
+          border-top-right-radius: 24px;box-shadow: rgba(0,0,0,.5) 0 -2px 5px"
+          class="bg-surface"
+        >
+          <home-page />
+        </div>
+      </div>
+
       <scan-q-r-dialog />
       <global-date-picker />
       <global-time-picker />

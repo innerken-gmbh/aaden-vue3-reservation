@@ -8,169 +8,154 @@ import {
   useTimePickerStore
 } from "../../dataLayer/repository/reservationRepo";
 import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
-import {watchEffect} from "vue";
+import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
+import BaseDialog from "../components/BaseDialog.vue";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
 const timerPicker = useTimePickerStore()
 
-const {personCount, date} = storeToRefs(controller)
+const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
   controller.startTime = null
   timerPicker.availableTimes = await checkTableTimeAvailable(date.value,
       '00:00', personCount.value, 1)
 })
 
+const displayPerson = computed(() => {
+  return  18
+})
+
 </script>
 
 <template>
-  <v-dialog
-    max-width="500"
-    v-model="controller.showNewReservationModal"
-  >
-    <v-card class="pa-6 py-8">
+  <base-dialog v-model="controller.showNewReservationModal">
+    <template #header>
       <template v-if="controller.reservationStep===0">
-        <div class="text-h5 font-weight-black d-flex align-center">
-          Create a new reservation
-          <v-spacer />
-          <v-icon
-            @click="controller.showNewReservationModal=false"
-            size="32"
-          >
-            mdi-close
-          </v-icon>
-        </div>
-        <div class="text-body-1 mt-12">
-          <div class="d-flex align-end">
-            <div class="text-body-2">
-              Person amount
-              <div class="text-h4 font-weight-black">
-                {{ controller.personCount }}
-              </div>
-            </div>
-            <v-spacer />
-            <v-btn
-              flat
-              @click="controller.minusPerson()"
-              icon="mdi-minus"
-              :rounded="0"
-              class="bg-grey-darken-4"
-            />
-            <v-btn
-              flat
-              @click="controller.personCount++"
-              icon="mdi-plus"
-              :rounded="0"
-              class="bg-grey-darken-3"
-            />
-          </div>
-          <inline-two-row-container class="mt-8">
-            <form-container label="Date">
-              <div
-                class="text-h5 font-weight-black d-flex align-center"
-                @click="async ()=>controller.date=await datePicker.selectDate()"
-              >
-                {{ controller.date }}
-              </div>
-            </form-container>
-            <form-container label="Time">
-              <div
-                class="text-h5 font-weight-black d-flex align-center text-no-wrap"
-                @click="async ()=>controller.startTime=await timerPicker.selectTime()"
-              >
-                {{ controller.startTime ?? 'Select a time' }}
-              </div>
-            </form-container>
-          </inline-two-row-container>
-        </div>
-        <v-btn
-          @click="controller.reservationStep=1"
-          size="large"
-          color="white"
-          :disabled="!controller.startTime"
-          class="mt-8"
+        Create a new reservation
+        <v-spacer />
+        <v-icon
+          @click="controller.showNewReservationModal=false"
+          size="32"
         >
-          Fill Detailed Information
-          <template #append>
-            <v-icon>mdi-arrow-right</v-icon>
-          </template>
-        </v-btn>
+          mdi-close
+        </v-icon>
       </template>
-      <template v-else-if="controller.reservationStep===1">
-        <div class="text-h5 font-weight-black d-flex align-center">
-          <div>
-            {{ controller.personCount }} People
-            <div class="text-body-2">
-              <span class="font-weight-regular">{{ controller.startTime }}</span>@{{ controller.date }}
-            </div>
+      <template v-else>
+        <div>
+          {{ controller.personCount }} People
+          <div class="text-body-2">
+            <span class="font-weight-regular">{{ controller.startTime }}</span>@{{ controller.date }}
           </div>
-
-
-          <v-spacer />
-          <v-icon
-            size="32"
-          >
-            mdi-calendar-clock
-          </v-icon>
         </div>
-        <div class="text-body-1 mt-12">
-          <inline-two-row-container>
-            <form-container label="First Name">
-              <v-text-field
-                v-model="controller.reservationExtraInfo.firstName"
-                placeholder="Max.."
-              />
-            </form-container>
-            <form-container label="Last Name">
-              <v-text-field
-                v-model="controller.reservationExtraInfo.lastName"
-                placeholder="Mustermann.."
-              />
-            </form-container>
-          </inline-two-row-container>
-          <inline-two-row-container>
-            <form-container label="Email">
-              <v-text-field
-                v-model="controller.reservationExtraInfo.email"
-                placeholder="Max.mustermann@example.com"
-              />
-            </form-container>
-            <form-container label="Tel">
-              <v-text-field
-                v-model="controller.reservationExtraInfo.tel"
-                placeholder="0123-456789"
-              />
-            </form-container>
-          </inline-two-row-container>
-          <form-container label="Note">
-            <v-textarea
-              v-model="controller.reservationExtraInfo.note"
-              auto-grow
-              placeholder="Note about extra wishes"
+        <v-spacer />
+        <v-icon
+          size="32"
+        >
+          mdi-calendar-clock
+        </v-icon>
+      </template>
+    </template>
+    <template #default>
+      <template v-if="controller.reservationStep===0">
+        <div class="text-body-2">
+          Person amount
+          <div
+            class="mt-2 text-body-1 font-weight-black"
+            style="display: grid;grid-gap: 4px;
+              width: 100%;
+              grid-template-columns: repeat(auto-fill,36px)"
+          >
+            <v-card
+              @click="controller.personCount=i"
+              width="36"
+              height="36"
+              rounded="pill"
+              :key="i"
+              :color="controller.personCount===i?'primary':'background'"
+              v-for="i in displayPerson"
+              class="d-flex align-center justify-center"
+            >
+              {{ i }}
+            </v-card>
+          </div>
+        </div>
+        <inline-two-row-container class="mt-8">
+          <form-container label="Date">
+            <div
+              class="text-h5 font-weight-black d-flex align-center"
+              @click="async ()=>controller.date=await datePicker.selectDate()"
+            >
+              {{ controller.date }}
+            </div>
+          </form-container>
+          <form-container label="Time">
+            <div
+              class="text-h5 font-weight-black d-flex align-center text-no-wrap"
+              @click="async ()=>controller.startTime=await timerPicker.selectTime()"
+            >
+              {{ controller.startTime ?? 'Select a time' }}
+            </div>
+          </form-container>
+        </inline-two-row-container>
+      </template>
+      <template v-else>
+        <inline-two-row-container>
+          <form-container label="First Name">
+            <v-text-field
+              v-model="controller.reservationExtraInfo.firstName"
+              placeholder="Max.."
             />
           </form-container>
-          <v-chip
-            @click="controller.reservationExtraInfo.useStroller=!controller.reservationExtraInfo.useStroller"
-            variant="tonal"
-            rounded="sm"
-          >
-            <template #prepend>
-              <v-icon
-                class="mr-2"
-              >
-                <template v-if="controller.reservationExtraInfo.useStroller">
-                  mdi-checkbox-marked
-                </template>
-                <template v-else>
-                  mdi-checkbox-blank-outline
-                </template>
-              </v-icon>
-            </template>
+          <form-container label="Last Name">
+            <v-text-field
+              v-model="controller.reservationExtraInfo.lastName"
+              placeholder="Mustermann.."
+            />
+          </form-container>
+        </inline-two-row-container>
+        <inline-two-row-container>
+          <form-container label="Email">
+            <v-text-field
+              v-model="controller.reservationExtraInfo.email"
+              placeholder="Max.mustermann@example.com"
+            />
+          </form-container>
+          <form-container label="Tel">
+            <v-text-field
+              v-model="controller.reservationExtraInfo.tel"
+              placeholder="0123-456789"
+            />
+          </form-container>
+        </inline-two-row-container>
+        <form-container label="Note">
+          <v-textarea
+            v-model="controller.reservationExtraInfo.note"
+            auto-grow
+            placeholder="Note about extra wishes"
+          />
+        </form-container>
+        <v-chip
+          @click="controller.reservationExtraInfo.useStroller=!controller.reservationExtraInfo.useStroller"
+          variant="tonal"
+          rounded="sm"
+        >
+          <template #prepend>
+            <v-icon
+              class="mr-2"
+            >
+              <template v-if="controller.reservationExtraInfo.useStroller">
+                mdi-checkbox-marked
+              </template>
+              <template v-else>
+                mdi-checkbox-blank-outline
+              </template>
+            </v-icon>
+          </template>
 
-            Need Stroller
-          </v-chip>
-        </div>
+          Need Stroller
+        </v-chip>
         <v-sheet
           rounded
           class="mt-4 bg-red pa-4 text-body-2 d-flex align-center"
@@ -181,18 +166,34 @@ watchEffect(async () => {
           </v-icon>
           {{ controller.errorMessage }}
         </v-sheet>
-        <v-btn
-          :loading="controller.loading"
-          @click="controller.addReservation()"
-          size="large"
-          color="white"
-          class="mt-4"
-        >
-          Create Reservation
-        </v-btn>
       </template>
-    </v-card>
-  </v-dialog>
+    </template>
+    <template #action>
+      <v-btn
+        block
+        v-if="controller.reservationStep===1"
+        :loading="controller.loading"
+        @click="controller.addReservation()"
+        size="large"
+        color="primary"
+      >
+        Create Reservation
+      </v-btn>
+      <v-btn
+        v-else
+        @click="controller.reservationStep=1"
+        size="large"
+        block
+        color="primary"
+        :disabled="!controller.startTime"
+      >
+        Fill Detailed Information
+        <template #append>
+          <v-icon>mdi-arrow-right</v-icon>
+        </template>
+      </v-btn>
+    </template>
+  </base-dialog>
 </template>
 
 <style scoped>
