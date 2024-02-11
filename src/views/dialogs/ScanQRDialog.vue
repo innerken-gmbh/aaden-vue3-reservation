@@ -34,7 +34,7 @@ function onDetect(e) {
     <template #header>
       <div>
         <div>
-          Scan Qr
+          Scan QR Code
         </div>
         <div class="text-body-2">
           Please scan the qrcode on the confirmation emails

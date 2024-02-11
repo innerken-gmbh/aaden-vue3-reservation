@@ -26,7 +26,7 @@ watch(show, (val) => {
 })
 
 const actionClass = computed(() => {
-  return childCount.value > 1 ? 'd-flex mt-8' : childCount.value > 0 ? 'mt-8' : ''
+  return childCount.value > 1 ? 'd-flex flex-column align-stretch mt-8' : childCount.value > 0 ? 'mt-8' : ''
 })
 </script>
 
@@ -38,7 +38,7 @@ const actionClass = computed(() => {
     <v-card rounded="xl">
       <v-card
         rounded="0"
-        class="text-h4 d-flex align-center font-weight-black pa-6"
+        class="text-h4 d-flex  align-center font-weight-black pa-6"
         :color="headerColor"
       >
         <slot name="header" />

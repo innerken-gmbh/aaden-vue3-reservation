@@ -90,7 +90,7 @@ async function onCancel() {
       <inline-two-row-container class="mt-4">
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
-            Table name
+            Table
           </div>
           <div>
             {{ info.tableNameNull }}
@@ -141,27 +141,26 @@ async function onCancel() {
     </template>
     <template #action>
       <v-btn
-        :loading="controller.loading"
-        @click="onConfirm"
-
-        color="primary"
-        class="mr-2 flex-grow-1"
-      >
-        <template #prepend>
-          <v-icon>mdi-check</v-icon>
-        </template>
-        Check in
-      </v-btn>
-      <v-btn
         @click="onCancel"
         :loading="controller.loading"
         color="primary"
-        class="mr-2"
+        variant="outlined"
       >
         <template #prepend>
           <v-icon>mdi-cancel</v-icon>
         </template>
         Cancel
+      </v-btn>
+      <v-btn
+        :loading="controller.loading"
+        @click="onConfirm"
+        color="primary"
+        class="mt-2"
+      >
+        <template #prepend>
+          <v-icon>mdi-check</v-icon>
+        </template>
+        Check in
       </v-btn>
     </template>
   </base-dialog>

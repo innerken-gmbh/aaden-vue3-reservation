@@ -7,6 +7,7 @@ import {aliases, mdi} from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 import relativeTime from 'dayjs/plugin/relativeTime'
 import duration from 'dayjs/plugin/duration'
+import calendar from 'dayjs/plugin/calendar'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import dayjs from "dayjs";
 import {createI18n} from "vue-i18n";
@@ -14,6 +15,7 @@ import {createI18n} from "vue-i18n";
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
 dayjs.extend(isoWeek)
+dayjs.extend(calendar)
 const aadenTheme = {
     dark: true,
     colors: {
@@ -47,7 +49,7 @@ export const vuetify = createVuetify({
     directives,
     theme: {
         variations: {
-            colors: ['primary', 'secondary','surface'],
+            colors: ['primary', 'secondary', 'surface'],
             lighten: 5,
             darken: 5,
         },

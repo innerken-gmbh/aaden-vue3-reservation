@@ -1,5 +1,5 @@
 <script setup>
-import HomePage from './views/pages/HomePage.vue';
+import HomePage from './views/pages/HomePage/HomePage.vue';
 import {useHomePageControllerStore, useReservationStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
@@ -25,6 +25,7 @@ const {smAndUp} = useDisplay()
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           flat
+          placeholder="Search here"
           density="compact"
           clearable
           hide-details

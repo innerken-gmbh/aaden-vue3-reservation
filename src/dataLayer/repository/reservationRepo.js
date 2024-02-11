@@ -9,13 +9,18 @@ import {
     moveReservation
 } from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
-import {groupBy, intersection, maxBy} from "lodash-es";
+import {groupBy, intersection, maxBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 
 export const ReservationStatus = {
+    Normal: 'Normal',
     Cancelled: 'Cancelled',
-    Complete: 'Complete',
-    Normal: 'Normal'
+    CheckedIn: 'CheckedIn',
+}
+export const ReservationIcon = {
+    Normal: 'mdi-view-list',
+    Cancelled: 'mdi-cancel',
+    CheckedIn: 'mdi-check',
 }
 
 export const useReservationStore = defineStore('reservation', {
@@ -35,7 +40,8 @@ export const useReservationStore = defineStore('reservation', {
             .map(it => (it + 7) % 24).map(it => Array
                 .from(Array(4).keys())
                 .map(minute => it.toString().padStart(2, '0') +
-                    ':' + (minute * 15).toString().padStart(2, '0'))).flat()
+                    ':' + (minute * 15).toString().padStart(2, '0'))).flat(),
+        listViewTab: ReservationStatus.Normal,
     }),
     getters: {
         bigTime() {
@@ -80,6 +86,7 @@ export const useReservationStore = defineStore('reservation', {
                             .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||
                         (it.completed !== '1' && it.cancelled !== '1'))
+                    && (!this.displayList || (it.status === this.listViewTab))
             })
         },
         displayList() {
@@ -96,13 +103,13 @@ export const useReservationStore = defineStore('reservation', {
                     .format('HH:mm') === t)
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
-                it.overTime = it.completed !== '1' && dayjs(it.fromDateTime).isBefore(dayjs())
+                it.overTime = it.completed !== '1' && dayjs(it.fromDateTime).add(15, 'minute').isBefore(dayjs())
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
                     y: yIndex * this.ySize
                 }
-                it.status =getReservationStatus(it)
+                it.status = getReservationStatus(it)
                 return it
             })
             const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
@@ -114,7 +121,13 @@ export const useReservationStore = defineStore('reservation', {
                 }).flat()
 
             const shareTable = (Object.values(groupBy(list, 'batch'))
-                .filter(it => it.length > 1).flat()
+                .filter(it => it.length > 1).map(it => {
+                    const totalPerson = sumBy(it, (h)=>parseInt(h.personCount))
+                    it.forEach(it => {
+                        it.totalPerson = totalPerson
+                    })
+                    return it
+                }).flat()
                 .map(it => it.id))
             const batchColorCache = {}
             this.reservationList = []
@@ -392,7 +405,7 @@ export function getReservationColor(reservation) {
         const status = getReservationStatus(reservation)
         if (overTime) {
             return 'red-darken-3'
-        } else if (status === ReservationStatus.Complete) {
+        } else if (status === ReservationStatus.CheckedIn) {
             return 'green-darken-3'
         } else if (haveOverlap) {
             return 'yellow-darken-3'
@@ -410,7 +423,7 @@ export function getReservationStatus(reservation) {
         return reservation.status
     }
     if (reservation?.completed === '1') {
-        return ReservationStatus.Complete
+        return ReservationStatus.CheckedIn
     } else if (reservation?.cancelled === '1') {
         return ReservationStatus.Cancelled
     } else {

@@ -60,7 +60,7 @@ const displayPerson = computed(() => {
     <template #default>
       <template v-if="controller.reservationStep===0">
         <div class="text-body-2">
-          Person amount
+          Gäste
           <div
             class="mt-2 text-body-1 font-weight-black"
             style="display: grid;grid-gap: 4px;
@@ -137,7 +137,8 @@ const displayPerson = computed(() => {
           />
         </form-container>
         <v-chip
-          @click="controller.reservationExtraInfo.useStroller=!controller.reservationExtraInfo.useStroller"
+          @click="controller.reservationExtraInfo.useStroller
+            =!controller.reservationExtraInfo.useStroller"
           variant="tonal"
           rounded="sm"
         >

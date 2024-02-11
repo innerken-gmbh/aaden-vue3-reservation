@@ -52,7 +52,11 @@
         </v-icon>
       </v-card>
       <div class="text-body-1 font-weight-black mr-2">
-        {{ reservationInfo.personCount }}P
+        {{ reservationInfo.personCount }} <span
+          class="text-caption"
+          v-if="reservationInfo.totalPerson"
+        >/{{ reservationInfo.totalPerson }}
+        </span> P
       </div>
       <div class="text-body-2 font-weight-regular text-no-wrap text-truncate">
         {{ reservationInfo.firstName }} {{ reservationInfo.lastName }}

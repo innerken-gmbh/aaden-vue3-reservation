@@ -3,7 +3,10 @@
 </script>
 
 <template>
-  <div style="display: grid;grid-template-columns: repeat(2,minmax(0,1fr));grid-gap: 12px">
+  <div
+    style="display: grid;grid-template-columns:
+   repeat(auto-fit,minmax(200px,1fr));grid-gap: 12px"
+  >
     <slot />
   </div>
 </template>
