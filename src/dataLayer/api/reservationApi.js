@@ -1,6 +1,6 @@
 import hillo from "hillo";
 import dayjs from "dayjs";
-import {dateFormat, sliceTime} from "../repository/dateRepo.js";
+import {dateFormat, sliceTime, toDateFormat} from "../repository/dateRepo.js";
 
 export async function loadAllReservable() {
     return (await hillo.get('Tables.php?op=getAllReservable')).content
@@ -67,14 +67,26 @@ export async function confirmReservation(id) {
 }
 
 export async function moveReservation(reservationId, newTableId, fromDateTime, toDateTime) {
-
-    return (await hillo.post('Tables.php?op=moveReservation&debug=true', {
-        reservationId,
-        newTableId,
-        fromDateTime,
-        toDateTime
-
-    }))
+    const list = await getReservation(toDateFormat(fromDateTime), toDateFormat(fromDateTime))
+    const batch = list.find(x => x.id === reservationId).batch
+    const others = list.filter(it => it.batch === batch && it.id !== reservationId)
+    await hillo.post('Tables.php?op=moveReservation&debug=true',
+        {
+            reservationId,
+            newTableId,
+            fromDateTime,
+            toDateTime
+        })
+    for (const reservation of others) {
+        console.log('reservation', reservation)
+        await hillo.post('Tables.php?op=moveReservation&debug=true',
+            {
+                reservationId: reservation.id,
+                newTableId: reservation.tableId,
+                fromDateTime,
+                toDateTime
+            })
+    }
 }
 
 export async function cancelReservation(reservationId) {

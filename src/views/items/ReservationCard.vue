@@ -51,7 +51,7 @@
           </template>
         </v-icon>
       </v-card>
-      <div class="text-body-1 font-weight-black mr-2">
+      <div class="text-body-1 font-weight-black mr-2 flex-shrink-0">
         {{ reservationInfo.personCount }} <span
           class="text-caption"
           v-if="reservationInfo.totalPerson"

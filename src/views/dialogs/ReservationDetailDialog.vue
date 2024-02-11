@@ -4,10 +4,11 @@ import {
   ReservationStatus,
   useReservationStore
 } from "../../dataLayer/repository/reservationRepo.js";
-import {computed} from "vue";
+import {computed, ref, watch} from "vue";
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
-import {toDateFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
+import {timestampTemplate, toDateFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
 import BaseDialog from "../components/BaseDialog.vue";
+import dayjs from "dayjs";
 
 const controller = useReservationStore()
 
@@ -32,8 +33,30 @@ const color = computed(() => {
   return getReservationColor(info.value)
 })
 
+const currentDiningTime = computed(() => {
+  return dayjs(info.value?.toDateTime).diff(info.value?.fromDateTime, 'minute')
+})
+
+const overrideDiningTime = ref(0)
+
+watch(currentDiningTime, (val) => {
+  overrideDiningTime.value = val
+})
+
+const timeChanged = computed(() => {
+  return currentDiningTime.value !== overrideDiningTime.value
+})
+
 async function onConfirm() {
   await controller.checkIn(info.value?.id)
+  controller.showDetailDialog = false
+}
+
+async function onChangeTime() {
+  info.value.toDateTime = dayjs(info.value.fromDateTime)
+      .add(overrideDiningTime.value, 'minute')
+      .format(timestampTemplate)
+  await controller.moveReservation(info.value)
   controller.showDetailDialog = false
 }
 
@@ -87,6 +110,37 @@ async function onCancel() {
           </div>
         </div>
       </inline-two-row-container>
+      <div class="d-flex align-center">
+        <div
+          class="text-h5 font-weight-black mt-4"
+        >
+          <div class="text-body-2">
+            Dining Time
+          </div>
+          <div class="d-flex">
+            <div v-if="!timeChanged">
+              {{ currentDiningTime }} min
+            </div>
+            <div v-else>
+              {{ currentDiningTime }} min -> {{ overrideDiningTime }} min
+            </div>
+          </div>
+        </div>
+        <v-spacer />
+        <v-btn
+          flat
+          @click="overrideDiningTime<=30?null:overrideDiningTime-=15"
+          icon="mdi-minus"
+          size="36"
+        />
+        <v-btn
+          flat
+          @click="overrideDiningTime+=15"
+          icon="mdi-plus"
+          size="36"
+        />
+      </div>
+
       <inline-two-row-container class="mt-4">
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
@@ -140,28 +194,43 @@ async function onCancel() {
       </div>
     </template>
     <template #action>
-      <v-btn
-        @click="onCancel"
-        :loading="controller.loading"
-        color="primary"
-        variant="outlined"
-      >
-        <template #prepend>
-          <v-icon>mdi-cancel</v-icon>
-        </template>
-        Cancel
-      </v-btn>
-      <v-btn
-        :loading="controller.loading"
-        @click="onConfirm"
-        color="primary"
-        class="mt-2"
-      >
-        <template #prepend>
-          <v-icon>mdi-check</v-icon>
-        </template>
-        Check in
-      </v-btn>
+      <template v-if="timeChanged">
+        <v-btn
+          :loading="controller.loading"
+          @click="onChangeTime"
+          color="primary"
+          class="mt-2"
+        >
+          <template #prepend>
+            <v-icon>mdi-check</v-icon>
+          </template>
+          Save
+        </v-btn>
+      </template>
+      <template v-else>
+        <v-btn
+          @click="onCancel"
+          :loading="controller.loading"
+          color="primary"
+          variant="outlined"
+        >
+          <template #prepend>
+            <v-icon>mdi-cancel</v-icon>
+          </template>
+          Cancel
+        </v-btn>
+        <v-btn
+          :loading="controller.loading"
+          @click="onConfirm"
+          color="primary"
+          class="mt-2"
+        >
+          <template #prepend>
+            <v-icon>mdi-check</v-icon>
+          </template>
+          Check in
+        </v-btn>
+      </template>
     </template>
   </base-dialog>
 </template>

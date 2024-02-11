@@ -122,7 +122,7 @@ export const useReservationStore = defineStore('reservation', {
 
             const shareTable = (Object.values(groupBy(list, 'batch'))
                 .filter(it => it.length > 1).map(it => {
-                    const totalPerson = sumBy(it, (h)=>parseInt(h.personCount))
+                    const totalPerson = sumBy(it, (h) => parseInt(h.personCount))
                     it.forEach(it => {
                         it.totalPerson = totalPerson
                     })
@@ -151,6 +151,13 @@ export const useReservationStore = defineStore('reservation', {
         async checkIn(id) {
             this.loading = true
             await confirmReservation(id)
+            await this.reload()
+            this.loading = false
+        },
+        async moveReservation(reservationInfo) {
+            this.loading = true
+            const {id, tableId, fromDateTime, toDateTime} = reservationInfo
+            await moveReservation(id, tableId, fromDateTime, toDateTime)
             await this.reload()
             this.loading = false
         },
@@ -233,11 +240,7 @@ export const useHomePageControllerStore
             }
             this.showNewReservationModal = true
         },
-        minusPerson() {
-            if (this.personCount > 1) {
-                this.personCount--
-            }
-        }
+
     }
 })
 export const useDatePickerStore = defineStore('datePicker', {
@@ -376,7 +379,10 @@ export const useReservationChangeVM = defineStore('reservationChange', {
             const infos = Object.entries(this.changes)
                 .map(([key, value]) => ({...value, id: key}))
             for (const info of infos) {
-                await moveReservation(info.id, info.tableId, info.start, info.end)
+                await moveReservation(info.id,
+                    info.tableId,
+                    info.start,
+                    info.end)
             }
             const reservationInfo = useReservationStore()
             await reservationInfo.reload()
