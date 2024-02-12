@@ -90,7 +90,7 @@ const displayPerson = computed(() => {
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller.startTime.substring(0,5) ?? 'Select a time' }}
+              {{ controller?.startTime?.substring(0,5) ?? 'Select a time' }}
             </div>
           </form-container>
         </inline-two-row-container>
