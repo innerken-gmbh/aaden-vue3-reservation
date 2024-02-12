@@ -26,7 +26,7 @@
   "NewReservation" : "Neue Reservierung",
   "Retry": "Wiederholen",
   "QRisNotValid" : " Dieser QR-Code ist ungültig",
-  "ScanQROnConformationMail" : "\nBitte scannen Sie den QR-Code in der Bestätigungs-Mail",
+  "ScanQROnConformationMail" : "Scannen Sie den QR-Code in der Bestätigungs-Mail",
   "ScanQR" : "QR-Code scannen",
   "Reservation": "Reservierung",
   "SelectPreferredTime" : "Wählen Sie Ihre bevorzugte Zeit aus",
