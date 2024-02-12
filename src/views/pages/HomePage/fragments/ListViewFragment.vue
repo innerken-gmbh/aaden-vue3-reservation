@@ -94,6 +94,7 @@ const {smAndUp} = useDisplay()
         <v-icon
           v-if="r.haveShareTable"
           small
+          :color="r.shareColor"
           class="ml-2"
         >
           mdi-link-variant
