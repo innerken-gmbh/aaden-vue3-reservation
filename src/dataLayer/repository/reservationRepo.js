@@ -31,7 +31,7 @@ export const useReservationStore = defineStore('reservation', {
         search: '',
         showAll: true,
         tableList: [],
-        xSize: 40,
+        xSize: 32,
         loading: false,
         ySize: 28,
         activeReservationId: 32165,
