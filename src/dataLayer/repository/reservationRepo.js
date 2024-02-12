@@ -115,6 +115,7 @@ export const useReservationStore = defineStore('reservation', {
                     y: yIndex * this.ySize
                 }
                 it.status = getReservationStatus(it)
+
                 return it
             })
             const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
