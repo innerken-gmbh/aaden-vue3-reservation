@@ -80,7 +80,7 @@ async function onCancel() {
     <template #header>
       <div>
         <div>
-          Reservation
+          {{ $t('Reservation') }}
         </div>
         <div class="text-body-2">
           #{{ controller.activeReservationId }}
@@ -88,14 +88,14 @@ async function onCancel() {
       </div>
       <v-spacer />
       <div class="text-body-1">
-        {{ status }}
+        {{ $t(status) }}
       </div>
     </template>
     <template v-if="info">
       <inline-two-row-container>
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
-            {{ info.title || 'Mr/Mrs' }}
+            {{ info.title || $t('FormOfAddress') }}
           </div>
           <div>
             {{ info.firstName }} {{ info.lastName }}
@@ -108,7 +108,7 @@ async function onCancel() {
           <div class="text-no-wrap">
             {{ toOnlyTimeFormat(info.fromDateTime) }}
             <span class="text-body-2">
-              to
+              {{ $t('to') }}
               {{ toOnlyTimeFormat(info.toDateTime) }}
             </span>
           </div>
@@ -119,7 +119,7 @@ async function onCancel() {
           class="text-h5 font-weight-black mt-4"
         >
           <div class="text-body-2">
-            Dining Time
+            {{ $t('DiningTime') }}
           </div>
           <div class="d-flex">
             <div v-if="!timeChanged">
@@ -150,7 +150,7 @@ async function onCancel() {
       <inline-two-row-container class="mt-4">
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
-            Table
+            {{ $t('Table') }}
           </div>
           <div>
             {{ info.tableNameNull }}
@@ -158,10 +158,10 @@ async function onCancel() {
         </div>
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
-            Need stroller
+            {{ $t('NeedStroller') }}
           </div>
           <div>
-            {{ info.useStroller === '1' ? 'Yes' : 'No' }}
+            {{ info.useStroller === '1' ? $t('Yes') : $t('No') }}
           </div>
         </div>
       </inline-two-row-container>
@@ -170,7 +170,7 @@ async function onCancel() {
         class="text-h5 font-weight-black mt-4"
       >
         <div class="text-body-2">
-          Email
+          {{ $t('Mail') }}
         </div>
         <div>
           {{ info.email }}
@@ -181,7 +181,7 @@ async function onCancel() {
         class="text-h5 font-weight-black mt-4"
       >
         <div class="text-body-2">
-          Tel
+          {{ $t('Phone') }}
         </div>
         <div>
           {{ info.tel }}
@@ -192,7 +192,7 @@ async function onCancel() {
         class="text-h5 font-weight-black mt-4"
       >
         <div class="text-body-2">
-          Note
+          {{  $t('Note')  }}
         </div>
         <div>
           {{ info.note }}
@@ -210,7 +210,7 @@ async function onCancel() {
           <template #prepend>
             <v-icon>mdi-check</v-icon>
           </template>
-          Save
+          {{  $t('Save')  }}
         </v-btn>
       </template>
       <template v-else>
@@ -223,7 +223,7 @@ async function onCancel() {
           <template #prepend>
             <v-icon>mdi-cancel</v-icon>
           </template>
-          Cancel
+          {{ $t('Cancel') }}
         </v-btn>
         <v-btn
           :loading="controller.loading"
@@ -234,7 +234,7 @@ async function onCancel() {
           <template #prepend>
             <v-icon>mdi-check</v-icon>
           </template>
-          Check in
+          {{ $t('CheckIn') }}
         </v-btn>
       </template>
     </template>

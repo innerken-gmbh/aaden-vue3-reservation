@@ -34,7 +34,7 @@ const displayPerson = computed(() => {
   <base-dialog v-model="controller.showNewReservationModal">
     <template #header>
       <template v-if="controller.reservationStep===0">
-        Create a new reservation
+        {{ $t('NewReservation') }}
         <v-spacer />
       </template>
       <template v-else>
@@ -55,7 +55,7 @@ const displayPerson = computed(() => {
     <template #default>
       <template v-if="controller.reservationStep===0">
         <div class="text-body-2">
-          Gäste
+          {{ $t('Guests') }}
           <div
             class="mt-2 text-body-1 font-weight-black"
             style="display: grid;grid-gap: 4px;
@@ -77,7 +77,7 @@ const displayPerson = computed(() => {
           </div>
         </div>
         <inline-two-row-container class="mt-8">
-          <form-container label="Date">
+          <form-container :label="$t('Date')">
             <div
               class="text-h5 font-weight-black d-flex align-center"
               @click="async ()=>controller.date=await datePicker.selectDate()"
@@ -97,13 +97,13 @@ const displayPerson = computed(() => {
       </template>
       <template v-else>
         <inline-two-row-container>
-          <form-container label="First Name">
+          <form-container :label="$t('FirstName')">
             <v-text-field
               v-model="controller.reservationExtraInfo.firstName"
               placeholder="Max.."
             />
           </form-container>
-          <form-container label="Last Name">
+          <form-container :label="$t('LastName')">
             <v-text-field
               v-model="controller.reservationExtraInfo.lastName"
               placeholder="Mustermann.."
@@ -111,13 +111,13 @@ const displayPerson = computed(() => {
           </form-container>
         </inline-two-row-container>
         <inline-two-row-container>
-          <form-container label="Email">
+          <form-container :label="$t('Mail')">
             <v-text-field
               v-model="controller.reservationExtraInfo.email"
               placeholder="Max.mustermann@example.com"
             />
           </form-container>
-          <form-container label="Tel">
+          <form-container :label="$t('Phone')">
             <v-text-field
               v-model="controller.reservationExtraInfo.tel"
               placeholder="0123-456789"
@@ -128,7 +128,7 @@ const displayPerson = computed(() => {
           <v-textarea
             v-model="controller.reservationExtraInfo.note"
             auto-grow
-            placeholder="Note about extra wishes"
+            :placeholder="$t('ExtraAnnotate')"
           />
         </form-container>
         <v-chip
@@ -150,7 +150,7 @@ const displayPerson = computed(() => {
             </v-icon>
           </template>
 
-          Need Stroller
+          {{ $t('NeedStroller') }}
         </v-chip>
         <v-sheet
           rounded
@@ -173,7 +173,7 @@ const displayPerson = computed(() => {
         size="large"
         color="primary"
       >
-        Create Reservation
+        {{ $t('NewReservation') }}
       </v-btn>
       <v-btn
         v-else
@@ -183,7 +183,7 @@ const displayPerson = computed(() => {
         color="primary"
         :disabled="!controller.startTime"
       >
-        Fill Detailed Information
+        {{ $t('FillUpInformation') }}
         <template #append>
           <v-icon>mdi-arrow-right</v-icon>
         </template>

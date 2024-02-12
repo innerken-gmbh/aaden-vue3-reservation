@@ -17,7 +17,7 @@ function confirmTime(time) {
     max-width="500px"
   >
     <template #header>
-      Select your preferred time
+      {{ $t('SelectPreferredTime') }}
     </template>
     <inline-two-row-container
       style="max-height: 80vh;overflow-y: scroll"
