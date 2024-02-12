@@ -53,7 +53,6 @@ const {smAndUp} = useDisplay()
       </div>
 
       <v-card
-
         color="grey-darken-3"
         class="pa-3 px-4 mb-2 d-flex align-center"
         v-for="r in reservationInfo.filteredReservationList"

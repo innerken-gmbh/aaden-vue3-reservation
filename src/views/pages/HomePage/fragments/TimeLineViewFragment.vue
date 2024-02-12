@@ -183,8 +183,9 @@ onMounted(async () => {
         style="position: sticky; z-index: 10;
           left: 0;
           width: 72px;
-          background: linear-gradient(to right , rgba(var(--v-theme-background),.7),
-             rgba(var(--v-theme-background),.1))"
+          background: linear-gradient(to right ,
+           rgba(var(--v-theme-background),.9),
+             rgba(var(--v-theme-background),.7))"
         class="d-flex align-center pl-2 pr-1
              font-weight-black text-body-2"
         :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"

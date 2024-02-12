@@ -132,13 +132,6 @@ const {smAndUp} = useDisplay()
             <template v-else>
               <div>
                 <div
-                  class="text-caption mt-n1"
-                >
-                  {{
-                    toCalendarFormat(reservationInfo.date)
-                  }}
-                </div>
-                <div
                   class="font-weight-black text-body-1"
                 >
                   {{ dayjs(reservationInfo.date).format('MMM DD') }}
