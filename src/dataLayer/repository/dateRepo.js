@@ -18,7 +18,9 @@ export function toOnlyTimeFormat(str) {
 export function toDateFormat(str) {
     return dayjs(str).format(dateFormat)
 }
-
+export function toDateDisplayFormat(str) {
+    return dayjs(str).format("dddd, DD MMM")
+}
 export function timeDisplay(str) {
     return dayjs(str).format(timestampTemplate)
 }

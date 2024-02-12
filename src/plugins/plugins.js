@@ -67,7 +67,7 @@ export const vuetify = createVuetify({
             lighten: 5,
             darken: 5,
         },
-        defaultTheme: 'aadenLightTheme',
+        defaultTheme: 'aadenTheme',
         themes: {
             aadenTheme,
             aadenLightTheme

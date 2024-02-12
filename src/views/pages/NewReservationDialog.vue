@@ -11,6 +11,7 @@ import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
 import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import BaseDialog from "../components/BaseDialog.vue";
+import {toDateDisplayFormat} from "../../dataLayer/repository/dateRepo.js";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
@@ -87,7 +88,7 @@ const displayPerson = computed(() => {
               class="text-h5 font-weight-black d-flex align-center"
               @click="async ()=>controller.date=await datePicker.selectDate()"
             >
-              {{ controller.date }}
+              {{ toDateDisplayFormat(controller.date) }}
             </div>
           </form-container>
           <form-container label="Time">

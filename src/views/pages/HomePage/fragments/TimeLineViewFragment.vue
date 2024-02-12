@@ -47,8 +47,11 @@ function resetCurrentScrollPos() {
 }
 
 onMounted(async () => {
-  await IKUtils.wait(1000)
-  resetCurrentScrollPos()
+  await IKUtils.wait(200)
+  if(reservationInfo.date===today()){
+    resetCurrentScrollPos()
+  }
+
 })
 </script>
 
@@ -58,6 +61,7 @@ onMounted(async () => {
     class="ml-n4 mt-8 pl-4 d-flex align-start"
   >
     <v-card
+      v-if="reservationInfo.date===today()"
       @click="resetCurrentScrollPos"
       style="position: absolute;left: 16px;top: 0;z-index: 8"
       :width="reservationInfo.ySize"
@@ -81,6 +85,7 @@ onMounted(async () => {
       }"
     >
       <div
+        v-if="reservationInfo.date===today()"
         class="border-primary"
         style="position: absolute;width:8px;
               z-index: 4;top:0;left: 0;
@@ -115,7 +120,9 @@ onMounted(async () => {
              box-sizing:border-box;
 "
             >
-              {{ t }}
+              <div style="margin-left: -20%">
+                {{ t }}
+              </div>
             </div>
           </template>
         </div>
@@ -252,9 +259,12 @@ onMounted(async () => {
 .gridBackground {
   background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px,
   rgba(255, 255, 255, .1) 1px),
-  linear-gradient(to bottom, rgba(var(--v-theme-background), 1) 1px, transparent 1px),
-  linear-gradient(to right, rgba(var(--v-theme-background), 1) 2px, transparent 1px),
-  linear-gradient(to right, rgba(var(--v-theme-background), 1) 3px, transparent 1px);
+  linear-gradient(to bottom, rgba(var(--v-theme-background), 1) 1px,
+      transparent 1px),
+  linear-gradient(to right, rgba(var(--v-theme-background), 1) 1px,
+      transparent 1px),
+  linear-gradient(to right, rgba(var(--v-theme-background), 1) 1px,
+      transparent 1px);
   background-size: 40px 28px,
   40px 28px,
   80px 72px,

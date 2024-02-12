@@ -10,7 +10,7 @@ import {useDisplay} from "vuetify";
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
-const {smAndUp} = useDisplay()
+
 </script>
 
 <template>
@@ -52,7 +52,7 @@ const {smAndUp} = useDisplay()
       >
         <div
           style="border-top-left-radius: 24px;z-index: 2;overflow: visible;min-height: calc(100svh - 72px);
-          border-top-right-radius: 24px;box-shadow: rgba(0,0,0,.5) 0 -2px 5px"
+          border-top-right-radius: 24px;"
           class="bg-surface"
         >
           <home-page />

@@ -6,7 +6,11 @@ import {
 } from "../../dataLayer/repository/reservationRepo.js";
 import {computed, ref, watch} from "vue";
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
-import {timestampTemplate, toDateFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
+import {
+  timestampTemplate,
+  toDateDisplayFormat,
+  toOnlyTimeFormat
+} from "../../dataLayer/repository/dateRepo.js";
 import BaseDialog from "../components/BaseDialog.vue";
 import dayjs from "dayjs";
 
@@ -99,7 +103,7 @@ async function onCancel() {
         </div>
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
-            {{ toDateFormat(info.fromDateTime) }}
+            {{ toDateDisplayFormat(info.fromDateTime) }}
           </div>
           <div class="text-no-wrap">
             {{ toOnlyTimeFormat(info.fromDateTime) }}
@@ -127,18 +131,20 @@ async function onCancel() {
           </div>
         </div>
         <v-spacer />
-        <v-btn
-          flat
-          @click="overrideDiningTime<=30?null:overrideDiningTime-=15"
-          icon="mdi-minus"
-          size="36"
-        />
-        <v-btn
-          flat
-          @click="overrideDiningTime+=15"
-          icon="mdi-plus"
-          size="36"
-        />
+        <template v-if="canEdit">
+          <v-btn
+            flat
+            @click="overrideDiningTime<=30?null:overrideDiningTime-=15"
+            icon="mdi-minus"
+            size="36"
+          />
+          <v-btn
+            flat
+            @click="overrideDiningTime+=15"
+            icon="mdi-plus"
+            size="36"
+          />
+        </template>
       </div>
 
       <inline-two-row-container class="mt-4">

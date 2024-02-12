@@ -6,8 +6,10 @@ import {
   ReservationStatus,
   useReservationStore
 } from "../../../../dataLayer/repository/reservationRepo.js";
+import {useDisplay} from "vuetify";
 
 const reservationInfo = useReservationStore()
+const {smAndUp} = useDisplay()
 </script>
 
 <template>
@@ -32,16 +34,19 @@ const reservationInfo = useReservationStore()
           <v-icon class="mr-2">
             {{ ReservationIcon[t] }}
           </v-icon>
-          {{ t }}
+          <template v-if="smAndUp">
+            {{ t }}
+          </template>
         </v-card>
       </v-card>
       <v-spacer />
       <v-card
+
         rounded="pill"
         class="text-body-1 pa-1 px-3"
         color="primary"
       >
-        {{ reservationInfo.filteredReservationList.length }}
+        {{ reservationInfo.filteredReservationList.length }}({{ reservationInfo.reservationTotalPersonCount }} P)
       </v-card>
     </div>
 

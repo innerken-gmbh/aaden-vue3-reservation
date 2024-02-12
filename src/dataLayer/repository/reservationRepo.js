@@ -60,8 +60,9 @@ export const useReservationStore = defineStore('reservation', {
                 const target = dayjs(this.date + ' ' + it)
                 this.reservationList.forEach(r => {
                     const [start, end] = [r.fromDateTime, r.toDateTime].map(t => dayjs(t))
-                    if (target.isBefore(end) && target.add(30, 'm').isAfter(start)) {
-                        seatCount++
+                    if (target.isBefore(end) && target.add(30, 'm')
+                        .isAfter(start)) {
+                        seatCount += parseInt(r.personCount)
                     }
                 })
                 return {
@@ -78,6 +79,10 @@ export const useReservationStore = defineStore('reservation', {
         activeReservation() {
             return this.reservationList
                 .find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
+        },
+        reservationTotalPersonCount() {
+            return sumBy(this.filteredReservationList,
+                (r) => parseInt(r.personCount))
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {

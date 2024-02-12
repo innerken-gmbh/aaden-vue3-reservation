@@ -1,7 +1,7 @@
 <script setup>
 import {useDatePickerStore, useReservationStore} from "../../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {dateFormat, toCalendarFormat, today, useCurrentTime} from "../../../dataLayer/repository/dateRepo.js";
+import {dateFormat, toCalendarFormat, useCurrentTime} from "../../../dataLayer/repository/dateRepo.js";
 import NewReservationDialog from "../NewReservationDialog.vue";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
@@ -79,6 +79,7 @@ const {smAndUp} = useDisplay()
             </v-icon>
           </v-btn>
           <v-btn
+            v-if="!reservationInfo.displayList"
             class="mr-2"
             icon=""
             flat
