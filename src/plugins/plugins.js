@@ -10,7 +10,8 @@ import duration from 'dayjs/plugin/duration'
 import calendar from 'dayjs/plugin/calendar'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import dayjs from "dayjs";
-import {createI18n} from "vue-i18n";
+import { createI18n } from 'vue-i18n'
+import locales from '../locales'
 
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
@@ -73,8 +74,21 @@ export const vuetify = createVuetify({
         },
     },
 })
-export const i18n = createI18n({
-    // something vue-i18n options here ...
+
+const {locale, availableLocales, fallbackLocale} = locales
+
+const messages = {}
+
+availableLocales.forEach((l) => {
+    messages[l.code] = l.messages
 })
+
+export const i18n = createI18n({
+    locale,
+    fallbackLocale,
+    messages
+})
+
+i18n.locales = availableLocales
 
 export const pinia = createPinia()
