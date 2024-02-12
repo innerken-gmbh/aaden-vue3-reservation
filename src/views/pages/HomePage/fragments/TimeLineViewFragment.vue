@@ -51,7 +51,6 @@ function resetCurrentScrollPos() {
     })
   } else {
     const firstReservation = minBy(reservationInfo.filteredReservationList, 'grid.x')
-    console.log(firstReservation, 'reser')
     container.value?.scroll({
       top: 0, left: firstReservation.grid.x -
           (window.innerWidth / 3)
@@ -194,7 +193,7 @@ onMounted(async () => {
       >
         {{ t.tableName }}
         <v-spacer />
-        <v-icon color="secondary">
+        <v-icon :color="t.reservable?'secondary':'grey'">
           mdi-circle-small
         </v-icon>
         <div class="font-weight-thin text-caption">
