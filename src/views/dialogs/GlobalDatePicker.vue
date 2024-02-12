@@ -28,7 +28,7 @@ function confirm() {
         color="primary"
         size="large"
       >
-        OK
+        {{ $t('OK') }}
       </v-btn>
     </v-card>
   </v-dialog>

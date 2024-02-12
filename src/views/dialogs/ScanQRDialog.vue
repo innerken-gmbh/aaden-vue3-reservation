@@ -34,10 +34,10 @@ function onDetect(e) {
     <template #header>
       <div>
         <div>
-          Scan QR Code
+          {{ $t('ScanQR') }}
         </div>
         <div class="text-body-2">
-          Please scan the qrcode on the confirmation emails
+          {{ $t('ScanQROnConformationMail') }}
         </div>
       </div>
       <v-spacer />
@@ -46,7 +46,7 @@ function onDetect(e) {
     <template #default>
       <div>
         <template v-if="controller.error">
-          <place-holder :hint="' This QR code is not valid'">
+          <place-holder :hint="$t('QRisNotValid')">
             <v-btn
               @click="controller.rescan()"
               class="mt-4"
@@ -55,7 +55,7 @@ function onDetect(e) {
               <template #prepend>
                 <v-icon>mdi-refresh</v-icon>
               </template>
-              Retry
+              {{  $t('Retry')  }}
             </v-btn>
           </place-holder>
         </template>

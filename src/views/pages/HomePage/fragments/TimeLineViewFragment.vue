@@ -249,7 +249,7 @@ onMounted(async () => {
       color="primary"
       elevation="8"
     >
-      {{ reservationChangeVM.changesCount }} Changes
+      {{ reservationChangeVM.changesCount }} {{ $t('Changes') }}
       <v-btn
         elevation="0"
         @click="reservationChangeVM.cancelAllChanges()"

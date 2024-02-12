@@ -1,3 +1,23 @@
 {
+  "CheckedIn" : "Eingecheckt",
+  "Cancelled": "Storniert",
+  "Normal" : "Normal",
+  "Changes": "Änderungen",
+  "FillUpInformation": "Füllen Sie detaillierte Informationen aus",
+  "NeedStroller": "Kinderwagen benötigt",
+  "ExtraAnnotate" : "Notiz mit Extrawünschen",
+  "Phone" : "Tel",
+  "Mail" : "E-Mail",
+  "LastName" : "Nachname",
+  "FirstName" : "Vorname",
+  "NewReservation" : "Neue Reservierung",
+  "Retry": "Wiederholen",
+  "QRisNotValid" : " Dieser QR-Code ist ungültig",
+  "ScanQROnConformationMail" : "\nBitte scannen Sie den QR-Code in der Bestätigungs-Mail",
+  "ScanQR" : "QR-Code scannen",
+  "Reservation": "Reservierung",
+  "SelectPreferredTime" : "Wählen Sie Ihre bevorzugte Zeit aus",
+  "OK" : "OK",
+  "Oops" : "Hoppla!",
   "SearchHere" : "Hier Suchen"
 }

@@ -1,3 +1,23 @@
 {
+  "CheckedIn" : "Ingecheckt",
+  "Cancelled": "Geannuleerd",
+  "Normal" : "Normaal",
+  "Changes": "Veranderingen",
+  "FillUpInformation": "Vul gedetailleerde informatie in",
+  "NeedStroller": "Kinderwagen vereist",
+  "ExtraAnnotate" : "Noteer bij uw speciale verzoeken",
+  "Phone" : "Tel",
+  "Mail" : "E-mail",
+  "LastName" : "Achternaam",
+  "FirstName" : "Voornaam",
+  "NewReservation" : "Nieuwe reservering",
+  "Retry": "Herhalen",
+  "QRisNotValid" : " Deze QR-code is niet geldig",
+  "ScanQROnConformationMail" : "Scan de QR-code op de bevestigingsmails",
+  "ScanQR" : "Scan QR-code",
+  "Reservation": "Reservering",
+  "SelectPreferredTime": "Selecteer uw voorkeurstijd",
+  "OK" : "Oké",
+  "Oops" : "Oeps!",
   "SearchHere" : "Zoek hier"
 }

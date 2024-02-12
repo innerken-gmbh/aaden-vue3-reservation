@@ -80,7 +80,7 @@ async function onCancel() {
     <template #header>
       <div>
         <div>
-          Reservation
+          {{ $t('Reservation') }}
         </div>
         <div class="text-body-2">
           #{{ controller.activeReservationId }}
