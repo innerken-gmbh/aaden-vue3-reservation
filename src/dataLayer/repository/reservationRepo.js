@@ -13,9 +13,9 @@ import {groupBy, intersection, maxBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 
 export const ReservationStatus = {
-    Normal: this.$t('Normal'),
-    Cancelled: this.$t('Cancelled'),
-    CheckedIn: this.$t('CheckedIn'),
+    Normal: 'Normal',
+    Cancelled: 'Cancelled',
+    CheckedIn: 'CheckedIn',
 }
 export const ReservationIcon = {
     Normal: 'mdi-view-list',

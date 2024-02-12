@@ -86,8 +86,7 @@ availableLocales.forEach((l) => {
 export const i18n = createI18n({
     locale,
     fallbackLocale,
-    messages,
-    globalInjection: true
+    messages
 })
 
 i18n.locales = availableLocales

@@ -55,7 +55,7 @@ const displayPerson = computed(() => {
     <template #default>
       <template v-if="controller.reservationStep===0">
         <div class="text-body-2">
-          Gäste
+          {{ $t('Guests') }}
           <div
             class="mt-2 text-body-1 font-weight-black"
             style="display: grid;grid-gap: 4px;
@@ -77,7 +77,7 @@ const displayPerson = computed(() => {
           </div>
         </div>
         <inline-two-row-container class="mt-8">
-          <form-container label="Date">
+          <form-container :label="$t('Date')">
             <div
               class="text-h5 font-weight-black d-flex align-center"
               @click="async ()=>controller.date=await datePicker.selectDate()"

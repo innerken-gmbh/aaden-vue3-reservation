@@ -38,7 +38,7 @@ const {smAndUp} = useDisplay()
               {{ ReservationIcon[t] }}
             </v-icon>
             <template v-if="smAndUp">
-              {{ t }}
+              {{ $t(t) }}
             </template>
           </v-card>
         </v-card>
@@ -114,7 +114,7 @@ const {smAndUp} = useDisplay()
 
     <place-holder
       icon="mdi-noodles"
-      hint="You don't have any reservation. eat a noodle and chill out"
+      :hint="$t('NoReservationsATM')"
       v-else
     />
   </div>
