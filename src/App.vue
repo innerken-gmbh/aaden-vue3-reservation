@@ -25,7 +25,7 @@ const {smAndUp} = useDisplay()
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           flat
-          placeholder="Search here"
+          :placeholder="$t('SearchHere')"
           density="compact"
           clearable
           hide-details
