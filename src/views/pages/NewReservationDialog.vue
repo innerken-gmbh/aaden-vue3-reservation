@@ -36,12 +36,6 @@ const displayPerson = computed(() => {
       <template v-if="controller.reservationStep===0">
         Create a new reservation
         <v-spacer />
-        <v-icon
-          @click="controller.showNewReservationModal=false"
-          size="32"
-        >
-          mdi-close
-        </v-icon>
       </template>
       <template v-else>
         <div>
@@ -96,7 +90,7 @@ const displayPerson = computed(() => {
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller.startTime ?? 'Select a time' }}
+              {{ controller.startTime.substring(0,5) ?? 'Select a time' }}
             </div>
           </form-container>
         </inline-two-row-container>

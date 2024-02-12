@@ -109,23 +109,42 @@ const {smAndUp} = useDisplay()
             class="d-flex mx-2 align-center"
             @click="selectNewDate"
           >
-            <div
-              class="text-caption"
-              v-if="smAndUp"
-            >
-              {{ dayjs(reservationInfo.date).format('MMMM') }}
-            </div>
-            <div class="font-weight-black text-h5 mx-2">
-              {{ dayjs(reservationInfo.date).format('DD') }}
-            </div>
-            <div
-              class="text-body-2 font-weight-black"
-              v-if="smAndUp"
-            >
-              {{
-                toCalendarFormat(reservationInfo.date)
-              }}
-            </div>
+            <template v-if="smAndUp">
+              <div
+                class="text-caption"
+              >
+                {{ dayjs(reservationInfo.date).format('MMMM') }}
+              </div>
+              <div
+
+                class="font-weight-black text-h5 mx-2"
+              >
+                {{ dayjs(reservationInfo.date).format('DD') }}
+              </div>
+              <div
+                class="text-body-2 font-weight-black"
+              >
+                {{
+                  toCalendarFormat(reservationInfo.date)
+                }}
+              </div>
+            </template>
+            <template v-else>
+              <div>
+                <div
+                  class="text-caption mt-n1"
+                >
+                  {{
+                    toCalendarFormat(reservationInfo.date)
+                  }}
+                </div>
+                <div
+                  class="font-weight-black text-body-1"
+                >
+                  {{ dayjs(reservationInfo.date).format('MMM DD') }}
+                </div>
+              </div>
+            </template>
           </div>
           <v-btn
             flat

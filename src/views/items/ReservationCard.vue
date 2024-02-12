@@ -14,7 +14,7 @@
     @drag-stop="stopDrag"
   >
     <v-card
-      @contextmenu="tryUnlock"
+      @click="tryUnlock"
       rounded="md"
       :height="ySize"
       class="pr-2 text-caption d-flex align-center reservationCard gradient "
@@ -133,15 +133,20 @@ const canDrag = computed(() => {
 function tryUnlock(e) {
   e.preventDefault()
   e.stopPropagation()
-  if (!checkedIn.value) {
-    console.log('unlock', props.reservationInfo.id)
-    dragController.startDrag(props.reservationInfo.id)
+  if(canDrag.value){
+    dragController.stopDrag()
+  }else{
+    if (!checkedIn.value && !cancelled.value) {
+      console.log('unlock', props.reservationInfo.id)
+      dragController.startDrag(props.reservationInfo.id)
+    }
   }
+
   return false
 }
 
 function stopDrag(...args) {
-  dragController.stopDrag()
+
   emit('dragStop', ...args)
 }
 

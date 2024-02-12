@@ -86,7 +86,7 @@ export const useReservationStore = defineStore('reservation', {
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
-                return (!this.search || Object.values(it)
+                return it.tableId && (!this.search || [it.firstName, it.lastName]
                         .some(s => s?.toString()?.toLowerCase()
                             .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||

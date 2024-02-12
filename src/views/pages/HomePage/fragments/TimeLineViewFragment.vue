@@ -10,6 +10,7 @@ import {timestampTemplate, today} from "../../../../dataLayer/repository/dateRep
 import dayjs from "dayjs";
 import {onMounted, ref} from "vue";
 import IKUtils from "innerken-js-utils";
+import {minBy} from "lodash-es";
 
 const props = defineProps({
   currentTimeX: {
@@ -43,14 +44,27 @@ async function onMoveReservation(r, positionInfo) {
 const container = ref(null)
 
 function resetCurrentScrollPos() {
-  container.value?.scroll({top: 0, left: props.currentTimeX - (window.innerWidth / 3)})
+  if (reservationInfo.date === today()) {
+    container.value?.scroll({
+      top: 0, left: props.currentTimeX -
+          (window.innerWidth / 3)
+    })
+  } else {
+    const firstReservation = minBy(reservationInfo.filteredReservationList, 'grid.x')
+    console.log(firstReservation, 'reser')
+    container.value?.scroll({
+      top: 0, left: firstReservation.grid.x -
+          (window.innerWidth / 3)
+    })
+  }
+
 }
 
 onMounted(async () => {
   await IKUtils.wait(200)
-  if(reservationInfo.date===today()){
-    resetCurrentScrollPos()
-  }
+
+  resetCurrentScrollPos()
+
 
 })
 </script>
@@ -60,19 +74,6 @@ onMounted(async () => {
     style="width: calc(100% + 24px);position: relative;"
     class="ml-n4 mt-8 pl-4 d-flex align-start"
   >
-    <v-card
-      v-if="reservationInfo.date===today()"
-      @click="resetCurrentScrollPos"
-      style="position: absolute;left: 16px;top: 0;z-index: 8"
-      :width="reservationInfo.ySize"
-      :height="reservationInfo.ySize"
-      color="primary"
-      class="d-flex align-center justify-center"
-    >
-      <v-icon size="sm">
-        mdi-crosshairs-gps
-      </v-icon>
-    </v-card>
     <div
       class="flex-grow-1"
       ref="container"
@@ -88,7 +89,7 @@ onMounted(async () => {
         v-if="reservationInfo.date===today()"
         class="border-primary"
         style="position: absolute;width:8px;
-              z-index: 4;top:0;left: 0;
+              z-index: 8;top:0;left: 0;
               backdrop-filter: grayscale(100%);
               background: linear-gradient(to right ,rgba(var(--v-theme-background),0) 0,rgba(var(--v-theme-background),0.05) 80%,rgba(var(--v-theme-background),.5) 100%);
               border-right: 2px solid;"
@@ -98,9 +99,23 @@ onMounted(async () => {
             +2*reservationInfo.ySize)+'px',
         }"
       />
+      <div
+        v-if="reservationInfo.date===today()"
+        class="border-primary"
+        style="position: absolute;width:8px;
+              z-index: 11;top:0;left: 0;
+              backdrop-filter: grayscale(100%);
+              background: linear-gradient(to right ,rgba(var(--v-theme-background),0) 0,rgba(var(--v-theme-background),0.05) 80%,rgba(var(--v-theme-background),.5) 100%);
+              border-right: 2px solid;"
+        :style="{
+          width: `${currentTimeX}px`,
+          height:(
+            +2*reservationInfo.ySize)+'px',
+        }"
+      />
 
       <div
-        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 3"
+        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 10"
       >
         <div
           style="width: 100%;position: relative;display: grid;"
@@ -120,7 +135,10 @@ onMounted(async () => {
              box-sizing:border-box;
 "
             >
-              <div style="margin-left: -20%">
+              <div
+                style="margin-left: -20%"
+                v-if="i!==0"
+              >
                 {{ t }}
               </div>
             </div>
@@ -135,7 +153,7 @@ onMounted(async () => {
           class="text-caption bg-surface-darken-1"
           style="width: 100%;height: 100%;
               grid-column:span 2;position: sticky;
-              top: 28px;z-index: 3"
+              top: 28px;z-index: 10"
           :style="{
             borderLeft:t.time.endsWith('00')?
               '3px inset rgba(var(--v-theme-background),.2) !important':
@@ -163,7 +181,7 @@ onMounted(async () => {
         </div>
       </template>
       <div
-        style="position: sticky; z-index: 2;
+        style="position: sticky; z-index: 10;
           left: 0;
           width: 72px;
           background: linear-gradient(to right , rgba(var(--v-theme-background),.7),
@@ -199,7 +217,7 @@ onMounted(async () => {
         tile
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
-        style="position: absolute;z-index: 1;"
+        style="position: absolute;z-index: 9;"
         :style="{
           gridColumn:'0 / '+reservationInfo.timeSlots.length,
           gridRow:'3 / '+(reservationInfo.tableList.length+3)
@@ -226,7 +244,7 @@ onMounted(async () => {
     </div>
     <v-card
       v-if="reservationChangeVM.changesCount>0"
-      style="position: fixed;right: 64px;bottom: 64px"
+      style="position: fixed;right: 16px;bottom: 16px"
       class="pa-2 pl-8 font-weight-black"
       color="primary"
       elevation="8"
@@ -251,6 +269,30 @@ onMounted(async () => {
       >
         <v-icon>mdi-check</v-icon>
       </v-btn>
+    </v-card>
+    <v-card
+      v-else-if="reservationInfo.date===today()"
+      @click="resetCurrentScrollPos"
+      style="position: fixed;right: 16px;bottom: 16px;z-index: 12"
+      color="primary"
+      rounded="pill"
+      class="pa-4 px-4 font-weight-black"
+    >
+      <v-icon>
+        mdi-crosshairs-gps
+      </v-icon>
+    </v-card>
+    <v-card
+      v-else
+      @click="reservationInfo.date=today()"
+      style="position: fixed;right: 16px;bottom: 16px;z-index: 12"
+      color="primary"
+      rounded="pill"
+      class="pa-4 px-4 font-weight-black"
+    >
+      <v-icon>
+        mdi-calendar-refresh
+      </v-icon>
     </v-card>
   </div>
 </template>
