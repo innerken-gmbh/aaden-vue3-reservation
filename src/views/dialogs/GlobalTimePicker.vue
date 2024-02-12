@@ -20,7 +20,7 @@ function confirmTime(time) {
       Select your preferred time
     </template>
     <inline-two-row-container
-      style="max-height: 40vh;overflow-y: scroll"
+      style="max-height: 80vh;overflow-y: scroll"
     >
       <v-card
         @click="confirmTime(t)"

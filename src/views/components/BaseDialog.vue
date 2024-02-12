@@ -38,7 +38,7 @@ const actionClass = computed(() => {
     max-width="500px"
   >
     <v-card
-      rounded="xl"
+      :rounded="xs?0:'xl'"
     >
       <div style="max-height: 100vh;overflow-y: scroll">
         <v-card
