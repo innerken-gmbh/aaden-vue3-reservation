@@ -19,7 +19,7 @@ try {
     console.log(e)
 }
 export default {
-    locale: locale,
+    locale,
     fallbackLocale: 'en',
     availableLocales: [
         {
