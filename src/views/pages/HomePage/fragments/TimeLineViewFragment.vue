@@ -85,7 +85,7 @@ onMounted(async () => {
         style="position: absolute;width:8px;
               z-index: 4;top:0;left: 0;
               backdrop-filter: grayscale(100%);
-              background: linear-gradient(to right ,rgba(0,0,0,0) 0,rgba(0,0,0,0.05) 80%,rgba(0,0,0,.5) 100%);
+              background: linear-gradient(to right ,rgba(var(--v-theme-background),0) 0,rgba(var(--v-theme-background),0.05) 80%,rgba(var(--v-theme-background),.5) 100%);
               border-right: 2px solid;"
         :style="{
           width: `${currentTimeX}px`,
@@ -131,8 +131,8 @@ onMounted(async () => {
               top: 28px;z-index: 3"
           :style="{
             borderLeft:t.time.endsWith('00')?
-              '3px inset rgba(0,0,0,.2) !important':
-              '2px inset rgba(0,0,0,.2) !important'
+              '3px inset rgba(var(--v-theme-background),.2) !important':
+              '2px inset rgba(var(--v-theme-background),.2) !important'
           }"
         >
           <div
@@ -159,8 +159,8 @@ onMounted(async () => {
         style="position: sticky; z-index: 4;
           left: 0;
           width: 72px;
-          background: linear-gradient(to right , rgba(0,0,0,.7),
-             rgba(0,0,0,.1))"
+          background: linear-gradient(to right , rgba(var(--v-theme-background),.7),
+             rgba(var(--v-theme-background),.1))"
         class="d-flex align-center pl-2 pr-1
              font-weight-black text-body-2"
         :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
@@ -192,7 +192,7 @@ onMounted(async () => {
         tile
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
-        style="position: absolute;z-index: 8;"
+        style="position: absolute;z-index: 2;"
         :style="{
           gridColumn:'0 / '+reservationInfo.timeSlots.length,
           gridRow:'3 / '+(reservationInfo.tableList.length+3)
@@ -250,10 +250,11 @@ onMounted(async () => {
 
 <style scoped>
 .gridBackground {
-  background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px, rgba(255, 255, 255, .1) 1px),
-  linear-gradient(to bottom, rgba(6, 6, 6, 1) 1px, transparent 1px),
-  linear-gradient(to right, rgba(6, 6, 6, 1) 2px, transparent 1px),
-  linear-gradient(to right, rgba(6, 6, 6, 1) 3px, transparent 1px);
+  background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px,
+  rgba(255, 255, 255, .1) 1px),
+  linear-gradient(to bottom, rgba(var(--v-theme-background), 1) 1px, transparent 1px),
+  linear-gradient(to right, rgba(var(--v-theme-background), 1) 2px, transparent 1px),
+  linear-gradient(to right, rgba(var(--v-theme-background), 1) 3px, transparent 1px);
   background-size: 40px 28px,
   40px 28px,
   80px 72px,

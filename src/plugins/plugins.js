@@ -29,6 +29,19 @@ const aadenTheme = {
     },
 }
 
+const aadenLightTheme = {
+    dark: false,
+    colors: {
+        background: '#f6f6f6',
+        surface: '#e8eadd',
+        'on-surface': '#30302e',
+        primary: '#30302e',
+        secondary: '#54a560',
+        error: '#e74983',
+        info: '#124bbe',
+    },
+}
+
 export const vuetify = createVuetify({
     icons: {
         defaultSet: 'mdi',
@@ -53,9 +66,10 @@ export const vuetify = createVuetify({
             lighten: 5,
             darken: 5,
         },
-        defaultTheme: 'aadenTheme',
+        defaultTheme: 'aadenLightTheme',
         themes: {
             aadenTheme,
+            aadenLightTheme
         },
     },
 })
