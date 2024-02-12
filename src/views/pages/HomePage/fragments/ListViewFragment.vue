@@ -98,21 +98,6 @@ const {smAndUp} = useDisplay()
         >
           mdi-link-variant
         </v-icon>
-        <v-icon
-          v-if="r.cancelled==='1'"
-          small
-          color="primary"
-          class="ml-2"
-        >
-          mdi-cancel
-        </v-icon>
-        <v-icon
-          v-if="r.completed==='1'"
-          small
-          class="ml-2"
-        >
-          mdi-check
-        </v-icon>
         <div
           class="text-h5 font-weight-black d-flex align-baseline ml-2"
         >
