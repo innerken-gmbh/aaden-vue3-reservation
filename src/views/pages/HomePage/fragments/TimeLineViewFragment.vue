@@ -100,7 +100,7 @@ onMounted(async () => {
       />
 
       <div
-        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 2"
+        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 3"
       >
         <div
           style="width: 100%;position: relative;display: grid;"
@@ -163,7 +163,7 @@ onMounted(async () => {
         </div>
       </template>
       <div
-        style="position: sticky; z-index: 4;
+        style="position: sticky; z-index: 2;
           left: 0;
           width: 72px;
           background: linear-gradient(to right , rgba(var(--v-theme-background),.7),
@@ -199,7 +199,7 @@ onMounted(async () => {
         tile
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
-        style="position: absolute;z-index: 2;"
+        style="position: absolute;z-index: 1;"
         :style="{
           gridColumn:'0 / '+reservationInfo.timeSlots.length,
           gridRow:'3 / '+(reservationInfo.tableList.length+3)
