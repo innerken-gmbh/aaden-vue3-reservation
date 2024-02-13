@@ -1,5 +1,9 @@
 {
-  "Date" : "Gasten",
+  "SelectTime": "Kies een tijdstip",
+  "Time" : "Tijd",
+  "People" : "Mensen",
+  "Guests" : "Gasten",
+  "Date" : "Datum",
   "NoReservationsATM" : "Er zijn momenteel geen reserveringen",
   "Table": "Tafel",
   "DiningTime" : "Eettijd",

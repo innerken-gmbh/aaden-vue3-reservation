@@ -39,7 +39,7 @@ const displayPerson = computed(() => {
       </template>
       <template v-else>
         <div>
-          {{ controller.personCount }} People
+          {{ controller.personCount }} {{ $t('People') }}
           <div class="text-body-2">
             <span class="font-weight-regular">{{ controller.startTime }}</span>@{{ controller.date }}
           </div>
@@ -85,12 +85,12 @@ const displayPerson = computed(() => {
               {{ toDateDisplayFormat(controller.date) }}
             </div>
           </form-container>
-          <form-container label="Time">
+          <form-container :label="$t('Time')">
             <div
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller?.startTime?.substring(0,5) ?? 'Select a time' }}
+              {{ controller?.startTime?.substring(0,5) ?? $t('SelectTime') }}
             </div>
           </form-container>
         </inline-two-row-container>
@@ -124,7 +124,7 @@ const displayPerson = computed(() => {
             />
           </form-container>
         </inline-two-row-container>
-        <form-container label="Note">
+        <form-container :label="$t('Note')">
           <v-textarea
             v-model="controller.reservationExtraInfo.note"
             auto-grow

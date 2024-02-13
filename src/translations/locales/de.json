@@ -1,4 +1,7 @@
 {
+  "SelectTime" : "Zeitpunkt wählen",
+  "Time" : "Zeit",
+  "People" : "Personen",
   "Guests" : "Gäste",
   "Date" : "Datum",
   "NoReservationsATM" : "Es liegen derzeit keine Reservierungen vor",

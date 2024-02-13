@@ -1,4 +1,7 @@
 {
+  "SelectTime" : "Select a time",
+  "Time" : "Time",
+  "People" : "People",
   "Guests" : "Guests",
   "Date" : "Date",
   "NoReservationsATM" : "You don't have any reservation. eat a noodle and chill out",
