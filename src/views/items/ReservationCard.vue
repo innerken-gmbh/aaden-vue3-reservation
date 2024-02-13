@@ -14,6 +14,7 @@
     @drag-stop="stopDrag"
   >
     <v-card
+      :disabled="cancelled||checkedIn"
       @click="tryUnlock"
       rounded="md"
       :height="ySize"
@@ -35,19 +36,19 @@
           small
           @click.stop="emit('open')"
         >
-          <template v-if="reservationInfo.haveOverlap">
+          <template v-if="canDrag">
+            mdi-cursor-move
+          </template>
+          <template v-else-if="reservationInfo.haveOverlap">
             mdi-flash-triangle
           </template>
-          <template v-else-if="!canDrag">
+          <template v-else>
             <template v-if="haveShareTable">
               mdi-link-variant
             </template>
             <template v-else>
               mdi-arrow-expand
             </template>
-          </template>
-          <template v-else>
-            mdi-cursor-move
           </template>
         </v-icon>
       </v-card>
@@ -133,9 +134,9 @@ const canDrag = computed(() => {
 function tryUnlock(e) {
   e.preventDefault()
   e.stopPropagation()
-  if(canDrag.value){
+  if (canDrag.value) {
     dragController.stopDrag()
-  }else{
+  } else {
     if (!checkedIn.value && !cancelled.value) {
       console.log('unlock', props.reservationInfo.id)
       dragController.startDrag(props.reservationInfo.id)

@@ -1,5 +1,5 @@
 <script setup>
-defineProps(['title','icon','hint'])
+defineProps(['title', 'icon', 'hint'])
 
 </script>
 
@@ -12,9 +12,9 @@ defineProps(['title','icon','hint'])
       {{ icon || 'mdi-heart-broken' }}
     </v-icon>
     <div class="mt-4 text-body-1 font-weight-black">
-      {{ title|| $t('Oops') }}
+      {{ title || $t('Oops') }}
     </div>
-    <div class="text-body-2 mt-1">
+    <div class="text-body-2 mt-1 text-center">
       {{ hint }}
     </div>
     <slot />

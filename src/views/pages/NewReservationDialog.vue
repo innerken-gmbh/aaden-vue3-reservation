@@ -25,7 +25,7 @@ watchEffect(async () => {
 })
 
 const displayPerson = computed(() => {
-  return  18
+  return 18
 })
 
 </script>
@@ -90,7 +90,7 @@ const displayPerson = computed(() => {
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller?.startTime?.substring(0,5) ?? $t('SelectTime') }}
+              {{ controller?.startTime?.substring(0, 5) ?? $t('SelectTime') }}
             </div>
           </form-container>
         </inline-two-row-container>
@@ -124,7 +124,7 @@ const displayPerson = computed(() => {
             />
           </form-container>
         </inline-two-row-container>
-        <form-container :label="$t('Note')">
+        <form-container :label="$t('Note')+'(optional)'">
           <v-textarea
             v-model="controller.reservationExtraInfo.note"
             auto-grow
@@ -171,6 +171,7 @@ const displayPerson = computed(() => {
         :loading="controller.loading"
         @click="controller.addReservation()"
         size="large"
+        :disabled="!controller.readyToSubmit"
         color="primary"
       >
         {{ $t('NewReservation') }}

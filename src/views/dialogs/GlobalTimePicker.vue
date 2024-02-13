@@ -14,13 +14,12 @@ function confirmTime(time) {
 <template>
   <base-dialog
     v-model="timePicker.showPicker"
-    max-width="500px"
   >
     <template #header>
       {{ $t('SelectPreferredTime') }}
     </template>
     <inline-two-row-container
-      style="max-height: 80vh;overflow-y: scroll"
+      style="max-height: 60vh;overflow-y: scroll"
     >
       <v-card
         @click="confirmTime(t)"

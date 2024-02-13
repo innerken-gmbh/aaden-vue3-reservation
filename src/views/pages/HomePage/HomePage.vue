@@ -53,6 +53,14 @@ async function selectNewDate() {
 
 const {smAndUp} = useDisplay()
 
+function toggleListView() {
+  if (reservationInfo.search !== '') {
+    reservationInfo.search = ''
+  } else {
+    reservationInfo.listView = !reservationInfo.listView
+  }
+}
+
 </script>
 
 <template>
@@ -67,7 +75,7 @@ const {smAndUp} = useDisplay()
             class="mr-2"
             icon=""
             flat
-            @click="reservationInfo.listView=!reservationInfo.listView"
+            @click="toggleListView"
           >
             <v-icon>
               <template v-if="reservationInfo.listView">

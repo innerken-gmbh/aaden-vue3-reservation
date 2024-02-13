@@ -18,40 +18,42 @@ const {smAndUp} = useDisplay()
     class="mt-4"
     style="max-height: calc(100vh - 160px);overflow-y: scroll"
   >
-    <template v-if="reservationInfo.filteredReservationList.length > 0">
-      <div class="d-flex align-center">
+    <div class="d-flex align-center mb-2">
+      <v-card
+        style="width: fit-content"
+        class="d-flex"
+        variant="outlined"
+      >
         <v-card
-          style="width: fit-content"
-          class="d-flex mb-2"
-          variant="outlined"
+          @click="reservationInfo.listViewTab=t"
+          :key="t"
+          rounded="0"
+          :variant="reservationInfo.listViewTab===t?'flat':'outlined'"
+          :color="reservationInfo.listViewTab===t?'primary':''"
+          v-for="t in Object.values(ReservationStatus)"
+          class="pa-1 px-3 d-flex align-center text-body-2"
         >
-          <v-card
-            @click="reservationInfo.listViewTab=t"
-            :key="t"
-            rounded="0"
-            :variant="reservationInfo.listViewTab===t?'flat':'outlined'"
-            :color="reservationInfo.listViewTab===t?'primary':''"
-            v-for="t in Object.values(ReservationStatus)"
-            class="pa-2 px-4 d-flex align-center"
+          <v-icon
+            size="18"
+            :class="smAndUp?'mr-2':''"
           >
-            <v-icon :class="smAndUp?'mr-2':''">
-              {{ ReservationIcon[t] }}
-            </v-icon>
-            <template v-if="smAndUp">
-              {{ $t(t) }}
-            </template>
-          </v-card>
+            {{ ReservationIcon[t] }}
+          </v-icon>
+          <template v-if="smAndUp">
+            {{ $t(t) }}
+          </template>
         </v-card>
-        <v-spacer />
-        <v-card
-          rounded="pill"
-          class="text-body-1 pa-1 px-3"
-          color="primary"
-        >
-          {{ reservationInfo.filteredReservationList.length }}({{ reservationInfo.reservationTotalPersonCount }} P)
-        </v-card>
-      </div>
-
+      </v-card>
+      <v-spacer />
+      <v-card
+        rounded="pill"
+        class="text-body-1 pa-1 px-3"
+        color="primary"
+      >
+        {{ reservationInfo.filteredReservationList.length }}({{ reservationInfo.reservationTotalPersonCount }} P)
+      </v-card>
+    </div>
+    <template v-if="reservationInfo.filteredReservationList.length > 0">
       <v-card
         color="grey-darken-3"
         class="pa-3 px-4 mb-2 d-flex align-center"

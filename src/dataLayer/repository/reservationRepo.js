@@ -9,7 +9,7 @@ import {
     moveReservation
 } from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
-import {groupBy, intersection, maxBy, sumBy} from "lodash-es";
+import {groupBy, intersection, maxBy, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 
 export const ReservationStatus = {
@@ -138,7 +138,7 @@ export const useReservationStore = defineStore('reservation', {
             const batchColorCache = {}
             this.reservationList = []
             await IKUtils.wait(50)
-            this.reservationList = list.map(it => {
+            this.reservationList = sortBy(list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
                 it.haveShareTable = shareTable.includes(it.id)
                 if (it.haveShareTable) {
@@ -149,6 +149,13 @@ export const useReservationStore = defineStore('reservation', {
                     it.shareColor = batchColorCache[it.batch]
                 }
                 return it
+            }), (r) => {
+                if (r.status === ReservationStatus.Cancelled) {
+                    return 3
+                } else if (r.status === ReservationStatus.CheckedIn) {
+                    return 2
+                }
+                return 1
             })
         },
         async reload() {
@@ -212,6 +219,9 @@ export const useHomePageControllerStore
                 },
                 this.reservationExtraInfo,
                 {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
+        },
+        readyToSubmit() {
+            return this.reservationExtraInfo.firstName && this.reservationExtraInfo.lastName && (this.reservationExtraInfo.email || this.reservationExtraInfo.phone)
         }
     },
     actions: {

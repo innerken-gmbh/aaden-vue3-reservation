@@ -26,9 +26,6 @@ watch(show, (val) => {
   }
 })
 
-const actionClass = computed(() => {
-  return childCount.value > 1 ? 'd-flex flex-column align-stretch mt-8' : childCount.value > 0 ? 'mt-8' : ''
-})
 </script>
 
 <template>
@@ -63,7 +60,7 @@ const actionClass = computed(() => {
             style="width: 100%"
             v-if="showAction"
             ref="action"
-            :class="actionClass"
+            class="mt-4 d-flex flex-column"
           >
             <slot name="action" />
           </div>

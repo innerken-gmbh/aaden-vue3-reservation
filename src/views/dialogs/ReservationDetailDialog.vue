@@ -7,6 +7,7 @@ import {
 import {computed, ref, watch} from "vue";
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import {
+  timeFormat,
   timestampTemplate,
   toDateDisplayFormat,
   toOnlyTimeFormat
@@ -49,6 +50,10 @@ watch(currentDiningTime, (val) => {
 
 const timeChanged = computed(() => {
   return currentDiningTime.value !== overrideDiningTime.value
+})
+
+const overrideTime = computed(() => {
+  return timeChanged.value ? dayjs(info.value.fromDateTime).add(overrideDiningTime.value, 'minute').format(timeFormat) : null;
 })
 
 async function onConfirm() {
@@ -109,7 +114,13 @@ async function onCancel() {
             {{ toOnlyTimeFormat(info.fromDateTime) }}
             <span class="text-body-2">
               {{ $t('to') }}
-              {{ toOnlyTimeFormat(info.toDateTime) }}
+              <template v-if="overrideTime">
+                {{ overrideTime }}
+              </template>
+              <template v-else>
+                {{ toOnlyTimeFormat(info.toDateTime) }}
+              </template>
+
             </span>
           </div>
         </div>
@@ -166,33 +177,55 @@ async function onCancel() {
         </div>
       </inline-two-row-container>
       <div
+        class="d-flex align-center"
         v-if="info.email"
-        class="text-h5 font-weight-black mt-4"
       >
-        <div class="text-body-2">
-          {{ $t('Mail') }}
+        <div
+
+          class="text-h5 font-weight-black mt-4"
+        >
+          <div class="text-body-2">
+            {{ $t('Mail') }}
+          </div>
+          <div>
+            {{ info.email }}
+          </div>
         </div>
-        <div>
-          {{ info.email }}
-        </div>
+        <v-spacer />
+        <v-btn
+          :href="'mailto:'+info.email"
+          icon="mdi-email"
+        />
       </div>
+
       <div
+        class="d-flex align-center"
         v-if="info.tel"
-        class="text-h5 font-weight-black mt-4"
       >
-        <div class="text-body-2">
-          {{ $t('Phone') }}
+        <div
+
+          class="text-h5 font-weight-black mt-4"
+        >
+          <div class="text-body-2">
+            {{ $t('Phone') }}
+          </div>
+          <div>
+            {{ info.tel }}
+          </div>
         </div>
-        <div>
-          {{ info.tel }}
-        </div>
+        <v-spacer />
+        <v-btn
+          :href="'tel:'+info.tel"
+          icon="mdi-phone"
+        />
       </div>
+
       <div
         v-if="info.note"
         class="text-h5 font-weight-black mt-4"
       >
         <div class="text-body-2">
-          {{  $t('Note')  }}
+          {{ $t('Note') }}
         </div>
         <div>
           {{ info.note }}
@@ -205,12 +238,13 @@ async function onCancel() {
           :loading="controller.loading"
           @click="onChangeTime"
           color="primary"
+          block
           class="mt-2"
         >
           <template #prepend>
             <v-icon>mdi-check</v-icon>
           </template>
-          {{  $t('Save')  }}
+          {{ $t('Save') }}
         </v-btn>
       </template>
       <template v-else>
