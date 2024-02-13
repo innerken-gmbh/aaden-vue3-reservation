@@ -1,6 +1,7 @@
 import hillo from "hillo";
 import dayjs from "dayjs";
-import {dateFormat, sliceTime, toDateFormat} from "../repository/dateRepo.js";
+import {dateFormat, sliceTime} from "../repository/dateRepo.js";
+import {useReservationStore} from "../repository/reservationRepo.js";
 
 export async function loadAllReservable() {
     return (await hillo.get('Tables.php?op=getAllReservable')).content
@@ -62,39 +63,42 @@ export async function addReservation(reservationInfo) {
 }
 
 export async function confirmReservation(id) {
-    return (await hillo.post('Tables.php?op=completeReservation',
-        Object.assign({}, {reservationId: id})))
+    const confirm = async (reservation) => {
+        (await hillo.post('Tables.php?op=completeReservation',
+            {reservationId: reservation.id}))
+    }
+    await confirm({id})
+    await alsoDoWithOthers(id, confirm)
+
+}
+
+async function alsoDoWithOthers(id, action) {
+    const list = useReservationStore().reservationList
+    const batch = list.find(x => x.id === id).batch
+    const others = list.filter(it => it.batch === batch && it.id !== id)
+    for (const reservation of others) {
+        await action(reservation)
+    }
 }
 
 export async function moveReservation(reservationId, newTableId, fromDateTime, toDateTime) {
-    const list = await getReservation(toDateFormat(fromDateTime), toDateFormat(fromDateTime))
-    const batch = list.find(x => x.id === reservationId).batch
-    const others = list.filter(it => it.batch === batch && it.id !== reservationId)
-    await hillo.post('Tables.php?op=moveReservation&debug=true',
-        {
-            reservationId,
-            newTableId,
-            fromDateTime,
-            toDateTime
-        })
-    for (const reservation of others) {
-        console.log('reservation', reservation)
+    const realMoveReservation = async (r) => {
         await hillo.post('Tables.php?op=moveReservation&debug=true',
             {
-                reservationId: reservation.id,
-                newTableId: reservation.tableId,
+                reservationId: r.id,
+                newTableId: r.tableId,
                 fromDateTime,
                 toDateTime
             })
     }
+    await realMoveReservation({id: reservationId, tableId: newTableId})
+    await alsoDoWithOthers(reservationId, realMoveReservation)
 }
 
 export async function cancelReservation(reservationId) {
-
     return (await hillo.post('Tables.php?op=cancelReservation', {
         reservationId
     }))
-
 }
 
 export async function getTimeSlotForDate(date, setting) {

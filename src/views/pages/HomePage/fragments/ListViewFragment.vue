@@ -18,7 +18,7 @@ const {smAndUp} = useDisplay()
     class="mt-4"
     style="max-height: calc(100vh - 160px);overflow-y: scroll"
   >
-    <template v-if="reservationInfo.reservationList.length > 0">
+    <template v-if="reservationInfo.filteredReservationList.length > 0">
       <div class="d-flex align-center">
         <v-card
           style="width: fit-content"
