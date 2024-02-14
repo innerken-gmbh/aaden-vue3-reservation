@@ -55,7 +55,7 @@ const {smAndUp} = useDisplay()
     </div>
     <template v-if="reservationInfo.filteredReservationList.length > 0">
       <v-card
-        color="grey-darken-3"
+        color="surface"
         class="pa-3 px-4 mb-2 d-flex align-center"
         v-for="r in reservationInfo.filteredReservationList"
         :key="r.id"

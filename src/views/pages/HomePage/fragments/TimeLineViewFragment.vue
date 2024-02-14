@@ -86,30 +86,15 @@ onMounted(async () => {
     >
       <div
         v-if="reservationInfo.date===today()"
-        class="border-primary"
-        style="position: absolute;width:8px;
-              z-index: 8;top:0;left: 0;
-              backdrop-filter: grayscale(100%);
-              background: linear-gradient(to right ,rgba(var(--v-theme-background),0) 0,rgba(var(--v-theme-background),0.05) 80%,rgba(var(--v-theme-background),.5) 100%);
-              border-right: 2px solid;"
-        :style="{
-          width: `${currentTimeX}px`,
-          height:(reservationInfo.containerHeight
-            +2*reservationInfo.ySize)+'px',
-        }"
-      />
-      <div
-        v-if="reservationInfo.date===today()"
-        class="border-primary"
+        class=""
         style="position: absolute;width:8px;
               z-index: 11;top:0;left: 0;
               backdrop-filter: grayscale(100%);
-              background: linear-gradient(to right ,rgba(var(--v-theme-background),0) 0,rgba(var(--v-theme-background),0.05) 80%,rgba(var(--v-theme-background),.5) 100%);
-              border-right: 2px solid;"
+              border-right: 4px solid rgb(var(--v-theme-currentTimeMarkerColor));"
         :style="{
           width: `${currentTimeX}px`,
           height:(
-            +2*reservationInfo.ySize)+'px',
+            +reservationInfo.ySize)+'px',
         }"
       />
 
@@ -299,13 +284,13 @@ onMounted(async () => {
 
 <style scoped>
 .gridBackground {
-  background: linear-gradient(to right, rgba(255, 255, 255, .1) 1px,
-  rgba(255, 255, 255, .1) 1px),
-  linear-gradient(to bottom, rgba(var(--v-theme-background), 1) 1px,
+  background: linear-gradient(to right, rgba(var(--v-theme-gridOverlayColor), .1) 1px,
+  rgba(var(--v-theme-gridOverlayColor), .1) 1px),
+  linear-gradient(to bottom, rgba(var(--v-theme-gridStripeColor), 1) 1px,
       transparent 1px),
-  linear-gradient(to right, rgba(var(--v-theme-background), 1) 1px,
+  linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 1px,
       transparent 1px),
-  linear-gradient(to right, rgba(var(--v-theme-background), 1) 1px,
+  linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 1px,
       transparent 1px);
   background-size: 40px 28px,
   40px 28px,
@@ -313,15 +298,6 @@ onMounted(async () => {
   160px 72px
 }
 
-.stripeBackground {
-  background: repeating-linear-gradient(
-      to right,
-      #f6ba52,
-      #f6ba52 10px,
-      #ffd180 10px,
-      #ffd180 20px
-  );
-}
 
 .vdr {
   position: absolute;

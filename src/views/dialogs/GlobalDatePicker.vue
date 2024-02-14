@@ -16,7 +16,7 @@ function confirm() {
     v-model="dateStore.showPicker"
     width="fit-content"
   >
-    <v-card>
+    <v-card rounded="xl">
       <v-date-picker
         color="primary"
         :min="today()"

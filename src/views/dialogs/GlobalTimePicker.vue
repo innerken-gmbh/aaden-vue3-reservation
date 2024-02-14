@@ -23,7 +23,7 @@ function confirmTime(time) {
     >
       <v-card
         @click="confirmTime(t)"
-        :color="timePicker.currentTime===t?'primary':'grey-darken-3'"
+        :color="timePicker.currentTime===t?'primary':'surface'"
         :key="t"
         class="px-4 text-body-1 pa-2"
         v-for="t in timePicker.availableTimes"

@@ -426,13 +426,13 @@ export function getReservationColor(reservation) {
         const haveOverlap = reservation.haveOverlap
         const status = getReservationStatus(reservation)
         if (overTime) {
-            return 'red-darken-3'
+            return 'cardOverTimeColor'
         } else if (status === ReservationStatus.CheckedIn) {
-            return 'green-darken-3'
+            return 'cardCheckedInColor'
         } else if (haveOverlap) {
-            return 'yellow-darken-3'
+            return 'cardOverlapColor'
         } else if (status === ReservationStatus.Cancelled) {
-            return 'transparent'
+            return 'cardCancelledColor'
         }
     }
 

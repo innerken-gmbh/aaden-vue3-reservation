@@ -14,7 +14,6 @@
     @drag-stop="stopDrag"
   >
     <v-card
-      :disabled="cancelled||checkedIn"
       @click="tryUnlock"
       rounded="md"
       :height="ySize"
@@ -162,8 +161,8 @@ div {
 .gradient {
   background: #3a7bd5; /* fallback for old browsers */
   background: linear-gradient(to right bottom,
-  rgba(var(--v-theme-background), .56),
-  rgba(var(--v-theme-surface-darken-1), 0.94));
+  rgba(var(--v-theme-cardGradientStart), .56),
+  rgba(var(--v-theme-cardGradientEnd), 0.94));
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
