@@ -68,7 +68,7 @@ const displayPerson = computed(() => {
               height="36"
               rounded="pill"
               :key="i"
-              :color="controller.personCount===i?'primary':'background'"
+              :color="controller.personCount===i?'peopleSelectorActiveColor':'peopleSelectorInactiveColor'"
               v-for="i in displayPerson"
               class="d-flex align-center justify-center"
             >

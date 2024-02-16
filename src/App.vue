@@ -17,7 +17,7 @@ const reservationStore = useReservationStore()
   <v-app>
     <v-app-bar
       flat
-      color="primary"
+      color="appBarColor"
     >
       <v-app-bar-title>
         <v-text-field
@@ -48,7 +48,7 @@ const reservationStore = useReservationStore()
     <v-main>
       <div
         style="width: 100%;height: 100%;"
-        class="bg-primary pt-2"
+        class="bg-appBarColor pt-2"
       >
         <div
           style="border-top-left-radius: 24px;z-index: 2;overflow: visible;min-height: calc(100svh - 72px);
