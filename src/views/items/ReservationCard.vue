@@ -39,7 +39,7 @@
             mdi-cursor-move
           </template>
           <template v-else-if="reservationInfo.haveOverlap">
-            mdi-flash-triangle
+            mdi-alert
           </template>
           <template v-else>
             <template v-if="haveShareTable">
@@ -79,7 +79,7 @@
       <v-icon
         v-if="cancelled"
         small
-        color="primary"
+        color="on-surface"
         class="ml-2"
       >
         mdi-cancel
@@ -87,7 +87,7 @@
       <v-icon
         v-if="checkedIn"
         small
-        color="primary"
+        color="on-surface"
         class="ml-2"
       >
         mdi-location-enter
@@ -120,7 +120,7 @@ const haveShareTable = computed(() => {
 })
 const color = computed(() => {
   if (canDrag.value) {
-    return 'pink'
+    return 'cardSelectedColor'
   }
   return getReservationColor(props.reservationInfo)
 })

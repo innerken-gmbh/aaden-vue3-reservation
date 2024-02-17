@@ -90,7 +90,7 @@ const {smAndUp} = useDisplay()
           color="yellow"
           class="ml-2"
         >
-          mdi-flash-triangle
+          mdi-alert
         </v-icon>
         <v-icon
           v-if="r.haveShareTable"

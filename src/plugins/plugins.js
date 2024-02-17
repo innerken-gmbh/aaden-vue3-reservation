@@ -24,6 +24,7 @@ const aadenTheme = {
         surface: '#30302e',// 30302e
         'on-surface': '#e8eadd',// e8eadd,eff4f0
         primary: '#e8eadd',// e8eadd,f9f6ef,e5e5e5
+        'on-primary':'#1b1c1d',
         secondary: '#54a560',// 54a560,0bbo4a,21bf73
         error: '#e74983',// e74983
         info: '#124bbe',// 124bbe
@@ -33,6 +34,7 @@ const aadenTheme = {
         cardCheckedInColor: 'green-darken-3',
         cardOverlapColor: 'yellow-darken-3',
         cardCancelledColor: 'transparent',
+        cardSelectedColor: 'pink',
         gridOverlayColor: '#ffffff',
         gridStripeColor: '#9cc0d7',
         currentTimeMarkerColor:'#000000',
@@ -41,7 +43,6 @@ const aadenTheme = {
         appBarColor:'#000000'
     },
 }
-
 const aadenLightTheme = {
     dark: false,
     colors: {
@@ -56,6 +57,7 @@ const aadenLightTheme = {
         cardGradientStart: '#edf4f9',// #123456,时间条的颜色前面的颜色,#183561,#d6e3ff,#d7e3f1,#aac7ff,#d6e3ff
         cardGradientEnd: '#d6e3ff',// #edf4f9,时间条的颜色
         cardOverTimeColor: '#E74983',//red-darken-3,#，晚点的颜色
+        cardSelectedColor: 'pink',//可以拖动的颜色
         cardCheckedInColor: 'green-darken-3',// green-darken-3,
         cardOverlapColor: 'yellow-darken-3',// yellow-darken-3,
         cardCancelledColor: 'transparent',// transparent,
@@ -67,6 +69,11 @@ const aadenLightTheme = {
         appBarColor:'#000000'
     },
 }
+
+export const linkColors=[//在这里添加颜色
+    '#fec342',
+]
+
 const mainTheme = 'aadenLightTheme'
 //const mainTheme='aadenTheme'
 

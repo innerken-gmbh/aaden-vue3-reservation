@@ -9,8 +9,9 @@ import {
     moveReservation
 } from "../api/reservationApi.js";
 import {loadReservationTableInfo} from "../api/tableApi.js";
-import {groupBy, intersection, maxBy, sortBy, sumBy} from "lodash-es";
+import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
+import {linkColors} from "../../plugins/plugins.js";
 
 export const ReservationStatus = {
     Normal: 'Normal',
@@ -108,13 +109,15 @@ export const useReservationStore = defineStore('reservation', {
                     .format('HH:mm') === t)
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
-                it.overTime = it.completed !== '1' && dayjs(it.fromDateTime).add(15, 'minute').isBefore(dayjs())
+
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
                     y: yIndex * this.ySize
                 }
                 it.status = getReservationStatus(it)
+                it.overTime = it.status === ReservationStatus.Normal && dayjs(it.fromDateTime).add(15, 'minute').isBefore(dayjs())
+
 
                 return it
             })
@@ -143,8 +146,7 @@ export const useReservationStore = defineStore('reservation', {
                 it.haveShareTable = shareTable.includes(it.id)
                 if (it.haveShareTable) {
                     if (!batchColorCache[it.batch]) {
-                        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-                        batchColorCache[it.batch] = '#' + randomColor
+                        batchColorCache[it.batch] = sample(linkColors)
                     }
                     it.shareColor = batchColorCache[it.batch]
                 }
