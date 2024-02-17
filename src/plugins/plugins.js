@@ -45,6 +45,7 @@ const aadenTheme = {
         currentTimeMarkerColor:'#ffffff',
         peopleSelectorInactiveColor:'#ffffff',//#000000,
         peopleSelectorActiveColor:'#9cc0d7',//#000000,
+
         appBarColor:'#ffffff',
         cardNormalColor:'#ffffff',
     },
@@ -74,8 +75,8 @@ const aadenLightTheme = {
         cardCheckedInColor: '#69a794',// green-darken-3,来的颜色,#62948d,#69a794
         cardOverlapColor: '#eb7695',// yellow-darken-3,重叠的颜色,#eebf63,#ecbc41,#ffd400
         //#ebc300,#d6ebe7,fffc9d
-
         cardCancelledColor: '#cbcbcb',// transparent,#44615f
+
 
         gridOverlayColor: '#edf4f9',//网线底色 #ffffff,,#edf4f9
         gridStripeColor: '#e0e0e0',//网线色 #9cc0d7,
@@ -108,6 +109,7 @@ const aadenLightTheme = {
     //     peopleSelectorInactiveColor:'#000000',//#000000,
     //     peopleSelectorActiveColor:'#000000',//#000000,
     //     appBarColor:'#000000',
+
         cardNormalColor:'#ffffff',
     },
 }
