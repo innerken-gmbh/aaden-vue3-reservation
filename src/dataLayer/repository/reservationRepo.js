@@ -116,7 +116,11 @@ export const useReservationStore = defineStore('reservation', {
                     y: yIndex * this.ySize
                 }
                 it.status = getReservationStatus(it)
-                it.overTime = it.status === ReservationStatus.Normal && dayjs(it.fromDateTime).add(15, 'minute').isBefore(dayjs())
+                it.overTime = it.status === ReservationStatus.Normal
+                    && dayjs(it.fromDateTime).add(15, 'minute')
+                        .isBefore(dayjs())
+
+                console.log(it.status,it.overTime)
 
 
                 return it
@@ -438,7 +442,7 @@ export function getReservationColor(reservation) {
         }
     }
 
-    return 'primary'
+    return 'cardNormalColor'
 
 }
 

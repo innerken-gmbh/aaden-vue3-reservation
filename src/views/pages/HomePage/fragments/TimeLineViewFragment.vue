@@ -74,6 +74,7 @@ onMounted(async () => {
     class="ml-n4 mt-8 pl-4 d-flex align-start"
   >
     <div
+      @click="dragController.stopDrag()"
       class="flex-grow-1"
       ref="container"
       v-dragscroll="dragController.globalDragEnable"
@@ -120,7 +121,7 @@ onMounted(async () => {
 "
             >
               <div
-                style="margin-left: -20%"
+                style="margin-left: -30%"
                 v-if="i!==0"
               >
                 {{ t }}
@@ -167,13 +168,13 @@ onMounted(async () => {
       <div
         style="position: sticky; z-index: 10;
           left: 0;
-          width: 72px;
           background: linear-gradient(to right ,
            rgba(var(--v-theme-background),.9),
              rgba(var(--v-theme-background),.7))"
         class="d-flex align-center pl-2 pr-1
              font-weight-black text-body-2"
-        :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3}"
+        :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3,
+                 width:2*reservationInfo.xSize+'px'}"
         v-for="(t,i) in reservationInfo.tableList"
         :key="t.id"
       >
@@ -230,8 +231,9 @@ onMounted(async () => {
     <v-card
       v-if="reservationChangeVM.changesCount>0"
       style="position: fixed;right: 16px;bottom: 16px"
-      class="pa-2 pl-8 font-weight-black"
+      class="pa-4 pl-8 font-weight-black text-body-2"
       color="primary"
+      rounded="lg"
       elevation="8"
     >
       {{ reservationChangeVM.changesCount }} {{ $t('Changes') }}
@@ -240,6 +242,7 @@ onMounted(async () => {
         @click="reservationChangeVM.cancelAllChanges()"
         class="mx-2"
         rounded="0"
+        size="36"
         icon=""
         color="primary"
       >
@@ -249,6 +252,7 @@ onMounted(async () => {
         @click="reservationChangeVM.applyAllChanges()"
         elevation="0"
         rounded="0"
+        size="36"
         icon=""
         color="primary"
       >
@@ -292,10 +296,10 @@ onMounted(async () => {
       transparent 1px),
   linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 1px,
       transparent 1px);
-  background-size: 40px 28px,
-  40px 28px,
-  80px 72px,
-  160px 72px
+  background-size: 32px 28px,
+  32px 28px,
+  64px 72px,
+  128px 72px
 }
 
 

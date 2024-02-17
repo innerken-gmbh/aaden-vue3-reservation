@@ -12,6 +12,7 @@ import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import BaseDialog from "../components/BaseDialog.vue";
 import {toDateDisplayFormat} from "../../dataLayer/repository/dateRepo.js";
+import {deviceId} from "../../plugins/plugins.js";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
@@ -21,7 +22,10 @@ const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
   controller.startTime = null
   timerPicker.availableTimes = await checkTableTimeAvailable(date.value,
-      '00:00', personCount.value, 1)
+      '00:00', personCount.value, parseInt(deviceId))
+  if (timerPicker.availableTimes.length > 0) {
+    controller.startTime = timerPicker.availableTimes[0]
+  }
 })
 
 const displayPerson = computed(() => {
@@ -87,10 +91,17 @@ const displayPerson = computed(() => {
           </form-container>
           <form-container :label="$t('Time')">
             <div
+              v-if="timerPicker.availableTimes.length>0"
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller?.startTime?.substring(0, 5) ?? $t('SelectTime') }}
+              {{ controller?.startTime?.substring(0, 5) ?? $t('Checking') }}
+            </div>
+            <div
+              v-else
+              class="text-h5 font-weight-black bg-error"
+            >
+              Not avaliable
             </div>
           </form-container>
         </inline-two-row-container>

@@ -12,11 +12,13 @@ import isoWeek from 'dayjs/plugin/isoWeek'
 import dayjs from "dayjs";
 import {createI18n} from 'vue-i18n'
 import locales from '../locales'
+import IKUtils from "innerken-js-utils";
 
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
 dayjs.extend(isoWeek)
 dayjs.extend(calendar)
+export const deviceId = IKUtils.getQueryString('Base') || '0001'
 const aadenTheme = {
     dark: true,
     colors: {
@@ -40,7 +42,8 @@ const aadenTheme = {
         currentTimeMarkerColor:'#000000',
         peopleSelectorInactiveColor:'#000000',//#000000,
         peopleSelectorActiveColor:'#000000',//#000000,
-        appBarColor:'#000000'
+        appBarColor:'#000000',
+        cardNormalColor:'#ffffff',
     },
 }
 const aadenLightTheme = {
@@ -57,16 +60,17 @@ const aadenLightTheme = {
         cardGradientStart: '#edf4f9',// #123456,时间条的颜色前面的颜色,#183561,#d6e3ff,#d7e3f1,#aac7ff,#d6e3ff
         cardGradientEnd: '#d6e3ff',// #edf4f9,时间条的颜色
         cardOverTimeColor: '#E74983',//red-darken-3,#，晚点的颜色
-        cardSelectedColor: 'pink',//可以拖动的颜色
+        cardSelectedColor: '#123123',//可以拖动的颜色
         cardCheckedInColor: 'green-darken-3',// green-darken-3,
         cardOverlapColor: 'yellow-darken-3',// yellow-darken-3,
-        cardCancelledColor: 'transparent',// transparent,
+        cardCancelledColor: '#edf4f9',// transparent,
         gridOverlayColor: '#edf4f9',// #ffffff,网线底色
         gridStripeColor: '#9cc0d7',// #9cc0d7,
         currentTimeMarkerColor:'#000000',//#000000,
         peopleSelectorInactiveColor:'#000000',//#000000,
         peopleSelectorActiveColor:'#000000',//#000000,
-        appBarColor:'#000000'
+        appBarColor:'#000000',
+        cardNormalColor:'#ffffff',
     },
 }
 
