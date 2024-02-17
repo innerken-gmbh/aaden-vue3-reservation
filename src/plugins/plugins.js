@@ -115,8 +115,8 @@ const aadenLightTheme = {
 }
 
 export const linkColors=[//在这里添加颜色
-    '#4f6ea0', 
-    //#4f6ea0,#6a5e48,#7b5d65,#ff5e2c,#aa4e1d,#357c81,#fbdf07,#ffca00
+    '#6a5e48', 
+    //#4f6ea0,#6a5e48,#60533f,#ff5e2c,#aa4e1d,#357c81,#fbdf07,#ffca00
     //,#f94892,#89cffd,#00e0ff,#284fee,#03658e,#d4f513,#89ec56,#ffa98c,#f272f4,,#b62522
 ]
 
