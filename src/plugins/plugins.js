@@ -23,7 +23,7 @@ const aadenTheme = {
     dark: true,
     colors: {
         background: '#0a1c30',//#060606,#0a1c30,#132438
-        surface: '#30302e',// #30302e
+        surface: '#35333e',// #30302e
         'on-surface': '#ffffff',// #e8eadd,#eff4f0
 
         primary: '#ffffff',// #e8eadd,#f9f6ef,#e5e5e5
@@ -35,8 +35,8 @@ const aadenTheme = {
         cardGradientStart: '#a7a7a7',//#afc0da,#3c3c4b,#afc0da,dba7a2,#c1b9de,#e9cec6
         //#a7a7a7
         cardGradientEnd: '#2e303e',//'#132438,#3b606f,#475268,#5d486e,#2d2d2d
-        cardOverTimeColor: '#b766b5',//#d13873,#7a339e
-        cardCheckedInColor: '#69a794',//196429
+        cardOverTimeColor: '#b766b5',//#d13873,#7a339e, 89cffd,#b766b5
+        cardCheckedInColor: '#69a794',//196429,84dfff,#69a794
         cardOverlapColor: '#eb7695',//#7a339e,#93000a,#590212
         cardCancelledColor: '#cbcbcb',//#cbcbcb,#2e303d
         cardSelectedColor: 'pink',
@@ -115,7 +115,9 @@ const aadenLightTheme = {
 }
 
 export const linkColors=[//在这里添加颜色
-    '#fec342',
+    '#071742', 
+    //#071742,#4f6ea0,#6a5e48,#7b5d65,#ff5e2c,#aa4e1d,#357c81,#fbdf07,#ffca00
+    //,#f94892,#89cffd,#00e0ff,#284fee,#03658e,#d4f513,#89ec56,#ffa98c,#f272f4,,#b62522
 ]
 
 const mainTheme = 'aadenLightTheme'
