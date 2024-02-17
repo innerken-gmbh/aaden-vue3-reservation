@@ -1,7 +1,17 @@
 <script setup>
-import {useDatePickerStore, useReservationStore} from "../../../dataLayer/repository/reservationRepo.js";
+import {
+  useDatePickerStore,
+  useDragStore,
+  useReservationChangeVM,
+  useReservationStore
+} from "../../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
-import {dateFormat, toCalendarFormat, useCurrentTime} from "../../../dataLayer/repository/dateRepo.js";
+import {
+  dateFormat,
+  toCalendarFormat,
+  toOnlyTimeFormat,
+  useCurrentTime
+} from "../../../dataLayer/repository/dateRepo.js";
 import NewReservationDialog from "../NewReservationDialog.vue";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
@@ -13,21 +23,28 @@ import TimeLineViewFragment from "./fragments/TimeLineViewFragment.vue";
 
 
 const reservationInfo = useReservationStore()
-
+const changeVM = useReservationChangeVM()
+const dragController = useDragStore()
 
 const loading = ref(true)
 const currentTimeX = ref(0)
 const {currentTime} = useCurrentTime()
 
 watchEffect(() => {
-  currentTimeX.value = Math.ceil((dayjs(currentTime.value).subtract(2, "hours")
+  currentTimeX.value = Math.ceil((dayjs(currentTime.value)
+          .subtract(2, "hours")
           .diff(dayjs().set("hours", 5), 'minutes') / (19 * 60))
-      * reservationInfo.containerWidth + reservationInfo.xSize * 2)
+      * reservationInfo.containerWidth + reservationInfo.xSize)
+  if (changeVM.changesCount === 0 && dragController.globalDragEnable) {
+    reservationInfo.reload()
+  }
+
 })
 
 const {date} = storeToRefs(reservationInfo)
 watch(date, async () => {
   loading.value = true
+  await changeVM.cancelAllChanges()
   await reservationInfo.reload()
   loading.value = false
 })
@@ -102,6 +119,12 @@ function toggleListView() {
               </template>
             </v-icon>
           </v-btn>
+          <div
+            v-if="smAndUp"
+            class="text-body-2"
+          >
+            Updated@{{ toOnlyTimeFormat(currentTime) }}
+          </div>
           <v-spacer />
 
           <v-btn

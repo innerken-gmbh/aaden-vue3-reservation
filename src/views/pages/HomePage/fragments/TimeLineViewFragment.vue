@@ -50,11 +50,15 @@ function resetCurrentScrollPos() {
           (window.innerWidth / 3)
     })
   } else {
-    const firstReservation = minBy(reservationInfo.filteredReservationList, 'grid.x')
-    container.value?.scroll({
-      top: 0, left: firstReservation.grid.x -
-          (window.innerWidth / 3)
-    })
+    const firstReservation = minBy(reservationInfo.filteredReservationList,
+        'grid.x')
+    if(firstReservation){
+      container.value?.scroll({
+        top: 0, left: firstReservation.grid.x -
+            (window.innerWidth / 3)
+      })
+    }
+
   }
 
 }
