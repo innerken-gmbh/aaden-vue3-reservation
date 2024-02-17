@@ -86,27 +86,28 @@ const aadenLightTheme = {
         peopleSelectorActiveColor:'#9cc0d7',//#000000,
 
         appBarColor:'#d7e3f1',//最上面#d7e3f1
-        background: '#d6e3ff',// #f6f6f6,#313742,#bacfe2,#9cc0d7,左边栏的颜色
-        surface: '#ffffff',// #e8eadd,#ccd0cf,#eff4f0,#f6f2e4,#fcf9f7,#f6f4fa,#edf4f9，底色,#ffffff
-        'on-surface': '#221534',// #30302e,#dbb2b3,#121315,#1b1c1d，字体颜色#2b638b
-        primary: '#d7e3f1',// #30302e,#e8dcd2,#f6f4fa,#dad8e5,#edf4f9,#d7e3f1,最上面,#415f91,#3d619b
-        'on-primary':'#1b1c1d', //#1b1c1d，方框箭头的颜色
-        secondary: '#54a560',// #54a560
-        error: '#e74983',// #e74983
-        info: '#124bbe',// #124bbe,
-        cardGradientStart: '#edf4f9',// #123456,时间条的颜色前面的颜色,#183561,#d6e3ff,#d7e3f1,#aac7ff,#d6e3ff
-        cardGradientEnd: '#d6e3ff',// #edf4f9,时间条的颜色
-        cardOverTimeColor: '#E74983',//red-darken-3,#，晚点的颜色
-        cardSelectedColor: '#123123',//可以拖动的颜色
-        cardCheckedInColor: 'green-darken-3',// green-darken-3,
-        cardOverlapColor: 'yellow-darken-3',// yellow-darken-3,
-        cardCancelledColor: '#edf4f9',// transparent,
-        gridOverlayColor: '#edf4f9',// #ffffff,网线底色
-        gridStripeColor: '#9cc0d7',// #9cc0d7,
-        currentTimeMarkerColor:'#000000',//#000000,
-        peopleSelectorInactiveColor:'#000000',//#000000,
-        peopleSelectorActiveColor:'#000000',//#000000,
-        appBarColor:'#000000',
+
+    //    background: '#d6e3ff',// #f6f6f6,#313742,#bacfe2,#9cc0d7,左边栏的颜色
+    //     surface: '#ffffff',// #e8eadd,#ccd0cf,#eff4f0,#f6f2e4,#fcf9f7,#f6f4fa,#edf4f9，底色,#ffffff
+    //     'on-surface': '#221534',// #30302e,#dbb2b3,#121315,#1b1c1d，字体颜色#2b638b
+    //     primary: '#d7e3f1',// #30302e,#e8dcd2,#f6f4fa,#dad8e5,#edf4f9,#d7e3f1,最上面,#415f91,#3d619b
+    //     'on-primary':'#1b1c1d', //#1b1c1d，方框箭头的颜色
+    //     secondary: '#54a560',// #54a560
+    //     error: '#e74983',// #e74983
+    //     info: '#124bbe',// #124bbe,
+    //     cardGradientStart: '#edf4f9',// #123456,时间条的颜色前面的颜色,#183561,#d6e3ff,#d7e3f1,#aac7ff,#d6e3ff
+    //     cardGradientEnd: '#d6e3ff',// #edf4f9,时间条的颜色
+    //     cardOverTimeColor: '#E74983',//red-darken-3,#，晚点的颜色
+    //     cardSelectedColor: '#123123',//可以拖动的颜色
+    //     cardCheckedInColor: 'green-darken-3',// green-darken-3,
+    //     cardOverlapColor: 'yellow-darken-3',// yellow-darken-3,
+    //     cardCancelledColor: '#edf4f9',// transparent,
+    //     gridOverlayColor: '#edf4f9',// #ffffff,网线底色
+    //     gridStripeColor: '#9cc0d7',// #9cc0d7,
+    //     currentTimeMarkerColor:'#000000',//#000000,
+    //     peopleSelectorInactiveColor:'#000000',//#000000,
+    //     peopleSelectorActiveColor:'#000000',//#000000,
+    //     appBarColor:'#000000',
         cardNormalColor:'#ffffff',
     },
 }
@@ -115,8 +116,8 @@ export const linkColors=[//在这里添加颜色
     '#fec342',
 ]
 
-//const mainTheme = 'aadenLightTheme'
-const mainTheme='aadenTheme'
+const mainTheme = 'aadenLightTheme'
+//const mainTheme='aadenTheme'
 
 export const vuetify = createVuetify({
     icons: {
