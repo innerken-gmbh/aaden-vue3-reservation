@@ -18,7 +18,10 @@ const {smAndUp} = useDisplay()
     class="mt-4"
     style="max-height: calc(100vh - 160px);overflow-y: scroll"
   >
-    <div class="d-flex align-center mb-2">
+    <div
+      class="d-flex align-center mb-2"
+      v-if="!reservationInfo.search"
+    >
       <v-card
         style="width: fit-content"
         class="d-flex"
@@ -84,6 +87,20 @@ const {smAndUp} = useDisplay()
           </div>
         </div>
         <v-spacer />
+        <v-icon
+          v-if="r.status===ReservationStatus.CheckedIn"
+          small
+          class="ml-2"
+        >
+          mdi-check
+        </v-icon>
+        <v-icon
+          v-if="r.status===ReservationStatus.Cancelled"
+          small
+          class="ml-2"
+        >
+          mdi-cancel
+        </v-icon>
         <v-icon
           v-if="r.haveOverlap"
           small

@@ -92,7 +92,7 @@ export const useReservationStore = defineStore('reservation', {
                             .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||
                         (it.completed !== '1' && it.cancelled !== '1'))
-                    && (!this.displayList || (it.status === this.listViewTab))
+                    && (this.search || !this.displayList || (it.status === this.listViewTab))
             })
         },
         displayList() {
@@ -120,7 +120,7 @@ export const useReservationStore = defineStore('reservation', {
                     && dayjs(it.fromDateTime).add(15, 'minute')
                         .isBefore(dayjs())
 
-                console.log(it.status,it.overTime)
+                console.log(it.status, it.overTime)
 
 
                 return it
