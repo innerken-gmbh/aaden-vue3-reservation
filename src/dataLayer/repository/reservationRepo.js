@@ -119,10 +119,6 @@ export const useReservationStore = defineStore('reservation', {
                 it.overTime = it.status === ReservationStatus.Normal
                     && dayjs(it.fromDateTime).add(15, 'minute')
                         .isBefore(dayjs())
-
-                console.log(it.status, it.overTime)
-
-
                 return it
             })
             const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
@@ -157,12 +153,13 @@ export const useReservationStore = defineStore('reservation', {
                 return it
             }), (r) => {
                 if (r.status === ReservationStatus.Cancelled) {
-                    return 3
+                    return 1
                 } else if (r.status === ReservationStatus.CheckedIn) {
                     return 2
                 }
-                return 1
+                return 3
             })
+            console.log(this.reservationList.map(it=>it.status))
         },
         async reload() {
             await this.loadReservations()

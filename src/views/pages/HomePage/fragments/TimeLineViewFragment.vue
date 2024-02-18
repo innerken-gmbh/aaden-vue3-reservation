@@ -84,28 +84,27 @@ onMounted(async () => {
       v-dragscroll="dragController.globalDragEnable"
       style="display: grid;grid-gap: 0;position: relative;
           width: 0;overflow:hidden;
-        height:calc(100vh - 170px);"
+        height:calc(100dvh - 170px);"
       :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
                gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
       }"
     >
       <div
-        v-if="reservationInfo.date===today()"
-        class=""
-        style="position: absolute;width:8px;
+        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 10"
+      >
+        <div
+          v-if="reservationInfo.date===today()"
+          class=""
+          style="position: absolute;width:8px;
               z-index: 11;top:0;left: 0;
               backdrop-filter: grayscale(100%);
               border-right: 4px solid rgb(var(--v-theme-currentTimeMarkerColor));"
-        :style="{
-          width: `${currentTimeX}px`,
-          height:(
-            +reservationInfo.ySize)+'px',
-        }"
-      />
-
-      <div
-        style="position: sticky;top: 0;grid-column: 1 / -1;z-index: 10"
-      >
+          :style="{
+            width: `${currentTimeX}px`,
+            height:(
+              +reservationInfo.ySize)+'px',
+          }"
+        />
         <div
           style="width: 100%;position: relative;display: grid;"
           :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
@@ -170,7 +169,7 @@ onMounted(async () => {
         </div>
       </template>
       <div
-        style="position: sticky; z-index: 10;
+        style="position: sticky; z-index: 9;
           left: 0;
           background: linear-gradient(to right ,
            rgba(var(--v-theme-background),.9),
@@ -207,7 +206,7 @@ onMounted(async () => {
         tile
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
-        style="position: absolute;z-index: 9;"
+        style="position: absolute;z-index: 8;"
         :style="{
           gridColumn:'0 / '+reservationInfo.timeSlots.length,
           gridRow:'3 / '+(reservationInfo.tableList.length+3)
