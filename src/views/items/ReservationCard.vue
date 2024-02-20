@@ -75,7 +75,14 @@
       >
         {{ reservationInfo.note }}
       </div>
-
+      <v-icon
+        v-if="changesVM.changes[reservationInfo.id]"
+        small
+        color="on-surface"
+        class="ml-2"
+      >
+        mdi-dots-square
+      </v-icon>
       <v-icon
         v-if="cancelled"
         small
@@ -98,7 +105,7 @@
 
 <script setup>
 import {computed} from "vue";
-import {getReservationColor, useDragStore} from "../../dataLayer/repository/reservationRepo.js";
+import {getReservationColor, useDragStore, useReservationChangeVM} from "../../dataLayer/repository/reservationRepo.js";
 import {storeToRefs} from "pinia";
 
 const props = defineProps(['reservationInfo', 'xSize', 'ySize'])
@@ -106,6 +113,7 @@ const emit = defineEmits(['open', 'dragStop', 'checkin'])
 
 const dragController = useDragStore()
 const {draggableItemId} = storeToRefs(useDragStore())
+const changesVM=useReservationChangeVM()
 
 
 const checkedIn = computed(() => {

@@ -233,7 +233,7 @@ onMounted(async () => {
     </div>
     <v-card
       v-if="reservationChangeVM.changesCount>0"
-      style="position: fixed;right: 16px;bottom: 16px"
+      style="position: fixed;right: 16px;bottom: 16px;z-index: 23"
       class="pa-4 pl-8 font-weight-black text-body-2"
       color="primary"
       rounded="lg"
