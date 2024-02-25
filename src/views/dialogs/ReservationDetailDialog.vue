@@ -31,7 +31,7 @@ const status = computed(() => {
   } else if (info.value?.cancelled === '1') {
     return ReservationStatus.Cancelled
   } else {
-    return ReservationStatus.Normal
+    return ReservationStatus.Confirmed
   }
 })
 const color = computed(() => {

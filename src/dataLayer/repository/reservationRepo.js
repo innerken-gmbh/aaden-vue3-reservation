@@ -5,23 +5,27 @@ import {
     addReservation,
     cancelReservation,
     confirmReservation,
-    getReservation, loadAllReservable,
+    getReservation,
+    loadAllReservable,
     moveReservation
 } from "../api/reservationApi.js";
 
-import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
+import {groupBy, intersection, maxBy, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
-import {linkColors} from "../../plugins/plugins.js";
 
 export const ReservationStatus = {
-    Normal: 'Normal',
+    Confirmed: 'Confirmed',
+    Created: 'Created',
     Cancelled: 'Cancelled',
-    CheckedIn: 'CheckedIn',
+    CheckIn: 'CheckIn',
+    NoShow: 'NoShow'
 }
 export const ReservationIcon = {
-    Normal: 'mdi-view-list',
+    Confirmed: 'mdi-view-list',
+    Created: 'Created',
     Cancelled: 'mdi-cancel',
-    CheckedIn: 'mdi-check',
+    CheckIn: 'mdi-check',
+    NoShow: 'NoShow'
 }
 
 export const useReservationStore = defineStore('reservation', {
@@ -42,7 +46,7 @@ export const useReservationStore = defineStore('reservation', {
                 .from(Array(4).keys())
                 .map(minute => it.toString().padStart(2, '0') +
                     ':' + (minute * 15).toString().padStart(2, '0'))).flat(),
-        listViewTab: ReservationStatus.Normal,
+        listViewTab: ReservationStatus.Confirmed,
     }),
     getters: {
         bigTime() {
@@ -86,12 +90,11 @@ export const useReservationStore = defineStore('reservation', {
                 (r) => parseInt(r.personCount))
         },
         filteredReservationList() {
+
             return this.reservationList.filter(it => {
-                return it.tableId && (!this.search || [it.firstName, it.lastName]
+                return it.seatPlan.length > 0 && (!this.search || [it.firstName, it.lastName]
                         .some(s => s?.toString()?.toLowerCase()
-                            .includes(this.search.toLowerCase()) ?? false)) &&
-                    (this.showAll ||
-                        (it.completed !== '1' && it.cancelled !== '1'))
+                            .includes(this.search.toLowerCase()) ?? false))
                     && (this.search || !this.displayList || (it.status === this.listViewTab))
             })
         },
@@ -107,16 +110,21 @@ export const useReservationStore = defineStore('reservation', {
                     .format('HH:mm') === t)
                 const xStopIndex = this.timeSlots.findIndex(t => dayjs(it.toDateTime)
                     .format('HH:mm') === t)
-                console.log(it)
-                const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
+                it.blocks = it.seatPlan.map(sp => {
+                    return {
+                        y: this.tableList.findIndex(t => parseInt(t.tableId) === sp.tableId) * this.ySize,
+                        personCount: sp.seatCount,
+                        id: sp.id
+                    }
+                })
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
-                    y: yIndex * this.ySize
                 }
+                console.log(it.status)
                 it.status = getReservationStatus(it)
-                it.overTime = it.status === ReservationStatus.Normal
+                it.overTime = it.status === ReservationStatus.Confirmed
                     && dayjs(it.fromDateTime).add(15, 'minute')
                         .isBefore(dayjs())
                 return it
@@ -128,33 +136,15 @@ export const useReservationStore = defineStore('reservation', {
                         return it
                     }).filter(it => it.haveOverlap).map(it => it.id)
                 }).flat()
-
-            const shareTable = (Object.values(groupBy(list, 'batch'))
-                .filter(it => it.length > 1).map(it => {
-                    const totalPerson = sumBy(it, (h) => parseInt(h.personCount))
-                    it.forEach(it => {
-                        it.totalPerson = totalPerson
-                    })
-                    return it
-                }).flat()
-                .map(it => it.id))
-            const batchColorCache = {}
             this.reservationList = []
             await IKUtils.wait(50)
             this.reservationList = sortBy(list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
-                it.haveShareTable = shareTable.includes(it.id)
-                if (it.haveShareTable) {
-                    if (!batchColorCache[it.batch]) {
-                        batchColorCache[it.batch] = sample(linkColors)
-                    }
-                    it.shareColor = batchColorCache[it.batch]
-                }
                 return it
             }), (r) => {
                 if (r.status === ReservationStatus.Cancelled) {
                     return 1
-                } else if (r.status === ReservationStatus.CheckedIn) {
+                } else if (r.status === ReservationStatus.CheckIn) {
                     return 2
                 }
                 return 3
@@ -429,7 +419,7 @@ export function getReservationColor(reservation) {
         const status = getReservationStatus(reservation)
         if (overTime) {
             return 'cardOverTimeColor'
-        } else if (status === ReservationStatus.CheckedIn) {
+        } else if (status === ReservationStatus.CheckIn) {
             return 'cardCheckedInColor'
         } else if (haveOverlap) {
             return 'cardOverlapColor'
@@ -447,10 +437,10 @@ export function getReservationStatus(reservation) {
         return reservation.status
     }
     if (reservation?.completed === '1') {
-        return ReservationStatus.CheckedIn
+        return ReservationStatus.CheckIn
     } else if (reservation?.cancelled === '1') {
         return ReservationStatus.Cancelled
     } else {
-        return ReservationStatus.Normal
+        return ReservationStatus.Confirmed
     }
 }

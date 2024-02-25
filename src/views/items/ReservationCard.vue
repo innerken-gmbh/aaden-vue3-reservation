@@ -8,7 +8,7 @@
     active-class=""
     :resizable="false"
     :x="reservationInfo.grid.x"
-    :y="reservationInfo.grid.y"
+    :y="yPos"
     :w="reservationInfo.grid.w"
     class-name-dragging="dragging"
     @drag-stop="stopDrag"
@@ -108,7 +108,7 @@ import {computed} from "vue";
 import {getReservationColor, useDragStore, useReservationChangeVM} from "../../dataLayer/repository/reservationRepo.js";
 import {storeToRefs} from "pinia";
 
-const props = defineProps(['reservationInfo', 'xSize', 'ySize'])
+const props = defineProps(['reservationInfo', 'xSize', 'ySize','yPos','personCount'])
 const emit = defineEmits(['open', 'dragStop', 'checkin'])
 
 const dragController = useDragStore()

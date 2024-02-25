@@ -88,7 +88,7 @@ const {smAndUp} = useDisplay()
         </div>
         <v-spacer />
         <v-icon
-          v-if="r.status===ReservationStatus.CheckedIn"
+          v-if="r.status===ReservationStatus.CheckIn"
           small
           class="ml-2"
         >

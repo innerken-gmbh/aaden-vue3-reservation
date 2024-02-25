@@ -19,7 +19,7 @@ const props = defineProps({
   }
 })
 const reservationInfo = useReservationStore()
-console.log(reservationInfo.timeSlots.length,'lenght')
+console.log(reservationInfo.timeSlots.length, 'lenght')
 const dragController = useDragStore()
 
 
@@ -53,7 +53,7 @@ function resetCurrentScrollPos() {
   } else {
     const firstReservation = minBy(reservationInfo.filteredReservationList,
         'grid.x')
-    if(firstReservation){
+    if (firstReservation) {
       container.value?.scroll({
         top: 0, left: firstReservation.grid.x -
             (window.innerWidth / 3)
@@ -69,7 +69,6 @@ onMounted(async () => {
   await IKUtils.wait(200)
 
   resetCurrentScrollPos()
-
 
 
 })
@@ -222,15 +221,24 @@ onMounted(async () => {
             height:reservationInfo.containerHeight+'px'
           }"
         >
-          <reservation-card
-            v-for="r in reservationInfo.filteredReservationList"
+          <template
             :key="r.id"
-            @open="reservationInfo.showReservationWithId(r.remoteId)"
-            :reservation-info="r"
-            @drag-stop="(...args)=>onMoveReservation(r,args)"
-            :x-size="reservationInfo.xSize"
-            :y-size="reservationInfo.ySize"
-          />
+            v-for="r in reservationInfo.filteredReservationList"
+          >
+            <template
+              v-for="b in r.blocks"
+              :key="b.id"
+            >
+              <reservation-card
+                @open="reservationInfo.showReservationWithId(r.remoteId)"
+                :reservation-info="r"
+                :y-pos="b.y"
+                @drag-stop="(...args)=>onMoveReservation(r,args)"
+                :x-size="reservationInfo.xSize"
+                :y-size="reservationInfo.ySize"
+              />
+            </template>
+          </template>
         </div>
       </v-card>
     </div>
