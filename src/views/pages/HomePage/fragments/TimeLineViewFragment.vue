@@ -19,6 +19,7 @@ const props = defineProps({
   }
 })
 const reservationInfo = useReservationStore()
+console.log(reservationInfo.timeSlots.length,'lenght')
 const dragController = useDragStore()
 
 
@@ -64,9 +65,11 @@ function resetCurrentScrollPos() {
 }
 
 onMounted(async () => {
+
   await IKUtils.wait(200)
 
   resetCurrentScrollPos()
+
 
 
 })
@@ -85,7 +88,7 @@ onMounted(async () => {
       style="display: grid;grid-gap: 0;position: relative;
           width: 0;overflow:hidden;
         height:calc(100dvh - 170px);"
-      :style="{gridTemplateColumns:'repeat('+reservationInfo.timeSlots.length+','+reservationInfo.xSize+'px)',
+      :style="{gridTemplateColumns:'repeat('+reservationInfo?.timeSlots?.length+','+reservationInfo.xSize+'px)',
                gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
       }"
     >
@@ -183,7 +186,7 @@ onMounted(async () => {
       >
         {{ t.tableName }}
         <v-spacer />
-        <v-icon :color="t.reservable?'secondary':'grey'">
+        <v-icon :color="t.active?'secondary':'grey'">
           mdi-circle-small
         </v-icon>
         <div class="font-weight-thin text-caption">

@@ -7,12 +7,11 @@ import {
   useHomePageControllerStore,
   useTimePickerStore
 } from "../../dataLayer/repository/reservationRepo";
-import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
+import {checkTableTimeAvailable, userId} from "../../dataLayer/api/reservationApi.js";
 import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import BaseDialog from "../components/BaseDialog.vue";
 import {toDateDisplayFormat} from "../../dataLayer/repository/dateRepo.js";
-import {deviceId} from "../../plugins/plugins.js";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
@@ -21,8 +20,9 @@ const timerPicker = useTimePickerStore()
 const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
   controller.startTime = null
-  timerPicker.availableTimes = await checkTableTimeAvailable(date.value,
-      '00:00', personCount.value, parseInt(deviceId))
+  const res = await checkTableTimeAvailable(date.value, personCount.value, userId)
+  console.log(res, '123')
+  timerPicker.availableTimes = res
   if (timerPicker.availableTimes.length > 0) {
     controller.startTime = timerPicker.availableTimes[0]
   }

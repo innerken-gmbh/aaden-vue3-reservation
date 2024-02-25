@@ -5,10 +5,10 @@ import {
     addReservation,
     cancelReservation,
     confirmReservation,
-    getReservation,
+    getReservation, loadAllReservable,
     moveReservation
 } from "../api/reservationApi.js";
-import {loadReservationTableInfo} from "../api/tableApi.js";
+
 import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 import {linkColors} from "../../plugins/plugins.js";
@@ -101,15 +101,15 @@ export const useReservationStore = defineStore('reservation', {
     },
     actions: {
         async loadReservations() {
-            this.tableList = await loadReservationTableInfo()
+            this.tableList = await loadAllReservable()
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
                     .format('HH:mm') === t)
                 const xStopIndex = this.timeSlots.findIndex(t => dayjs(it.toDateTime)
                     .format('HH:mm') === t)
+                console.log(it)
                 const yIndex = this.tableList.findIndex(t => parseInt(t.tableId) === parseInt(it.tableId))
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
-
                 it.grid = {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
@@ -159,7 +159,6 @@ export const useReservationStore = defineStore('reservation', {
                 }
                 return 3
             })
-            console.log(this.reservationList.map(it=>it.status))
         },
         async reload() {
             await this.loadReservations()

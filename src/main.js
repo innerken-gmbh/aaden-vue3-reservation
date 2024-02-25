@@ -17,7 +17,7 @@ if (!endLanguage.includes(i18n.locale)) {
 
 
 
-hillo.initial(`https://ik${deviceId}.ngrok.aaden.io/PHP/`)
+
 createApp(App)
     .use(vuetify)
     .use(i18n)
