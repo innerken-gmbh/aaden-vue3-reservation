@@ -10,22 +10,23 @@ import {
     moveReservation
 } from "../api/reservationApi.js";
 
-import {groupBy, intersection, maxBy, sortBy, sumBy} from "lodash-es";
+import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
+import {linkColors} from "../../plugins/plugins.js";
 
 export const ReservationStatus = {
     Confirmed: 'Confirmed',
     Created: 'Created',
     Cancelled: 'Cancelled',
     CheckIn: 'CheckIn',
-    NoShow: 'NoShow'
+    NoShow:'NoShow'
 }
 export const ReservationIcon = {
     Confirmed: 'mdi-view-list',
     Created: 'Created',
     Cancelled: 'mdi-cancel',
     CheckIn: 'mdi-check',
-    NoShow: 'NoShow'
+    NoShow:'NoShow'
 }
 
 export const useReservationStore = defineStore('reservation', {
@@ -90,11 +91,12 @@ export const useReservationStore = defineStore('reservation', {
                 (r) => parseInt(r.personCount))
         },
         filteredReservationList() {
-
             return this.reservationList.filter(it => {
-                return it.seatPlan.length > 0 && (!this.search || [it.firstName, it.lastName]
+                return it.seatPlan.length>0 && (!this.search || [it.firstName, it.lastName]
                         .some(s => s?.toString()?.toLowerCase()
-                            .includes(this.search.toLowerCase()) ?? false))
+                            .includes(this.search.toLowerCase()) ?? false)) &&
+                    (this.showAll ||
+                        (it.completed !== '1' && it.cancelled !== '1'))
                     && (this.search || !this.displayList || (it.status === this.listViewTab))
             })
         },
@@ -136,10 +138,19 @@ export const useReservationStore = defineStore('reservation', {
                         return it
                     }).filter(it => it.haveOverlap).map(it => it.id)
                 }).flat()
+
+            const batchColorCache = {}
             this.reservationList = []
             await IKUtils.wait(50)
             this.reservationList = sortBy(list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
+                it.haveShareTable =it.seatPlan.length>1
+                if (it.haveShareTable) {
+                    if (!batchColorCache[it.id]) {
+                        batchColorCache[it.id] = sample(linkColors)
+                    }
+                    it.shareColor = batchColorCache[it.id]
+                }
                 return it
             }), (r) => {
                 if (r.status === ReservationStatus.Cancelled) {

@@ -233,6 +233,7 @@ onMounted(async () => {
                 @open="reservationInfo.showReservationWithId(r.remoteId)"
                 :reservation-info="r"
                 :y-pos="b.y"
+                :person-count="b.personCount"
                 @drag-stop="(...args)=>onMoveReservation(r,args)"
                 :x-size="reservationInfo.xSize"
                 :y-size="reservationInfo.ySize"
