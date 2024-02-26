@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, nextTick, ref, watch} from "vue";
+import {ref} from "vue";
 import {useDisplay} from "vuetify";
 
 defineProps({
@@ -16,15 +16,6 @@ defineProps({
 const show = defineModel({type: Boolean})
 const {xs} = useDisplay()
 const action = ref(null)
-const childCount = ref(0)
-watch(show, (val) => {
-  if (val) {
-    nextTick(() => {
-      childCount.value = action.value.childElementCount
-
-    })
-  }
-})
 
 </script>
 

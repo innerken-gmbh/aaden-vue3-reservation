@@ -15,7 +15,7 @@
   >
     <div
       style="position: relative"
-      class="gradient rounded"
+      :class="backgroundClass"
     >
       <v-card
         elevation="0"
@@ -70,17 +70,7 @@
         >
           {{ reservationInfo.firstName }} {{ reservationInfo.lastName }}
         </div>
-        <template v-if="reservationInfo.childCount>0">
-          <v-icon
-            small
-            class="mx-2"
-          >
-            mdi-human-child
-          </v-icon>
-          {{ reservationInfo.childCount }}
-        </template>
         <div
-
           style="font-size: 12px!important;"
           class="text-body-2 text-no-wrap text-truncate text-right ml-2 flex-grow-1"
         >
@@ -96,22 +86,6 @@
         >
           mdi-dots-square
         </v-icon>
-        <v-icon
-          v-if="cancelled"
-          small
-          color="on-surface"
-          class="ml-2"
-        >
-          mdi-cancel
-        </v-icon>
-        <v-icon
-          v-if="checkedIn"
-          small
-          color="on-surface"
-          class="ml-2"
-        >
-          mdi-location-enter
-        </v-icon>
       </v-card>
     </div>
   </vue-draggable-resizable>
@@ -123,7 +97,8 @@ import {useDragStore} from "../../dataLayer/repository/reservationRepo.js";
 import {storeToRefs} from "pinia";
 import {useReservationChangeVM} from "../../dataLayer/repository/reservationChangesVM.js";
 import {
-  getReservationColor,
+  getReservationBackgroundClass,
+  getReservationStatusColor,
   getReservationStatusIcon,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
@@ -147,9 +122,11 @@ const haveShareTable = computed(() => {
   return props.reservationInfo.haveShareTable
 })
 const color = computed(() => {
-  return getReservationColor(props.reservationInfo)
+  return getReservationStatusColor(props.reservationInfo)
 })
-
+const backgroundClass = computed(() => {
+  return getReservationBackgroundClass(props.reservationInfo)
+})
 const cardFrontIcon = computed(() => {
   return getReservationStatusIcon(props.reservationInfo)
 })

@@ -58,16 +58,16 @@ import logo from './assets/calendar.png'
 
       <template v-if="!reservationStore.showSearch">
         <v-btn
-          @click="reservationStore.showSearch=true"
-          icon=""
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <v-btn
           @click="toggleTheme()"
           icon=""
         >
           <v-icon>mdi-theme-light-dark</v-icon>
+        </v-btn>
+        <v-btn
+          @click="reservationStore.showSearch=true"
+          icon=""
+        >
+          <v-icon>mdi-magnify</v-icon>
         </v-btn>
         <v-btn
           @click="homeController.showNewModal()"

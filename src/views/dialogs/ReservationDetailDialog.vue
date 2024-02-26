@@ -5,7 +5,11 @@ import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import {timeFormat, toDateDisplayFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
 import BaseDialog from "../components/BaseDialog.vue";
 import dayjs from "dayjs";
-import {getReservationColor, ReservationStatus} from "../../dataLayer/repository/reservationDisplay.js";
+import {
+  getReservationStatusColor,
+  reservationCanEdit,
+  ReservationStatus
+} from "../../dataLayer/repository/reservationDisplay.js";
 import {confirm} from "../../dataLayer/api/reservationApi.js";
 
 const controller = useReservationStore()
@@ -15,14 +19,14 @@ const info = computed(() => {
 })
 
 const canEdit = computed(() => {
-  return info.value?.completed !== '1' && info.value?.cancelled !== '1'
+  return reservationCanEdit(info.value)
 })
 
 const status = computed(() => {
   return info.value?.status ?? ''
 })
 const color = computed(() => {
-  return getReservationColor(info.value)
+  return getReservationStatusColor(info.value)
 })
 
 const currentDiningTime = computed(() => {
@@ -72,7 +76,7 @@ async function onCancel() {
 
 <template>
   <base-dialog
-    :header-color="color"
+    :header-color="color==='transparent'?'white':color"
     :show-action="canEdit"
     v-model="controller.showDetailDialog"
   >

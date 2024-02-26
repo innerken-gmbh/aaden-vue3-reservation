@@ -45,8 +45,12 @@ export function getReservationAdditionalIcons(reservation) {
     return arr
 }
 
+export function reservationCanEdit(reservation) {
+    return ![ReservationStatus.Cancelled, ReservationStatus.NoShow, ReservationStatus.CheckIn].includes(reservation?.status ?? ReservationStatus.NoShow)
+}
 
-export function getReservationColor(reservation) {
+
+export function getReservationStatusColor(reservation) {
     if (reservation) {
         const haveOverlap = reservation.haveOverlap
         const status = reservation.status
@@ -66,7 +70,7 @@ export function getReservationColor(reservation) {
                 case ReservationStatus.Cancelled:
                     return 'transparent'
                 case ReservationStatus.CheckIn:
-                    return 'transparent'
+                    return 'green-darken-4'
                 case ReservationStatus.Confirmed:
                     return 'cardNormalColor'
                 case ReservationStatus.Created:
@@ -78,4 +82,23 @@ export function getReservationColor(reservation) {
         }
     }
     return 'cardNormalColor'
+}
+
+export function getReservationBackgroundClass(reservation) {
+    if (reservation) {
+        const status = reservation.status
+        switch (status) {
+            case ReservationStatus.Cancelled:
+                return 'bg-surface-darken-2'
+            case ReservationStatus.CheckIn:
+                return 'bg-green-darken-4'
+            case ReservationStatus.Confirmed:
+            case ReservationStatus.Created:
+            case ReservationStatus.NoShow:
+            default:
+                break;
+
+        }
+    }
+    return 'gradient rounded'
 }

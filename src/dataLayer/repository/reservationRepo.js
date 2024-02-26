@@ -6,7 +6,7 @@ import {cancelReservation, changeEatTime, checkIn, getReservation, loadAllReserv
 import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 import {linkColors} from "../../plugins/plugins.js";
-import {ReservationStatus} from "./reservationDisplay.js";
+import {reservationCanEdit, ReservationStatus} from "./reservationDisplay.js";
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
@@ -76,12 +76,12 @@ export const useReservationStore = defineStore('reservation', {
                         .some(s => s?.toString()?.toLowerCase()
                             .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||
-                        (it.completed !== '1' && it.cancelled !== '1'))
+                        (reservationCanEdit(it)))
                     && (this.search || !this.displayList || (it.status === this.listViewTab))
             })
         },
         displayList() {
-            return this.listView || this.search
+            return this.listView || this.showSearch
         }
     },
     actions: {
