@@ -123,38 +123,7 @@ async function onCancel() {
           </div>
         </div>
       </inline-two-row-container>
-      <div class="d-flex align-center">
-        <div
-          class="text-h5 font-weight-black mt-4"
-        >
-          <div class="text-body-2">
-            {{ $t('DiningTime') }}
-          </div>
-          <div class="d-flex">
-            <div v-if="!timeChanged">
-              {{ currentDiningTime }} min
-            </div>
-            <div v-else>
-              {{ currentDiningTime }} min -> {{ overrideDiningTime }} min
-            </div>
-          </div>
-        </div>
-        <v-spacer />
-        <template v-if="canEdit">
-          <v-btn
-            flat
-            @click="overrideDiningTime<=30?null:overrideDiningTime-=15"
-            icon="mdi-minus"
-            size="36"
-          />
-          <v-btn
-            flat
-            @click="overrideDiningTime+=15"
-            icon="mdi-plus"
-            size="36"
-          />
-        </template>
-      </div>
+
 
       <inline-two-row-container class="mt-4">
         <div class="text-h5 font-weight-black">
@@ -162,7 +131,7 @@ async function onCancel() {
             {{ $t('Table') }}
           </div>
           <div>
-            {{ info.tableNameNull }}
+            {{ info.tableName }}
           </div>
         </div>
         <div class="text-h5 font-weight-black">
@@ -217,7 +186,38 @@ async function onCancel() {
           icon="mdi-phone"
         />
       </div>
-
+      <div class="d-flex align-center">
+        <div
+          class="text-h5 font-weight-black mt-4"
+        >
+          <div class="text-body-2">
+            {{ $t('DiningTime') }}
+          </div>
+          <div class="d-flex">
+            <div v-if="!timeChanged">
+              {{ currentDiningTime }} min
+            </div>
+            <div v-else>
+              {{ currentDiningTime }} min -> {{ overrideDiningTime }} min
+            </div>
+          </div>
+        </div>
+        <v-spacer />
+        <template v-if="canEdit">
+          <v-btn
+            flat
+            @click="overrideDiningTime<=30?null:overrideDiningTime-=15"
+            icon="mdi-minus"
+            size="36"
+          />
+          <v-btn
+            flat
+            @click="overrideDiningTime+=15"
+            icon="mdi-plus"
+            size="36"
+          />
+        </template>
+      </div>
       <div
         v-if="info.note"
         class="text-h5 font-weight-black mt-4"

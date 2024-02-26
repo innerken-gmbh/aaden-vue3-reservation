@@ -1,9 +1,8 @@
 <script setup>
 
-import {toOnlyTimeFormat} from "../../../../dataLayer/repository/dateRepo.js";
 import {useReservationStore} from "../../../../dataLayer/repository/reservationRepo.js";
 import PlaceHolder from "../../../components/PlaceHolder.vue";
-import {ReservationStatus} from "../../../../dataLayer/repository/reservationDisplay.js";
+import ReservationListItem from "../../../items/ReservationListItem.vue";
 
 const reservationInfo = useReservationStore()
 </script>
@@ -43,88 +42,13 @@ const reservationInfo = useReservationStore()
           {{ reservationInfo.listSorted[2].length }}
         </v-tab>
       </v-tabs>
-      <v-spacer />
-      <v-card
-        rounded="pill"
-        class="text-body-1 pa-1 px-3"
-        color="primary"
-      >
-        {{ reservationInfo.filteredReservationList.length }}({{ reservationInfo.reservationTotalPersonCount }} P)
-      </v-card>
     </div>
     <template v-if="reservationInfo.filteredReservationList.length > 0">
-      <v-card
-        color="surface"
-        class="pa-3 px-4 mb-2 d-flex align-center"
+      <reservation-list-item
         v-for="r in reservationInfo.filteredReservationList"
         :key="r.id"
-        @click="reservationInfo.showReservationWithId(r.id)"
-      >
-        <div>
-          <div
-            :class="r.overTime?'text-error font-weight-black':''"
-            class="text-body-2 "
-          >
-            {{ toOnlyTimeFormat(r.fromDateTime) }} - {{ toOnlyTimeFormat(r.toDateTime) }}
-          </div>
-          <div
-            class="text-h5 mt-1 font-weight-black d-flex align-baseline"
-          >
-            {{ r.personCount }} <span
-              :style="{
-                color:r.shareColor
-              }"
-              class="text-body-1 mr-2 ml-1 font-weight-black"
-              v-if="r.totalPerson"
-            >/{{ r.totalPerson }} </span> P
-            <div class="ml-4">
-              {{ r.firstName }} {{ r.lastName }}
-            </div>
-          </div>
-        </div>
-        <v-spacer />
-        <v-icon
-          v-if="r.status===ReservationStatus.CheckIn"
-          small
-          class="ml-2"
-        >
-          mdi-check
-        </v-icon>
-        <v-icon
-          v-if="r.status===ReservationStatus.Cancelled"
-          small
-          class="ml-2"
-        >
-          mdi-cancel
-        </v-icon>
-        <v-icon
-          v-if="r.haveOverlap"
-          small
-          color="yellow"
-          class="ml-2"
-        >
-          mdi-alert
-        </v-icon>
-        <v-icon
-          v-if="r.haveShareTable"
-          small
-          :color="r.shareColor"
-          class="ml-2"
-        >
-          mdi-link-variant
-        </v-icon>
-        <div
-          class="text-h5 font-weight-black d-flex align-baseline ml-2"
-        >
-          <v-icon
-            class="mr-2"
-            size="24"
-          >
-            mdi-map-marker
-          </v-icon>
-          {{ r.tableNameNull }}
-        </div>
-      </v-card>
+        :info="r"
+      />
     </template>
 
     <place-holder

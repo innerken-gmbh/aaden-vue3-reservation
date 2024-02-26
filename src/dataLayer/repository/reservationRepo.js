@@ -3,7 +3,7 @@ import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
 import {cancelReservation, changeEatTime, checkIn, getReservation, loadAllReservable} from "../api/reservationApi.js";
 
-import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
+import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 import {linkColors} from "../../plugins/plugins.js";
 import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./reservationDisplay.js";
@@ -70,8 +70,8 @@ export const useReservationStore = defineStore('reservation', {
             return sumBy(this.filteredReservationList,
                 (r) => parseInt(r.personCount))
         },
-        listSorted(){
-            return Object.values(ReservationStatusFilter).map(it=>this.reservationList.filter(r=>it.includes(r.status)))
+        listSorted() {
+            return Object.values(ReservationStatusFilter).map(it => this.reservationList.filter(r => it.includes(r.status)))
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
@@ -101,6 +101,7 @@ export const useReservationStore = defineStore('reservation', {
     actions: {
         async loadReservations() {
             this.tableList = await loadAllReservable()
+            const tableMap = keyBy(this.tableList, 'tableId')
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
                     .format('HH:mm') === t)
@@ -113,6 +114,12 @@ export const useReservationStore = defineStore('reservation', {
                         id: sp.id
                     }
                 })
+                it.seatPlan = it.seatPlan.map(it => {
+                    it.tableName = tableMap[it.tableId]?.tableName??''
+                    console.log(tableMap,it,'seat')
+                    return it
+                })
+                it.tableName = join(it.seatPlan.map(it => it.tableName), ',')
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
                 it.grid = {
                     x: xIndex * this.xSize,
