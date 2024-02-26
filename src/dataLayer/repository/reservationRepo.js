@@ -6,7 +6,7 @@ import {cancelReservation, changeEatTime, checkIn, getReservation, loadAllReserv
 import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 import {linkColors} from "../../plugins/plugins.js";
-import {reservationCanEdit, ReservationStatus} from "./reservationDisplay.js";
+import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./reservationDisplay.js";
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
@@ -70,6 +70,9 @@ export const useReservationStore = defineStore('reservation', {
             return sumBy(this.filteredReservationList,
                 (r) => parseInt(r.personCount))
         },
+        listSorted(){
+            return Object.values(ReservationStatusFilter).map(it=>this.reservationList.filter(r=>it.includes(r.status)))
+        },
         filteredReservationList() {
             return this.reservationList.filter(it => {
                 const isValid = it.seatPlan.length > 0
@@ -80,7 +83,6 @@ export const useReservationStore = defineStore('reservation', {
                                 .includes(this.search.toLowerCase()) ?? false)
                         return isValid && searchContains
                     } else {
-                        console.log(this.listViewTab)
                         const filter = Object.values(ReservationStatus)[this.listViewTab]
                         return isValid && filter.includes(it.status)
                     }

@@ -27,20 +27,20 @@ const reservationInfo = useReservationStore()
             mdi-view-list
           </v-icon>
           <div>
-            6
+            {{ reservationInfo.listSorted[0].length }}
           </div>
         </v-tab>
         <v-tab :value="1">
           <v-icon start>
             mdi-bell-badge-outline
           </v-icon>
-          8
+          {{ reservationInfo.listSorted[1].length }}
         </v-tab>
         <v-tab :value="2">
           <v-icon start>
             mdi-dots-horizontal
           </v-icon>
-          12
+          {{ reservationInfo.listSorted[2].length }}
         </v-tab>
       </v-tabs>
       <v-spacer />
