@@ -27,13 +27,22 @@ export function getReservationStatusIcon(reservation) {
         return 'mdi-alert'
     } else if (overTime) {
         return 'mdi-timer-alert'
+    } else if (status === ReservationStatus.Created) {
+        return 'mdi-bell-badge-outline'
+    } else if (status === ReservationStatus.Cancelled) {
+        return 'mdi-cancel'
+    } else if (status === ReservationStatus.CheckIn) {
+        return 'mdi-check'
     } else if (reservation.haveShareTable) {
         return 'mdi-link-variant'
-    } else if(status===ReservationStatus.Created){
-        return 'mdi-bell-badge-outline'
     } else {
         return 'mdi-arrow-expand'
     }
+}
+
+export function getReservationAdditionalIcons(reservation) {
+    const arr = []
+    return arr
 }
 
 
@@ -42,8 +51,13 @@ export function getReservationColor(reservation) {
         const haveOverlap = reservation.haveOverlap
         const status = reservation.status
         const canDrag = useDragStore().draggableItemId === reservation.id
-        if(canDrag){
+        const overTime = reservation.overTime
+
+        if (canDrag) {
             return 'pink'
+        }
+        if (overTime) {
+            return 'red-lighten-2'
         }
         if (haveOverlap) {
             return 'yellow'
@@ -52,7 +66,7 @@ export function getReservationColor(reservation) {
                 case ReservationStatus.Cancelled:
                     return 'transparent'
                 case ReservationStatus.CheckIn:
-                    return 'green-darken-4'
+                    return 'transparent'
                 case ReservationStatus.Confirmed:
                     return 'cardNormalColor'
                 case ReservationStatus.Created:

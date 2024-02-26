@@ -10,6 +10,7 @@ import {ReservationStatus} from "./reservationDisplay.js";
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
+        showSearch: false,
         reservationList: [],
         listView: false,
         date: today(),
