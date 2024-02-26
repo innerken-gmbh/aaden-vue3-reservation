@@ -130,7 +130,7 @@ onMounted(async () => {
             v-for="(t,i) in reservationInfo.bigTime"
           >
             <div
-              class="pa-2 text-body-1 d-flex align-center bg-surface"
+              class="text-body-1 d-flex align-center bg-surface"
               style="width: 100%;height: 100%;grid-column:span 4;
                   position: sticky;top:0;
                   z-index: 6;
@@ -138,7 +138,8 @@ onMounted(async () => {
 "
             >
               <div
-                style="margin-left: -30%"
+                class="font-weight-black pa-1 px-2 rounded-lg"
+                style="margin-left: -25%;background: rgba(255,255,255,.02)"
                 v-if="i!==0"
               >
                 {{ t }}
