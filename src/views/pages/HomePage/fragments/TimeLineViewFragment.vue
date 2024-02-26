@@ -152,7 +152,7 @@ onMounted(async () => {
         :key="t.time"
       >
         <div
-          class="text-caption bg-surface-darken-1"
+          class="text-caption bg-surface"
           style="width: 100%;height: 100%;
               grid-column:span 2;position: sticky;
               top: 28px;z-index: 10"
@@ -163,22 +163,24 @@ onMounted(async () => {
           }"
         >
           <div
-            class="pa-1 text-center d-flex align-center justify-center"
+            v-if="t.count!==0"
             style="position: relative;width: 100%;height: 100%"
           >
             <div
-              style="z-index: 2"
-              class="font-weight-black text-body-2"
+              style="position: absolute;top: 0;left: 0;right: 0;"
+              :class="t.ratio===100?'bg-yellow':'bg-yellow-lighten-3'"
+              :style="{
+                height:t.ratio*0.9+'%'
+              }"
+            />
+            <div
+              v-if="t.ratio>40"
+              style="position: absolute;z-index: 4;top:-2px;left: 4px;text-shadow: #f6f6f6 0px 0px 2px;
+                font-size: xx-small"
+              class="font-weight-black text-black"
             >
               {{ t.count }}
             </div>
-            <div
-              style="position: absolute;top: 0;left: 0;right: 0;"
-              :class="t.ratio===100?'bg-error':'bg-secondary'"
-              :style="{
-                height:t.ratio+'%'
-              }"
-            />
           </div>
         </div>
       </template>

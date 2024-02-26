@@ -7,28 +7,13 @@ import {
     changeEatTime,
     confirmReservation,
     getReservation,
-    loadAllReservable,
-    moveReservation
+    loadAllReservable
 } from "../api/reservationApi.js";
 
 import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
 import {linkColors} from "../../plugins/plugins.js";
-
-export const ReservationStatus = {
-    Confirmed: 'Confirmed',
-    Created: 'Created',
-    Cancelled: 'Cancelled',
-    CheckIn: 'CheckIn',
-    NoShow: 'NoShow'
-}
-export const ReservationIcon = {
-    Confirmed: 'mdi-view-list',
-    Created: 'Created',
-    Cancelled: 'mdi-cancel',
-    CheckIn: 'mdi-check',
-    NoShow: 'NoShow'
-}
+import {ReservationStatus} from "./reservationDisplay.js";
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
@@ -125,17 +110,20 @@ export const useReservationStore = defineStore('reservation', {
                     x: xIndex * this.xSize,
                     w: (xStopIndex - xIndex) * this.xSize,
                 }
-                console.log(it.status)
-                it.status = getReservationStatus(it)
                 it.overTime = it.status === ReservationStatus.Confirmed
                     && dayjs(it.fromDateTime).add(15, 'minute')
                         .isBefore(dayjs())
                 return it
             })
-            const overlaps = Object.entries(groupBy(list.filter(it => it.cancelled === '0'), 'tableId'))
+            const overlaps = Object.entries(
+                groupBy(list.filter(it => it.status !== ReservationStatus.Cancelled &&
+                    it.status !== ReservationStatus.NoShow).map(it => {
+                    return it.seatPlan.map(sp => ({tableId: sp.tableId, timeMap: it.timeMap, id: it.id})).flat()
+                }).flat(2), 'tableId'))
                 .map(([, value]) => {
                     return value.map(it => {
-                        it.haveOverlap = value.some(that => that.id !== it.id && intersection(it.timeMap, that.timeMap).length > 1)
+                        it.haveOverlap = value.some(that => that.id !== it.id &&
+                            intersection(it.timeMap, that.timeMap).length > 1)
                         return it
                     }).filter(it => it.haveOverlap).map(it => it.id)
                 }).flat()
@@ -166,29 +154,33 @@ export const useReservationStore = defineStore('reservation', {
             await this.loadReservations()
         },
         async checkIn(id) {
+            await this.actionAnd(
+                async () => {
+                    await confirmReservation(id)
+                }
+            )
+
+        },
+        async actionAnd(action) {
             this.loading = true
-            await confirmReservation(id)
+            await action()
             await this.reload()
             this.loading = false
         },
         async changeEatingTime(id, newEatingTime) {
-            this.loading = true
-            await changeEatTime(id, newEatingTime)
-            await this.reload()
-            this.loading = false
-        },
-        async moveReservation(reservationInfo) {
-            this.loading = true
-            const {id, tableId, fromDateTime, toDateTime} = reservationInfo
-            await moveReservation(id, tableId, fromDateTime, toDateTime)
-            await this.reload()
-            this.loading = false
+            await this.actionAnd(
+                async () => {
+                    await changeEatTime(id, newEatingTime)
+                }
+            )
+
         },
         async cancel(id) {
-            this.loading = true
-            await cancelReservation(id)
-            await this.reload()
-            this.loading = false
+            await this.actionAnd(
+                async () => {
+                    await cancelReservation(id)
+                }
+            )
         },
         async showReservationWithId(id) {
             this.activeReservationId = id
@@ -385,35 +377,3 @@ export const useDragStore = defineStore('drag', {
     }
 })
 
-export function getReservationColor(reservation) {
-    if (reservation) {
-        const overTime = reservation.overTime
-        const haveOverlap = reservation.haveOverlap
-        const status = getReservationStatus(reservation)
-        if (overTime) {
-            return 'cardOverTimeColor'
-        } else if (status === ReservationStatus.CheckIn) {
-            return 'cardCheckedInColor'
-        } else if (haveOverlap) {
-            return 'cardOverlapColor'
-        } else if (status === ReservationStatus.Cancelled) {
-            return 'cardCancelledColor'
-        }
-    }
-
-    return 'cardNormalColor'
-
-}
-
-export function getReservationStatus(reservation) {
-    if (reservation.status) {
-        return reservation.status
-    }
-    if (reservation?.completed === '1') {
-        return ReservationStatus.CheckIn
-    } else if (reservation?.cancelled === '1') {
-        return ReservationStatus.Cancelled
-    } else {
-        return ReservationStatus.Confirmed
-    }
-}

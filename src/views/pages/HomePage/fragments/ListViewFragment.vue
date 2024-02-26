@@ -2,12 +2,11 @@
 
 import {toOnlyTimeFormat} from "../../../../dataLayer/repository/dateRepo.js";
 import {
-  ReservationIcon,
-  ReservationStatus,
   useReservationStore
 } from "../../../../dataLayer/repository/reservationRepo.js";
 import {useDisplay} from "vuetify";
 import PlaceHolder from "../../../components/PlaceHolder.vue";
+import {ReservationIcon, ReservationStatus} from "../../../../dataLayer/repository/reservationDisplay.js";
 
 const reservationInfo = useReservationStore()
 const {smAndUp} = useDisplay()

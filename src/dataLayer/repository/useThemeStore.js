@@ -1,5 +1,4 @@
 import {defineStore} from "pinia";
-import {useTheme} from "vuetify";
 
 export const useThemeStore = defineStore('theme', {
     state: () => ({

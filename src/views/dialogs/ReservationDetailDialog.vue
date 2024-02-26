@@ -1,19 +1,12 @@
 <script setup>
-import {
-  getReservationColor,
-  ReservationStatus,
-  useReservationStore
-} from "../../dataLayer/repository/reservationRepo.js";
+import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
 import {computed, ref, watch} from "vue";
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
-import {
-  timeFormat,
-  timestampTemplate,
-  toDateDisplayFormat,
-  toOnlyTimeFormat
-} from "../../dataLayer/repository/dateRepo.js";
+import {timeFormat, toDateDisplayFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
 import BaseDialog from "../components/BaseDialog.vue";
 import dayjs from "dayjs";
+import {getReservationColor, ReservationStatus} from "../../dataLayer/repository/reservationDisplay.js";
+import {confirmReservation} from "../../dataLayer/api/reservationApi.js";
 
 const controller = useReservationStore()
 
@@ -26,13 +19,7 @@ const canEdit = computed(() => {
 })
 
 const status = computed(() => {
-  if (info.value?.completed === '1') {
-    return ReservationStatus.Complete
-  } else if (info.value?.cancelled === '1') {
-    return ReservationStatus.Cancelled
-  } else {
-    return ReservationStatus.Confirmed
-  }
+  return info.value.status
 })
 const color = computed(() => {
   return getReservationColor(info.value)
@@ -57,12 +44,21 @@ const overrideTime = computed(() => {
 })
 
 async function onConfirm() {
-  await controller.checkIn(info.value?.id)
+  if (status.value === ReservationStatus.Confirmed) {
+    await controller.checkIn(info.value?.id)
+  } else {
+    await controller.actionAnd(
+        async () => {
+          await confirmReservation(id)
+        }
+    )
+  }
+
   controller.showDetailDialog = false
 }
 
 async function onChangeTime() {
-  await controller.changeEatingTime(info.value.id,overrideDiningTime.value/15)
+  await controller.changeEatingTime(info.value.id, overrideDiningTime.value / 15)
   controller.showDetailDialog = false
 }
 
@@ -254,19 +250,34 @@ async function onCancel() {
           <template #prepend>
             <v-icon>mdi-cancel</v-icon>
           </template>
-          {{ $t('Cancel') }}
+          {{ $t('Reject') }}
         </v-btn>
-        <v-btn
-          :loading="controller.loading"
-          @click="onConfirm"
-          color="primary"
-          class="mt-2"
-        >
-          <template #prepend>
-            <v-icon>mdi-check</v-icon>
-          </template>
-          {{ $t('CheckIn') }}
-        </v-btn>
+        <template v-if="status===ReservationStatus.Created">
+          <v-btn
+            :loading="controller.loading"
+            @click="onConfirm"
+            color="primary"
+            class="mt-2"
+          >
+            <template #prepend>
+              <v-icon>mdi-check</v-icon>
+            </template>
+            {{ $t('Accept') }}
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn
+            :loading="controller.loading"
+            @click="onConfirm"
+            color="primary"
+            class="mt-2"
+          >
+            <template #prepend>
+              <v-icon>mdi-check</v-icon>
+            </template>
+            {{ $t('CheckIn') }}
+          </v-btn>
+        </template>
       </template>
     </template>
   </base-dialog>
