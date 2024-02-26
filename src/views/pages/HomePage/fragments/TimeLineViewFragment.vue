@@ -185,11 +185,7 @@ onMounted(async () => {
         </div>
       </template>
       <div
-        style="position: sticky; z-index: 9;
-          left: 0;
-          background: linear-gradient(to right ,
-           rgba(var(--v-theme-background),.9),
-             rgba(var(--v-theme-background),.7))"
+        style="position: sticky; z-index: 9; left: 0;"
         class="d-flex align-center pl-2 pr-1
              font-weight-black text-body-2"
         :style="{height:reservationInfo.ySize+'px',gridColumn:'1',gridRow:i+3,
