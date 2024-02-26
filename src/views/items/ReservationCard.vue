@@ -14,7 +14,8 @@
     @drag-stop="stopDrag"
   >
     <div
-      style="position: relative"
+      :style="{opacity:reservationCanEdit(reservationInfo)?'1':'0.4'}"
+      style="position: relative;"
       :class="backgroundClass"
     >
       <v-card
@@ -99,7 +100,7 @@ import {useReservationChangeVM} from "../../dataLayer/repository/reservationChan
 import {
   getReservationBackgroundClass,
   getReservationStatusColor,
-  getReservationStatusIcon,
+  getReservationStatusIcon, reservationCanEdit,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
 
