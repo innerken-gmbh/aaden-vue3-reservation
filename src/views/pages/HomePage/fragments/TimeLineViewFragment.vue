@@ -266,28 +266,33 @@ onMounted(async () => {
       rounded="lg"
       elevation="8"
     >
-      {{ reservationChangeVM.changesCount }} {{ $t('Changes') }}
-      <v-btn
-        elevation="0"
-        @click="reservationChangeVM.cancelAllChanges()"
-        class="mx-2"
-        rounded="0"
-        size="36"
-        icon=""
-        color="primary"
-      >
-        <v-icon>mdi-refresh</v-icon>
-      </v-btn>
-      <v-btn
-        @click="reservationChangeVM.applyAllChanges()"
-        elevation="0"
-        rounded="0"
-        size="36"
-        icon=""
-        color="primary"
-      >
-        <v-icon>mdi-check</v-icon>
-      </v-btn>
+      <template v-if="!reservationChangeVM.loading">
+        {{ reservationChangeVM.changesCount }} {{ $t('Changes') }}
+        <v-btn
+          elevation="0"
+          @click="reservationChangeVM.cancelAllChanges()"
+          class="mx-2"
+          rounded="0"
+          size="36"
+          icon=""
+          color="primary"
+        >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
+        <v-btn
+          @click="reservationChangeVM.applyAllChanges()"
+          elevation="0"
+          rounded="0"
+          size="36"
+          icon=""
+          color="primary"
+        >
+          <v-icon>mdi-check</v-icon>
+        </v-btn>
+      </template>
+      <template v-else>
+        <v-progress-circular indeterminate />
+      </template>
     </v-card>
     <v-card
       v-else-if="reservationInfo.date===today()"

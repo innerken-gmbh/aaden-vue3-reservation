@@ -44,6 +44,7 @@ import logo from './assets/calendar.png'
       <template v-else>
         <v-app-bar-title>
           <v-text-field
+            autofocus
             v-model="reservationStore.search"
             prepend-inner-icon="mdi-magnify"
             variant="outlined"

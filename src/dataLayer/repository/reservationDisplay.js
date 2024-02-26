@@ -7,12 +7,11 @@ export const ReservationStatus = {
     CheckIn: 'CheckIn',
     NoShow: 'NoShow'
 }
-export const ReservationIcon = {
-    Confirmed: 'mdi-view-list',
-    Created: 'Created',
-    Cancelled: 'mdi-cancel',
-    CheckIn: 'mdi-check',
-    NoShow: 'NoShow'
+
+export const ReservationStatusFilter = {
+    Normal: [ReservationStatus.Confirmed],
+    WaitToBeConfirm: [ReservationStatus.Created],
+    Finished: [ReservationStatus.Cancelled, ReservationStatus.CheckIn, ReservationStatus.NoShow]
 }
 
 

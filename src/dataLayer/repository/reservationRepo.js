@@ -27,7 +27,7 @@ export const useReservationStore = defineStore('reservation', {
                 .from(Array(4).keys())
                 .map(minute => it.toString().padStart(2, '0') +
                     ':' + (minute * 15).toString().padStart(2, '0'))).flat(),
-        listViewTab: ReservationStatus.Confirmed,
+        listViewTab: 0,
     }),
     getters: {
         bigTime() {
@@ -72,12 +72,24 @@ export const useReservationStore = defineStore('reservation', {
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
-                return it.seatPlan.length > 0 && (!this.search || [it.firstName, it.lastName]
-                        .some(s => s?.toString()?.toLowerCase()
-                            .includes(this.search.toLowerCase()) ?? false)) &&
-                    (this.showAll ||
-                        (reservationCanEdit(it)))
-                    && (this.search || !this.displayList || (it.status === this.listViewTab))
+                const isValid = it.seatPlan.length > 0
+                if (this.displayList) {
+                    if (this.search) {
+                        const searchContains = [it.firstName, it.lastName]
+                            .some(s => s?.toString()?.toLowerCase()
+                                .includes(this.search.toLowerCase()) ?? false)
+                        return isValid && searchContains
+                    } else {
+                        console.log(this.listViewTab)
+                        const filter = Object.values(ReservationStatus)[this.listViewTab]
+                        return isValid && filter.includes(it.status)
+                    }
+
+                } else {
+                    const showAllOrCanEdit = this.showAll || reservationCanEdit(it)
+
+                    return isValid && showAllOrCanEdit
+                }
             })
         },
         displayList() {

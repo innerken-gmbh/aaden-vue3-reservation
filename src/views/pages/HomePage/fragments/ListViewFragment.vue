@@ -1,15 +1,11 @@
 <script setup>
 
 import {toOnlyTimeFormat} from "../../../../dataLayer/repository/dateRepo.js";
-import {
-  useReservationStore
-} from "../../../../dataLayer/repository/reservationRepo.js";
-import {useDisplay} from "vuetify";
+import {useReservationStore} from "../../../../dataLayer/repository/reservationRepo.js";
 import PlaceHolder from "../../../components/PlaceHolder.vue";
-import {ReservationIcon, ReservationStatus} from "../../../../dataLayer/repository/reservationDisplay.js";
+import {ReservationStatus} from "../../../../dataLayer/repository/reservationDisplay.js";
 
 const reservationInfo = useReservationStore()
-const {smAndUp} = useDisplay()
 </script>
 
 <template>
@@ -21,31 +17,32 @@ const {smAndUp} = useDisplay()
       class="d-flex align-center mb-2"
       v-if="!reservationInfo.search"
     >
-      <v-card
-        style="width: fit-content"
-        class="d-flex"
-        variant="outlined"
+      <v-tabs
+        v-model="reservationInfo.listViewTab"
       >
-        <v-card
-          @click="reservationInfo.listViewTab=t"
-          :key="t"
-          rounded="0"
-          :variant="reservationInfo.listViewTab===t?'flat':'outlined'"
-          :color="reservationInfo.listViewTab===t?'primary':''"
-          v-for="t in Object.values(ReservationStatus)"
-          class="pa-1 px-3 d-flex align-center text-body-2"
-        >
+        <v-tab :value="0">
           <v-icon
-            size="18"
-            :class="smAndUp?'mr-2':''"
+            start
           >
-            {{ ReservationIcon[t] }}
+            mdi-view-list
           </v-icon>
-          <template v-if="smAndUp">
-            {{ $t(t) }}
-          </template>
-        </v-card>
-      </v-card>
+          <div>
+            6
+          </div>
+        </v-tab>
+        <v-tab :value="1">
+          <v-icon start>
+            mdi-bell-badge-outline
+          </v-icon>
+          8
+        </v-tab>
+        <v-tab :value="2">
+          <v-icon start>
+            mdi-dots-horizontal
+          </v-icon>
+          12
+        </v-tab>
+      </v-tabs>
       <v-spacer />
       <v-card
         rounded="pill"

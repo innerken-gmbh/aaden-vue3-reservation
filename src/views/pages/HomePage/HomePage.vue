@@ -24,7 +24,6 @@ import {useReservationChangeVM} from "../../../dataLayer/repository/reservationC
 
 const reservationInfo = useReservationStore()
 const changeVM = useReservationChangeVM()
-const dragController = useDragStore()
 
 const loading = ref(true)
 const currentTimeX = ref(0)
@@ -35,9 +34,6 @@ watchEffect(() => {
           .subtract(2, "hours")
           .diff(dayjs().set("hours", 5), 'minutes') / (19 * 60))
       * reservationInfo.containerWidth + reservationInfo.xSize)
-  if (changeVM.changesCount === 0 && dragController.globalDragEnable) {
-    reservationInfo.reload()
-  }
 
 })
 
