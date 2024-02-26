@@ -1,12 +1,13 @@
 <script setup>
 import HomePage from './views/pages/HomePage/HomePage.vue';
-import {useHomePageControllerStore, useReservationStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
+import {useReservationStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
 import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
 import {useThemeStore} from "./dataLayer/repository/useThemeStore.js";
 import {useTheme} from "vuetify";
+import {useHomePageControllerStore} from "./dataLayer/repository/homeController.js";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()

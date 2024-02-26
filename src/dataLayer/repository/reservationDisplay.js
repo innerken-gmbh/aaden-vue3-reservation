@@ -56,7 +56,7 @@ export function getReservationColor(reservation) {
                 case ReservationStatus.Confirmed:
                     return 'cardNormalColor'
                 case ReservationStatus.Created:
-                    return 'indigo'
+                    return 'yellow-lighten-4'
                 case ReservationStatus.NoShow:
                 default:
                     break;

@@ -1,14 +1,7 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {
-    addReservation,
-    cancelReservation,
-    changeEatTime,
-    confirmReservation,
-    getReservation,
-    loadAllReservable
-} from "../api/reservationApi.js";
+import {cancelReservation, changeEatTime, checkIn, getReservation, loadAllReservable} from "../api/reservationApi.js";
 
 import {groupBy, intersection, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
@@ -156,7 +149,7 @@ export const useReservationStore = defineStore('reservation', {
         async checkIn(id) {
             await this.actionAnd(
                 async () => {
-                    await confirmReservation(id)
+                    await checkIn(id)
                 }
             )
 
@@ -186,79 +179,6 @@ export const useReservationStore = defineStore('reservation', {
             this.activeReservationId = id
             this.showDetailDialog = true
         }
-    }
-})
-export const useHomePageControllerStore
-    = defineStore('homePageController', {
-    state: () => ({
-        showNewReservationModal: false,
-        personCount: 4,
-        reservationStep: 0,
-        showMorePerson: false,
-        date: today(),
-        startTime: null,
-        loading: false,
-        timeGap: [],
-        otherTime: [],
-        error: false,
-        errorMessage: '',
-        reservationExtraInfo: {
-            firstName: '',
-            lastName: '',
-            phone: '',
-            email: '',
-            note: '',
-            useStroller: false
-        },
-    }),
-    getters: {
-        reservationAddModel() {
-            return Object.assign({
-                    fromDateTime: this.date + ' ' +
-                        this.startTime,
-                    userId: 1,
-                    personCount: this.personCount,
-                },
-                this.reservationExtraInfo,
-                {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
-        },
-        readyToSubmit() {
-            return this.reservationExtraInfo.firstName && this.reservationExtraInfo.lastName && (this.reservationExtraInfo.email || this.reservationExtraInfo.phone)
-        }
-    },
-    actions: {
-        async addReservation() {
-            this.loading = true
-            const res = await addReservation(this.reservationAddModel)
-            if (res.code === 200) {
-                await useReservationStore().reload()
-                this.showNewReservationModal = false
-            } else {
-                this.error = true
-                this.errorMessage = res.message
-            }
-            this.loading = false
-
-        },
-        showNewModal() {
-            this.reservationStep = 0
-            this.startTime = null
-            this.showMorePerson = false
-            this.personCount = 4
-            this.date = useReservationStore().date
-            this.errorMessage = ''
-            this.error = false
-            this.reservationExtraInfo = {
-                firstName: '',
-                lastName: '',
-                phone: '',
-                email: '',
-                note: '',
-                useStroller: false
-            }
-            this.showNewReservationModal = true
-        },
-
     }
 })
 export const useDatePickerStore = defineStore('datePicker', {

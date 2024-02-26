@@ -15,7 +15,7 @@
   >
     <div
       style="position: relative"
-      class="gradient"
+      class="gradient rounded"
     >
       <v-card
         elevation="0"

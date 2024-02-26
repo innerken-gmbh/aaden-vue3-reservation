@@ -6,7 +6,7 @@ import {timeFormat, toDateDisplayFormat, toOnlyTimeFormat} from "../../dataLayer
 import BaseDialog from "../components/BaseDialog.vue";
 import dayjs from "dayjs";
 import {getReservationColor, ReservationStatus} from "../../dataLayer/repository/reservationDisplay.js";
-import {confirmReservation} from "../../dataLayer/api/reservationApi.js";
+import {confirm} from "../../dataLayer/api/reservationApi.js";
 
 const controller = useReservationStore()
 
@@ -19,7 +19,7 @@ const canEdit = computed(() => {
 })
 
 const status = computed(() => {
-  return info.value.status
+  return info.value?.status ?? ''
 })
 const color = computed(() => {
   return getReservationColor(info.value)
@@ -44,12 +44,13 @@ const overrideTime = computed(() => {
 })
 
 async function onConfirm() {
+  console.log(status.value)
   if (status.value === ReservationStatus.Confirmed) {
     await controller.checkIn(info.value?.id)
   } else {
     await controller.actionAnd(
         async () => {
-          await confirmReservation(id)
+          await confirm(info.value.id)
         }
     )
   }
@@ -250,7 +251,7 @@ async function onCancel() {
           <template #prepend>
             <v-icon>mdi-cancel</v-icon>
           </template>
-          {{ $t('Reject') }}
+          {{ $t('Cancel') }}
         </v-btn>
         <template v-if="status===ReservationStatus.Created">
           <v-btn

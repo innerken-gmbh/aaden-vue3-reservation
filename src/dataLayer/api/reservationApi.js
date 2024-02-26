@@ -39,25 +39,16 @@ export async function addReservation(reservationInfo) {
     return (await hillo.jsonPost('reservation/add', Object.assign({}, defaultReservationInfo, reservationInfo)))
 }
 
-export async function confirmReservation(id) {
+export async function checkIn(id) {
     return (await hillo.jsonPost('reservation/checkIn/' + id,
         {}))
 }
 
-
-export async function moveReservation(reservationId, newTableId, fromDateTime, toDateTime) {
-    const realMoveReservation = async (r) => {
-        await hillo.post('Tables.php?op=moveReservation&debug=true',
-            {
-                reservationId: r.id,
-                newTableId: r.tableId,
-                fromDateTime,
-                toDateTime
-            })
-    }
-    await realMoveReservation({id: reservationId, tableId: newTableId})
-
+export async function confirm(id) {
+    return (await hillo.jsonPost('reservation/confirmByMerchant/' + id,
+        {}))
 }
+
 
 export async function changeSeatPlan(id, seatPlan) {
     return await hillo.jsonPost('reservation/changeSeatPlan/' + id, seatPlan)

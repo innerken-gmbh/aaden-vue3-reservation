@@ -4,7 +4,6 @@ import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import FormContainer from "../items/FormContainer.vue";
 import {
   useDatePickerStore,
-  useHomePageControllerStore,
   useTimePickerStore
 } from "../../dataLayer/repository/reservationRepo";
 import {checkTableTimeAvailable, userId} from "../../dataLayer/api/reservationApi.js";
@@ -12,6 +11,7 @@ import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import BaseDialog from "../components/BaseDialog.vue";
 import {toDateDisplayFormat} from "../../dataLayer/repository/dateRepo.js";
+import {useHomePageControllerStore} from "../../dataLayer/repository/homeController.js";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
