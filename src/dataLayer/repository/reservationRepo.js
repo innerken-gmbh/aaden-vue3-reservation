@@ -22,6 +22,7 @@ export const useReservationStore = defineStore('reservation', {
         ySize: 28,
         activeReservationId: 32165,
         showDetailDialog: false,
+        showLogs:false,
         timeSlots: Array.from(Array(24 - 7 + 3).keys())
             .map(it => (it + 7) % 24).map(it => Array
                 .from(Array(4).keys())
@@ -119,7 +120,6 @@ export const useReservationStore = defineStore('reservation', {
                 })
                 it.seatPlan = it.seatPlan.map(it => {
                     it.tableName = tableMap[it.tableId]?.tableName??''
-                    console.log(tableMap,it,'seat')
                     return it
                 })
                 it.tableName = join(it.seatPlan.map(it => it.tableName), ',')

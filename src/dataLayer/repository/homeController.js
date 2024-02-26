@@ -83,6 +83,11 @@ export const useNotificationStore = defineStore('notification', {
         loading: true,
         lastUpdateTime: ""
     }),
+    getters: {
+        haveNotReadInfo() {
+            return this.eventList.find(it => !it.checked)
+        }
+    },
     actions: {
         async showList() {
             await this.reload()
@@ -107,9 +112,10 @@ export const useNotificationStore = defineStore('notification', {
                 }
             })
         },
-        async readNotification(id) {
+        async readNotification(info) {
+            info.checked = true
             await this.actionAnd(async () => {
-                await readEvent(id)
+                await readEvent(info.id)
             })
         }
     }

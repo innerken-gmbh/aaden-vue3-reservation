@@ -34,6 +34,17 @@ watchEffect(() => {
       * reservationInfo.containerWidth + reservationInfo.xSize)
 
 })
+watch(currentTime, async () => {
+  console.log('reloaded')
+  if (!changeVM.loading && changeVM.changesCount === 0) {
+    await reservationInfo.reload()
+  }
+
+  if (!notificationController.show) {
+    await notificationController.reload()
+  }
+
+})
 
 const {date} = storeToRefs(reservationInfo)
 watch(date, async () => {
@@ -120,7 +131,12 @@ function toggleListView() {
             flat
           >
             <v-icon>
-              mdi-bell
+              <template v-if="notificationController.haveNotReadInfo">
+                mdi-bell-badge
+              </template>
+              <template v-else>
+                mdi-bell
+              </template>
             </v-icon>
           </v-btn>
           <div

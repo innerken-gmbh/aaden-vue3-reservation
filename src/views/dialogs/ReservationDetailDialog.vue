@@ -11,6 +11,8 @@ import {
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
 import {confirm} from "../../dataLayer/api/reservationApi.js";
+import EventLogListItem from "../items/EventLogListItem.vue";
+import {reverse} from "lodash-es";
 
 const controller = useReservationStore()
 
@@ -86,15 +88,28 @@ async function onCancel() {
           {{ $t('Reservation') }}
         </div>
         <div class="text-body-2">
-          #{{ controller.activeReservationId }}
+          #{{ controller.activeReservationId }}/{{ $t(status) }}
         </div>
       </div>
       <v-spacer />
-      <div class="text-body-1">
-        {{ $t(status) }}
-      </div>
+      <v-btn
+        @click="controller.showLogs=!controller.showLogs"
+        icon=""
+        color="white"
+        v-if="info?.logs?.length>0"
+      >
+        <v-icon>mdi-message-processing</v-icon>
+      </v-btn>
     </template>
-    <template v-if="info">
+    <template v-if="controller.showLogs">
+      <template
+        v-for="e in info?.logs??[]"
+        :key="e.id"
+      >
+        <event-log-list-item :info="e" />
+      </template>
+    </template>
+    <template v-else-if="info">
       <inline-two-row-container>
         <div class="text-h5 font-weight-black">
           <div class="text-body-2">
@@ -231,57 +246,73 @@ async function onCancel() {
       </div>
     </template>
     <template #action>
-      <template v-if="timeChanged">
+      <template v-if="controller.showLogs">
         <v-btn
           :loading="controller.loading"
-          @click="onChangeTime"
+          @click="controller.showLogs=false"
           color="primary"
           block
           class="mt-2"
         >
           <template #prepend>
-            <v-icon>mdi-check</v-icon>
+            <v-icon>mdi-arrow-left</v-icon>
           </template>
-          {{ $t('Save') }}
+          {{ $t('Back') }}
         </v-btn>
       </template>
       <template v-else>
-        <v-btn
-          @click="onCancel"
-          :loading="controller.loading"
-          color="primary"
-          variant="outlined"
-        >
-          <template #prepend>
-            <v-icon>mdi-cancel</v-icon>
-          </template>
-          {{ $t('Cancel') }}
-        </v-btn>
-        <template v-if="status===ReservationStatus.Created">
+        <template v-if="timeChanged">
           <v-btn
             :loading="controller.loading"
-            @click="onConfirm"
+            @click="onChangeTime"
             color="primary"
+            block
             class="mt-2"
           >
             <template #prepend>
               <v-icon>mdi-check</v-icon>
             </template>
-            {{ $t('Accept') }}
+            {{ $t('Save') }}
           </v-btn>
         </template>
         <template v-else>
           <v-btn
+            @click="onCancel"
             :loading="controller.loading"
-            @click="onConfirm"
             color="primary"
-            class="mt-2"
+            variant="outlined"
           >
             <template #prepend>
-              <v-icon>mdi-check</v-icon>
+              <v-icon>mdi-cancel</v-icon>
             </template>
-            {{ $t('CheckIn') }}
+            {{ $t('Cancel') }}
           </v-btn>
+          <template v-if="status===ReservationStatus.Created">
+            <v-btn
+              :loading="controller.loading"
+              @click="onConfirm"
+              color="primary"
+              class="mt-2"
+            >
+              <template #prepend>
+                <v-icon>mdi-check</v-icon>
+              </template>
+              {{ $t('Accept') }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              :loading="controller.loading"
+              @click="onConfirm"
+              color="primary"
+              class="mt-2"
+            >
+              <template #prepend>
+                <v-icon>mdi-check</v-icon>
+              </template>
+              {{ $t('CheckIn') }}
+            </v-btn>
+          </template>
         </template>
       </template>
     </template>
