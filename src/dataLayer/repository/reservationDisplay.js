@@ -88,8 +88,9 @@ export function getReservationBackgroundClass(reservation) {
         const status = reservation.status
         switch (status) {
             case ReservationStatus.Cancelled:
+                return 'bg-surface'
             case ReservationStatus.CheckIn:
-                return 'bg-surface-darken-1'
+                return 'bg-green-darken-4'
             case ReservationStatus.Confirmed:
             case ReservationStatus.Created:
             case ReservationStatus.NoShow:
