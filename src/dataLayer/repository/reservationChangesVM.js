@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {changeSeatPlan, changeStartTime} from "../api/reservationApi.js";
-import {useReservationStore} from "./reservationRepo.js";
+import {useDragStore, useReservationStore} from "./reservationRepo.js";
 import {groupBy, keyBy} from "lodash-es";
 
 export const useReservationChangeVM = defineStore('reservationChange', {
@@ -49,6 +49,7 @@ export const useReservationChangeVM = defineStore('reservationChange', {
                 this.timeChanges = {}
                 this.seatPlanChanges = {}
             })
+            useDragStore().stopDrag()
             this.loading = false
         },
 
@@ -56,6 +57,7 @@ export const useReservationChangeVM = defineStore('reservationChange', {
             this.changes = {}
             const reservationInfo = useReservationStore()
             await reservationInfo.reload()
+            useDragStore().stopDrag()
         }
     },
     getters: {

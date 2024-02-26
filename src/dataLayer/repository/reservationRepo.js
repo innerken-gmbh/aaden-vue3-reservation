@@ -314,6 +314,11 @@ export const useDragStore = defineStore('drag', {
         startDrag(id) {
             this.globalDragEnable = false
             this.draggableItemId = id
+            try {
+                navigator.vibrate(50);
+            }catch (e) {
+                console.log(e)
+            }
         },
         stopDrag() {
             this.globalDragEnable = true
