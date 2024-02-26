@@ -62,10 +62,7 @@ async function onConfirm() {
 }
 
 async function onChangeTime() {
-  info.value.toDateTime = dayjs(info.value.fromDateTime)
-      .add(overrideDiningTime.value, 'minute')
-      .format(timestampTemplate)
-  await controller.moveReservation(info.value)
+  await controller.changeEatingTime(info.value.id,overrideDiningTime.value/15)
   controller.showDetailDialog = false
 }
 

@@ -20,9 +20,7 @@ const timerPicker = useTimePickerStore()
 const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
   controller.startTime = null
-  const res = await checkTableTimeAvailable(date.value, personCount.value, userId)
-  console.log(res, '123')
-  timerPicker.availableTimes = res
+  timerPicker.availableTimes = await checkTableTimeAvailable(date.value, personCount.value, userId)
   if (timerPicker.availableTimes.length > 0) {
     controller.startTime = timerPicker.availableTimes[0]
   }

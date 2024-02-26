@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import {
     addReservation,
     cancelReservation,
+    changeEatTime,
     confirmReservation,
     getReservation,
     loadAllReservable,
@@ -84,7 +85,7 @@ export const useReservationStore = defineStore('reservation', {
         },
         activeReservation() {
             return this.reservationList
-                .find(it => parseInt(it.remoteId) === parseInt(this.activeReservationId))
+                .find(it => parseInt(it.id) === parseInt(this.activeReservationId))
         },
         reservationTotalPersonCount() {
             return sumBy(this.filteredReservationList,
@@ -170,6 +171,12 @@ export const useReservationStore = defineStore('reservation', {
             await this.reload()
             this.loading = false
         },
+        async changeEatingTime(id, newEatingTime) {
+            this.loading = true
+            await changeEatTime(id, newEatingTime)
+            await this.reload()
+            this.loading = false
+        },
         async moveReservation(reservationInfo) {
             this.loading = true
             const {id, tableId, fromDateTime, toDateTime} = reservationInfo
@@ -183,8 +190,8 @@ export const useReservationStore = defineStore('reservation', {
             await this.reload()
             this.loading = false
         },
-        async showReservationWithId(remoteId) {
-            this.activeReservationId = remoteId
+        async showReservationWithId(id) {
+            this.activeReservationId = id
             this.showDetailDialog = true
         }
     }
@@ -344,9 +351,9 @@ export const useScanQrStore =
                     this.showPicker = true
                     this.resolve = resolve
                 })
-                if (qrInfo.batch && qrInfo.remoteId) {
+                if (qrInfo.id) {
                     const infoStore = useReservationStore()
-                    await infoStore.showReservationWithId(qrInfo.remoteId)
+                    await infoStore.showReservationWithId(qrInfo.id)
                 }
             },
             confirm(info) {

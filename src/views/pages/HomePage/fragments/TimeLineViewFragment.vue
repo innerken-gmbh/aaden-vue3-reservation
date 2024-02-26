@@ -242,7 +242,7 @@ onMounted(async () => {
               :key="b.id"
             >
               <reservation-card
-                @open="reservationInfo.showReservationWithId(r.remoteId)"
+                @open="reservationInfo.showReservationWithId(r.id)"
                 :reservation-info="r"
                 :y-pos="b.y"
                 :block-id="b.id"

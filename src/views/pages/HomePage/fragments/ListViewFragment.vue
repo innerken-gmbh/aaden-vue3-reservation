@@ -62,7 +62,7 @@ const {smAndUp} = useDisplay()
         class="pa-3 px-4 mb-2 d-flex align-center"
         v-for="r in reservationInfo.filteredReservationList"
         :key="r.id"
-        @click="reservationInfo.showReservationWithId(r.remoteId)"
+        @click="reservationInfo.showReservationWithId(r.id)"
       >
         <div>
           <div
