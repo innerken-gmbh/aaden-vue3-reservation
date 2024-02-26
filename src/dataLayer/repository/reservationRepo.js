@@ -94,6 +94,9 @@ export const useReservationStore = defineStore('reservation', {
                 }
             })
         },
+        groupedReservations(){
+            return groupBy(this.filteredReservationList,'fromDateTime')
+        },
         displayList() {
             return this.listView || this.showSearch
         }

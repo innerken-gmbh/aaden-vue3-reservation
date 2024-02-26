@@ -3,8 +3,11 @@
 import {useReservationStore} from "../../../../dataLayer/repository/reservationRepo.js";
 import PlaceHolder from "../../../components/PlaceHolder.vue";
 import ReservationListItem from "../../../items/ReservationListItem.vue";
+import {toOnlyTimeFormat} from "../../../../dataLayer/repository/dateRepo.js";
+import {sortBy} from "lodash-es";
 
 const reservationInfo = useReservationStore()
+
 </script>
 
 <template>
@@ -44,13 +47,21 @@ const reservationInfo = useReservationStore()
       </v-tabs>
     </div>
     <template v-if="reservationInfo.filteredReservationList.length > 0">
-      <reservation-list-item
-        v-for="r in reservationInfo.filteredReservationList"
-        :key="r.id"
-        :info="r"
-      />
-    </template>
+      <template
+        :key="time"
+        v-for="time in sortBy(Object.keys(reservationInfo.groupedReservations))"
+      >
+        <div class="text-h5 mt-4 mb-1 px-2 font-weight-black">
+          {{ toOnlyTimeFormat(time) }}
+        </div>
 
+        <reservation-list-item
+          v-for="r in reservationInfo.groupedReservations[time]"
+          :key="r.id"
+          :info="r"
+        />
+      </template>
+    </template>
     <place-holder
       icon="mdi-noodles"
       :hint="$t('NoReservationsATM')"

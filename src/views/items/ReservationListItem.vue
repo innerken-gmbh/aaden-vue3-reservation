@@ -10,73 +10,73 @@ defineProps({info: Object})
 
 <template>
   <v-card
-    color="surface"
-    class="pa-3 px-4 mb-2 d-flex align-center"
+    color="surface-lighten-1"
+    class="pa-3 px-4 mb-2 text-body-1"
     @click="reservationInfo.showReservationWithId(info.id)"
   >
-    <div>
+    <div class="d-flex align-center">
       <div
-        :class="info.overTime?'text-error font-weight-black':''"
-        class="text-body-2 "
+        class="text-body-1 mt-1 font-weight-black d-flex align-baseline"
       >
-        {{ toOnlyTimeFormat(info.fromDateTime) }} - {{ toOnlyTimeFormat(info.toDateTime) }}
-      </div>
-      <div
-        class="text-h5 mt-1 font-weight-black d-flex align-baseline"
-      >
-        {{ info.personCount }} <span
-          :style="{
-            color:info.shareColor
-          }"
-          class="text-body-1 mr-2 ml-1 font-weight-black"
-          v-if="info.totalPerson"
-        >/{{ info.totalPerson }} </span> P
-        <div class="ml-4">
+        {{ info.personCount }}P
+        <div class="ml-2 text-body-2 font-weight-black">
           {{ info.firstName }} {{ info.lastName }}
         </div>
       </div>
+      <v-spacer />
+      <div
+        style="display: grid;grid-auto-flow: column;grid-gap: 8px;width: fit-content"
+        class="text-body-2"
+      >
+        <div
+          class="font-weight-black"
+        >
+          <v-icon>
+            mdi-map-marker
+          </v-icon>
+          {{ info.tableName }}
+        </div>
+        <v-icon
+          v-if="info.haveShareTable"
+        >
+          mdi-link-variant
+        </v-icon>
+        <v-icon
+          v-if="info.status===ReservationStatus.CheckIn"
+        >
+          mdi-check
+        </v-icon>
+        <v-icon
+          v-if="info.status===ReservationStatus.Cancelled"
+        >
+          mdi-cancel
+        </v-icon>
+        <v-icon
+          v-if="info.haveOverlap"
+          color="yellow"
+        >
+          mdi-alert
+        </v-icon>
+
+        <div
+          :class="info.overTime?'bg-error px-1 rounded':''"
+          class="text-body-2 d-flex align-center"
+        >
+          to {{ toOnlyTimeFormat(info.toDateTime) }}
+        </div>
+      </div>
     </div>
-    <v-spacer />
-    <v-icon
-      v-if="info.status===ReservationStatus.CheckIn"
-      small
-      class="ml-2"
-    >
-      mdi-check
-    </v-icon>
-    <v-icon
-      v-if="info.status===ReservationStatus.Cancelled"
-      small
-      class="ml-2"
-    >
-      mdi-cancel
-    </v-icon>
-    <v-icon
-      v-if="info.haveOverlap"
-      small
-      color="yellow"
-      class="ml-2"
-    >
-      mdi-alert
-    </v-icon>
-    <v-icon
-      v-if="info.haveShareTable"
-      small
-      :color="info.shareColor"
-      class="ml-2"
-    >
-      mdi-link-variant
-    </v-icon>
+
     <div
-      class="text-h5 font-weight-black d-flex align-baseline ml-2"
+      v-if="info.note"
+      class="mt-2  d-flex align-center font-weight-regular text-caption"
     >
       <v-icon
         class="mr-2"
-        size="24"
       >
-        mdi-map-marker
+        mdi-text
       </v-icon>
-      {{ info.tableName }}
+      {{ info.note }}
     </div>
   </v-card>
 </template>
