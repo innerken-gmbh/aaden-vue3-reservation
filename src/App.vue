@@ -5,11 +5,20 @@ import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
 import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
-import {useDisplay} from "vuetify";
+import {useThemeStore} from "./dataLayer/repository/useThemeStore.js";
+import {useTheme} from "vuetify";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
+const theme = useThemeStore()
+const vuetifyTheme = useTheme()
+
+function toggleTheme() {
+  theme.toggleTheme()
+  vuetifyTheme.global.name.value = theme.themeName
+}
+
 
 </script>
 
@@ -31,7 +40,12 @@ const reservationStore = useReservationStore()
           hide-details
         />
       </v-app-bar-title>
-
+      <v-btn
+        @click="toggleTheme()"
+        icon=""
+      >
+        <v-icon>mdi-theme-light-dark</v-icon>
+      </v-btn>
       <v-btn
         @click="homeController.showNewModal()"
         icon=""

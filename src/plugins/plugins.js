@@ -14,6 +14,8 @@ import {createI18n} from 'vue-i18n'
 import locales from '../locales'
 import IKUtils from "innerken-js-utils";
 
+import {useThemeStore} from "../dataLayer/repository/useThemeStore.js";
+
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
 dayjs.extend(isoWeek)
@@ -60,7 +62,7 @@ const aadenLightTheme = {
 
         primary: '#ffffff',//'#b4c5ff #30302e,#e8dcd2,#f6f4fa,#dad8e5
                                //#edf4f9,#d7e3f1,#415f91,#3d619b
-       
+
         'on-primary':'#221534', //方框箭头的颜色#1b1c1d,#e7eaff,#b4c5ff,#124bbe,#221534
 
         secondary: '#51c293',// #54a560,#51c293
@@ -115,7 +117,7 @@ const aadenLightTheme = {
 }
 
 export const linkColors=[//在这里添加颜色
-    '#6a5e48', 
+    '#6a5e48',
     //#4f6ea0,#6a5e48,#60533f,#ff5e2c,#aa4e1d,#357c81,#fbdf07,#ffca00
     //,#f94892,#89cffd,#00e0ff,#284fee,#03658e,#d4f513,#89ec56,#ffa98c,#f272f4,,#b62522
 ]

@@ -385,7 +385,6 @@ export const useDragStore = defineStore('drag', {
     }
 })
 
-
 export function getReservationColor(reservation) {
     if (reservation) {
         const overTime = reservation.overTime
