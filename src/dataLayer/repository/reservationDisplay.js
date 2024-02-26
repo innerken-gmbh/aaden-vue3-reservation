@@ -28,7 +28,7 @@ export function getReservationStatusIcon(reservation) {
         return 'mdi-timer-alert'
     } else if (status === ReservationStatus.Created) {
         return 'mdi-bell-badge-outline'
-    } else if (status === ReservationStatus.Cancelled) {
+    } else if (status === ReservationStatus.Cancelled || status === ReservationStatus.NoShow) {
         return 'mdi-cancel'
     } else if (status === ReservationStatus.CheckIn) {
         return 'mdi-check'
