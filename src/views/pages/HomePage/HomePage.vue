@@ -115,6 +115,15 @@ function toggleListView() {
               </template>
             </v-icon>
           </v-btn>
+          <v-btn
+            class="mr-2"
+            icon=""
+            flat
+          >
+            <v-icon>
+              mdi-bell
+            </v-icon>
+          </v-btn>
           <div
             v-if="smAndUp"
             class="text-body-2"
