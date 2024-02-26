@@ -4,6 +4,16 @@ const host = 'http://localhost/'
 export const userId = 1
 hillo.initial(host)
 
+export async function loadAllEvent() {
+    return (await hillo.get('reservation/event/' + userId)).data
+}
+
+export async function readEvent(id) {
+    return (await hillo.jsonPost('reservation/event/' + id + '/read',
+        {}))
+}
+
+
 export async function loadAllReservable() {
     return (await hillo.get('reservableTable/getList/' + userId)).data
 }

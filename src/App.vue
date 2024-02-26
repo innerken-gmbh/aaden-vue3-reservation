@@ -20,6 +20,7 @@ function toggleTheme() {
   vuetifyTheme.global.name.value = theme.themeName
 }
 import logo from './assets/calendar.png'
+import NotificationsDialog from "./views/dialogs/NotificationsDialog.vue";
 
 
 </script>
@@ -105,7 +106,7 @@ import logo from './assets/calendar.png'
           <home-page />
         </div>
       </div>
-
+      <notifications-dialog />
       <scan-q-r-dialog />
       <global-date-picker />
       <global-time-picker />

@@ -1,7 +1,8 @@
 import {defineStore} from "pinia";
-import {today} from "./dateRepo.js";
-import {addReservation} from "../api/reservationApi.js";
+import {toBeautiful, today} from "./dateRepo.js";
+import {addReservation, loadAllEvent, readEvent} from "../api/reservationApi.js";
 import {useReservationStore} from "./reservationRepo.js";
+import dayjs from "dayjs";
 
 export const useHomePageControllerStore
     = defineStore('homePageController', {
@@ -73,5 +74,43 @@ export const useHomePageControllerStore
             this.showNewReservationModal = true
         },
 
+    }
+})
+export const useNotificationStore = defineStore('notification', {
+    state: () => ({
+        show: null,
+        eventList: [],
+        loading: true,
+        lastUpdateTime: ""
+    }),
+    actions: {
+        async showList() {
+            await this.reload()
+            this.show = true
+        },
+        async actionAnd(action) {
+            this.loading = true
+            await action()
+            await this.reload()
+
+        },
+        async reload() {
+            this.loading = true
+            this.eventList = await loadAllEvent()
+            this.lastUpdateTime = toBeautiful(dayjs())
+            this.loading = false
+        },
+        async readAllNotification() {
+            await this.actionAnd(async () => {
+                for (const eventListElement of this.eventList.filter(it => !it.checked)) {
+                    await readEvent(eventListElement.id)
+                }
+            })
+        },
+        async readNotification(id) {
+            await this.actionAnd(async () => {
+                await readEvent(id)
+            })
+        }
     }
 })

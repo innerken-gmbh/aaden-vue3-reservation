@@ -1,9 +1,5 @@
 <script setup>
-import {
-  useDatePickerStore,
-  useDragStore,
-  useReservationStore
-} from "../../../dataLayer/repository/reservationRepo.js";
+import {useDatePickerStore, useReservationStore} from "../../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
 import {
   dateFormat,
@@ -20,10 +16,12 @@ import IKUtils from "innerken-js-utils";
 import ListViewFragment from "./fragments/ListViewFragment.vue";
 import TimeLineViewFragment from "./fragments/TimeLineViewFragment.vue";
 import {useReservationChangeVM} from "../../../dataLayer/repository/reservationChangesVM.js";
+import {useNotificationStore} from "../../../dataLayer/repository/homeController.js";
 
 
 const reservationInfo = useReservationStore()
 const changeVM = useReservationChangeVM()
+const notificationController = useNotificationStore()
 
 const loading = ref(true)
 const currentTimeX = ref(0)
@@ -116,6 +114,7 @@ function toggleListView() {
             </v-icon>
           </v-btn>
           <v-btn
+            @click="notificationController.show=true"
             class="mr-2"
             icon=""
             flat

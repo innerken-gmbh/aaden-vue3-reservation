@@ -21,6 +21,9 @@ export function toDateFormat(str) {
 export function toDateDisplayFormat(str) {
     return dayjs(str).format("dddd, DD MMM")
 }
+export function toBeautiful(str) {
+    return dayjs(str).format("DD MMMM, HH:mm:ss")
+}
 export function timeDisplay(str) {
     return dayjs(str).format(timestampTemplate)
 }
