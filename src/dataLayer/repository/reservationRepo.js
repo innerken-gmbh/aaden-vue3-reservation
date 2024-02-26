@@ -19,14 +19,14 @@ export const ReservationStatus = {
     Created: 'Created',
     Cancelled: 'Cancelled',
     CheckIn: 'CheckIn',
-    NoShow:'NoShow'
+    NoShow: 'NoShow'
 }
 export const ReservationIcon = {
     Confirmed: 'mdi-view-list',
     Created: 'Created',
     Cancelled: 'mdi-cancel',
     CheckIn: 'mdi-check',
-    NoShow:'NoShow'
+    NoShow: 'NoShow'
 }
 
 export const useReservationStore = defineStore('reservation', {
@@ -92,7 +92,7 @@ export const useReservationStore = defineStore('reservation', {
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
-                return it.seatPlan.length>0 && (!this.search || [it.firstName, it.lastName]
+                return it.seatPlan.length > 0 && (!this.search || [it.firstName, it.lastName]
                         .some(s => s?.toString()?.toLowerCase()
                             .includes(this.search.toLowerCase()) ?? false)) &&
                     (this.showAll ||
@@ -144,7 +144,7 @@ export const useReservationStore = defineStore('reservation', {
             await IKUtils.wait(50)
             this.reservationList = sortBy(list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
-                it.haveShareTable =it.seatPlan.length>1
+                it.haveShareTable = it.seatPlan.length > 1
                 if (it.haveShareTable) {
                     if (!batchColorCache[it.id]) {
                         batchColorCache[it.id] = sample(linkColors)
@@ -374,50 +374,6 @@ export const useDragStore = defineStore('drag', {
         stopDrag() {
             this.globalDragEnable = true
             this.draggableItemId = null
-        }
-    }
-})
-
-export const useReservationChangeVM = defineStore('reservationChange', {
-    state: () => ({
-        changes: {},
-        loading: false,
-    }),
-    actions: {
-        addToChanges(id, tableId, start, end) {
-            if (!tableId) {
-                delete this.changes[id]
-            } else {
-                this.changes[id] = {tableId, start, end}
-            }
-
-        },
-
-        async applyAllChanges() {
-            this.loading = true
-            const infos = Object.entries(this.changes)
-                .map(([key, value]) => ({...value, id: key}))
-            for (const info of infos) {
-                await moveReservation(info.id,
-                    info.tableId,
-                    info.start,
-                    info.end)
-            }
-            const reservationInfo = useReservationStore()
-            await reservationInfo.reload()
-            this.loading = false
-            this.changes = {}
-        },
-
-        async cancelAllChanges() {
-            this.changes = {}
-            const reservationInfo = useReservationStore()
-            await reservationInfo.reload()
-        }
-    },
-    getters: {
-        changesCount() {
-            return Object.values(this.changes).length
         }
     }
 })

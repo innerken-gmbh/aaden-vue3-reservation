@@ -3,6 +3,7 @@ import hillo from "hillo";
 const host = 'http://localhost/'
 export const userId = 1
 hillo.initial(host)
+
 export async function loadAllReservable() {
     return (await hillo.get('reservableTable/getList/' + userId)).data
 }
@@ -39,7 +40,7 @@ export async function addReservation(reservationInfo) {
 }
 
 export async function confirmReservation(id) {
-    return (await hillo.jsonPost( 'reservation/checkIn/' + id,
+    return (await hillo.jsonPost('reservation/checkIn/' + id,
         {}))
 }
 
@@ -58,15 +59,27 @@ export async function moveReservation(reservationId, newTableId, fromDateTime, t
 
 }
 
+export async function changeSeatPlan(id, seatPlan) {
+    return await hillo.jsonPost('reservation/changeSeatPlan/' + id, seatPlan)
+}
+
+export async function changeStartTime(id, startTime) {
+    return await hillo.jsonPost('reservation/changeStartTime/' + id, {startTime})
+}
+
+export async function changeEatTime(id, eatTime) {
+    return await hillo.jsonPost('reservation/changeEatTime/' + id, eatTime)
+}
+
 export async function cancelReservation(id) {
-    return (await hillo.jsonPost( 'reservation/cancelInternal/' + id,
+    return (await hillo.jsonPost('reservation/cancelInternal/' + id,
         {}))
 }
 
 
 export async function checkTableTimeAvailable(date,
                                               personCount, id) {
-    const getTableTime = (await hillo.jsonPost( 'reservableTable/getTableTime', {
+    const getTableTime = (await hillo.jsonPost('reservableTable/getTableTime', {
         reserveDate: date, peopleCount: personCount,
         userId: id
     }))

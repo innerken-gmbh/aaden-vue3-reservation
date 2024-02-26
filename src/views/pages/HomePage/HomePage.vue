@@ -2,7 +2,6 @@
 import {
   useDatePickerStore,
   useDragStore,
-  useReservationChangeVM,
   useReservationStore
 } from "../../../dataLayer/repository/reservationRepo.js";
 import dayjs from "dayjs";
@@ -20,6 +19,7 @@ import {useDisplay} from "vuetify";
 import IKUtils from "innerken-js-utils";
 import ListViewFragment from "./fragments/ListViewFragment.vue";
 import TimeLineViewFragment from "./fragments/TimeLineViewFragment.vue";
+import {useReservationChangeVM} from "../../../dataLayer/repository/reservationChangesVM.js";
 
 
 const reservationInfo = useReservationStore()

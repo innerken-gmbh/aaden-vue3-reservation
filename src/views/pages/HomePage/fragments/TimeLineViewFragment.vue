@@ -1,16 +1,13 @@
 <script setup>
 
 import ReservationCard from "../../../items/ReservationCard.vue";
-import {
-  useDragStore,
-  useReservationChangeVM,
-  useReservationStore
-} from "../../../../dataLayer/repository/reservationRepo.js";
+import {useDragStore, useReservationStore} from "../../../../dataLayer/repository/reservationRepo.js";
 import {timestampTemplate, today} from "../../../../dataLayer/repository/dateRepo.js";
 import dayjs from "dayjs";
 import {onMounted, ref} from "vue";
 import IKUtils from "innerken-js-utils";
 import {minBy} from "lodash-es";
+import {useReservationChangeVM} from "../../../../dataLayer/repository/reservationChangesVM.js";
 
 const props = defineProps({
   currentTimeX: {
@@ -26,21 +23,36 @@ const dragController = useDragStore()
 const reservationChangeVM = useReservationChangeVM()
 
 
-async function onMoveReservation(r, positionInfo) {
+async function onMoveReservation(r, b, positionInfo) {
   const [x, y] = positionInfo
-  if (x === r.grid.x && y === r.grid.y) {
+  if (x === r.grid.x && y === b.y) {
     reservationChangeVM.addToChanges(r.id, null)
     return
   }
-  const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
-  const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
-  const reservationLength = Math.abs(dayjs(r.fromDateTime).diff(dayjs(r.toDateTime), 'minutes'))
-  const [hour, minute] = timeSlot.split(':')
-  const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute)
-  const newEnd = newStart.add(reservationLength, 'minutes').format(timestampTemplate)
-  reservationChangeVM.addToChanges(r.id, table.tableId,
-      newStart.format(timestampTemplate), newEnd)
+  if (!r.oldX) {
+    r.oldX = r.grid.x
+  }
+  if (x === r.oldX) {
+    reservationChangeVM.addToChanges(r.id, null)
+  } else {
+    const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
+    const [hour, minute] = timeSlot.split(':')
+    const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute).format(timestampTemplate)
+    reservationChangeVM.addToChanges(r.id, newStart)
+  }
+  if (!b.oldY) {
+    b.oldY = b.y
+  }
+  if (y === b.oldY) {
+    reservationChangeVM.addSeatPlanChanges(b.id, null)
+  } else {
+    const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
+    reservationChangeVM.addSeatPlanChanges(b.id, table.tableId, r.id)
+  }
+  r.grid.x = x
+  b.y = y
 }
+
 
 const container = ref(null)
 
@@ -233,8 +245,9 @@ onMounted(async () => {
                 @open="reservationInfo.showReservationWithId(r.remoteId)"
                 :reservation-info="r"
                 :y-pos="b.y"
+                :block-id="b.id"
                 :person-count="b.personCount"
-                @drag-stop="(...args)=>onMoveReservation(r,args)"
+                @drag-stop="(...args)=>onMoveReservation(r,b,args)"
                 :x-size="reservationInfo.xSize"
                 :y-size="reservationInfo.ySize"
               />
