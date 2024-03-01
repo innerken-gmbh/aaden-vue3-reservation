@@ -25,7 +25,8 @@ watchEffect(async () => {
 async function refreshAvaliableTimes() {
   if(controller.showNewReservationModal){
     controller.startTime = null
-    timerPicker.availableTimes = await checkTableTimeAvailable(date.value, personCount.value, userId)
+    timerPicker.availableTimes =
+        await checkTableTimeAvailable(date.value, personCount.value, userId)
     if (timerPicker.availableTimes.length > 0) {
       controller.startTime = timerPicker.availableTimes[0]
     }
