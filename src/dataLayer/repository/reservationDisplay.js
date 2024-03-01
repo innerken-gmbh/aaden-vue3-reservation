@@ -8,6 +8,11 @@ export const ReservationStatus = {
     NoShow: 'NoShow'
 }
 
+export function reservationCanEdit(reservation) {
+    return ![ReservationStatus.Cancelled, ReservationStatus.NoShow, ReservationStatus.CheckIn].includes(reservation?.status ?? ReservationStatus.NoShow)
+}
+
+
 export const ReservationStatusFilter = {
     Normal: [ReservationStatus.Confirmed],
     WaitToBeConfirm: [ReservationStatus.Created],
@@ -42,10 +47,6 @@ export function getReservationStatusIcon(reservation) {
 export function getReservationAdditionalIcons(reservation) {
     const arr = []
     return arr
-}
-
-export function reservationCanEdit(reservation) {
-    return ![ReservationStatus.Cancelled, ReservationStatus.NoShow, ReservationStatus.CheckIn].includes(reservation?.status ?? ReservationStatus.NoShow)
 }
 
 
