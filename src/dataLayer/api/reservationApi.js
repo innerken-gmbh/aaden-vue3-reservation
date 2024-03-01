@@ -1,7 +1,8 @@
 import hillo from "hillo";
+import {userId} from "../../main.js";
 const host = 'https://reservation-api.aaden.io/'
 // const host = 'http://localhost/'
-export const userId = 1
+
 hillo.initial(host)
 
 export async function loadAllEvent() {
@@ -90,4 +91,9 @@ export async function checkTableTimeAvailable(date,
         return '请设置该人数的规则'
     }
 }
+
+export async function getUserList() {
+    return (await hillo.post('user/getList')).data
+}
+
 
