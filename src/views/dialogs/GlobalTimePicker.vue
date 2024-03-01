@@ -24,14 +24,21 @@ function confirmTime(time) {
       style="max-height: 60dvh;overflow-y: scroll"
     >
       <v-card
-        @click="confirmTime(t)"
+        @click="confirmTime(t.startTime)"
         :color="timePicker.currentTime===t?'primary':'surface'"
         :key="t"
         elevation="0"
-        class="px-4 text-body-1 pa-2"
+        class="px-4 text-body-1 pa-2 d-flex"
         v-for="t in timePicker.availableTimes"
       >
-        {{ t.substring(0, 5) }}
+        <div class="font-weight-black">
+          {{ t.startTime }}
+        </div>
+
+        <v-spacer />
+        <div class="text-body-2">
+          ⌛{{ t.eatingTimeMinute }}m
+        </div>
       </v-card>
     </inline-two-row-container>
     <place-holder

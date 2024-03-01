@@ -28,7 +28,7 @@ async function refreshAvaliableTimes() {
     timerPicker.availableTimes =
         await checkTableTimeAvailable(date.value, personCount.value, userId)
     if (timerPicker.availableTimes.length > 0) {
-      controller.startTime = timerPicker.availableTimes[0]
+      controller.startTime = timerPicker.availableTimes[0].startTime
     }
   }
 
@@ -101,7 +101,7 @@ const displayPerson = computed(() => {
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
               @click="async ()=>controller.startTime=await timerPicker.selectTime()"
             >
-              {{ controller?.startTime?.substring(0, 5) ?? $t('Checking') }}
+              {{ controller?.startTime ?? $t('Checking') }}
             </div>
             <div
               v-else
