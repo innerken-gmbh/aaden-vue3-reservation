@@ -76,7 +76,9 @@ export const useReservationStore = defineStore('reservation', {
                 (r) => parseInt(r.personCount))
         },
         listSorted() {
-            return Object.values(ReservationStatusFilter).map(it => this.reservationList.filter(r => it.includes(r.status)))
+            return Object.values(ReservationStatusFilter)
+                .map(it => this.reservationList
+                    .filter(r => it.includes(r.status)))
         },
         filteredReservationList() {
             return this.reservationList.filter(it => {
