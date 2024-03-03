@@ -13,7 +13,7 @@ function onDetect(e) {
   const value = e?.[0].rawValue
   console.log(value)
   try {
-    const info = JSON.parse(value.replace('id', '"id"'))
+    const info = JSON.parse(value)
     if (info.id) {
       controller.confirm(info)
     } else {
