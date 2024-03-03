@@ -35,7 +35,6 @@ watchEffect(() => {
 
 })
 watch(currentTime, async () => {
-  console.log('reloaded')
   if (!changeVM.loading && changeVM.changesCount === 0) {
     await reservationInfo.reload()
   }

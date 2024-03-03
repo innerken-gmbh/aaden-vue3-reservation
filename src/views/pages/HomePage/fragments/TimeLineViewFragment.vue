@@ -200,7 +200,7 @@ onMounted(async () => {
           mdi-circle-small
         </v-icon>
         <div class="font-weight-thin text-caption">
-          {{ t.tableSeatCount }}
+          {{ t.seatCount }}
         </div>
       </div>
       <div

@@ -13,8 +13,8 @@ function onDetect(e) {
   const value = e?.[0].rawValue
   console.log(value)
   try {
-    const info = JSON.parse(value.replace('remoteId', '"remoteId"').replace('batch', '"batch"'))
-    if (info.batch && info.remoteId) {
+    const info = JSON.parse(value.replace('id', '"id"'))
+    if (info.id) {
       controller.confirm(info)
     } else {
       controller.error = true
@@ -55,7 +55,7 @@ function onDetect(e) {
               <template #prepend>
                 <v-icon>mdi-refresh</v-icon>
               </template>
-              {{  $t('Retry')  }}
+              {{ $t('Retry') }}
             </v-btn>
           </place-holder>
         </template>

@@ -1,7 +1,14 @@
 import {defineStore} from "pinia";
 import {dateFormat, sliceTime, today} from "./dateRepo.js";
 import dayjs from "dayjs";
-import {cancelReservation, changeEatTime, checkIn, getReservation, loadAllReservable} from "../api/reservationApi.js";
+import {
+    cancelReservation,
+    changeEatTime,
+    checkIn,
+    getOneReservation,
+    getReservation,
+    loadAllReservable
+} from "../api/reservationApi.js";
 
 import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import IKUtils from "innerken-js-utils";
@@ -22,7 +29,8 @@ export const useReservationStore = defineStore('reservation', {
         ySize: 28,
         activeReservationId: 32165,
         showDetailDialog: false,
-        showLogs:false,
+        showLogs: false,
+        activeReservation: null,
         timeSlots: Array.from(Array(24 - 7 + 3).keys())
             .map(it => (it + 7) % 24).map(it => Array
                 .from(Array(4).keys())
@@ -63,10 +71,6 @@ export const useReservationStore = defineStore('reservation', {
                 return it
             })
         },
-        activeReservation() {
-            return this.reservationList
-                .find(it => parseInt(it.id) === parseInt(this.activeReservationId))
-        },
         reservationTotalPersonCount() {
             return sumBy(this.filteredReservationList,
                 (r) => parseInt(r.personCount))
@@ -95,8 +99,8 @@ export const useReservationStore = defineStore('reservation', {
                 }
             })
         },
-        groupedReservations(){
-            return groupBy(this.filteredReservationList,'fromDateTime')
+        groupedReservations() {
+            return groupBy(this.filteredReservationList, 'fromDateTime')
         },
         displayList() {
             return this.listView || this.showSearch
@@ -119,7 +123,7 @@ export const useReservationStore = defineStore('reservation', {
                     }
                 })
                 it.seatPlan = it.seatPlan.map(it => {
-                    it.tableName = tableMap[it.tableId]?.tableName??''
+                    it.tableName = tableMap[it.tableId]?.tableName ?? ''
                     return it
                 })
                 it.tableName = join(it.seatPlan.map(it => it.tableName), ',')
@@ -202,7 +206,11 @@ export const useReservationStore = defineStore('reservation', {
         },
         async showReservationWithId(id) {
             this.activeReservationId = id
-            this.showDetailDialog = true
+            this.activeReservation = await getOneReservation(id)
+            if(this.activeReservation){
+                this.showDetailDialog = true
+            }
+
         }
     }
 })
@@ -316,7 +324,7 @@ export const useDragStore = defineStore('drag', {
             this.draggableItemId = id
             try {
                 navigator.vibrate(50);
-            }catch (e) {
+            } catch (e) {
                 console.log(e)
             }
         },

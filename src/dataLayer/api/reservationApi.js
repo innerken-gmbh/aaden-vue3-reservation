@@ -1,5 +1,6 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
+
 const host = 'https://reservation-api.aaden.io/'
 // const host = 'http://localhost/'
 
@@ -58,6 +59,10 @@ export async function checkIn(id) {
 export async function confirm(id) {
     return (await hillo.jsonPost('reservation/confirmByMerchant/' + id,
         {}))
+}
+
+export async function getOneReservation(id) {
+    return (await hillo.get('reservation/getOne/' + id)).data
 }
 
 
