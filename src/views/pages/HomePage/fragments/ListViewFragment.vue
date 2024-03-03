@@ -33,8 +33,17 @@ const reservationInfo = useReservationStore()
           </div>
         </v-tab>
         <v-tab :value="1">
-          <v-icon start>
+          <v-icon
+            start
+            v-if="reservationInfo.listSorted[1].length>0"
+          >
             mdi-bell-badge-outline
+          </v-icon>
+          <v-icon
+            start
+            v-else
+          >
+            mdi-bell-outline
           </v-icon>
           {{ reservationInfo.listSorted[1].length }}
         </v-tab>

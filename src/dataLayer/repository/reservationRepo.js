@@ -90,7 +90,8 @@ export const useReservationStore = defineStore('reservation', {
                                 .includes(this.search.toLowerCase()) ?? false)
                         return isValid && searchContains
                     } else {
-                        const filter = Object.values(ReservationStatus)[this.listViewTab]
+                        const filter = Object.values(ReservationStatusFilter)[this.listViewTab]
+                        console.log(filter,'filter')
                         return isValid && filter.includes(it.status)
                     }
 
