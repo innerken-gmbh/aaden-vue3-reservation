@@ -91,7 +91,6 @@ export const useReservationStore = defineStore('reservation', {
                         return isValid && searchContains
                     } else {
                         const filter = Object.values(ReservationStatusFilter)[this.listViewTab]
-                        console.log(filter,'filter')
                         return isValid && filter.includes(it.status)
                     }
 
