@@ -142,7 +142,7 @@ function toggleListView() {
             v-if="smAndUp"
             class="text-body-2"
           >
-            Updated@{{ toOnlyTimeFormat(currentTime) }}
+            {{ $t('Updated') }}@{{ toOnlyTimeFormat(currentTime) }}
           </div>
           <v-spacer />
 
