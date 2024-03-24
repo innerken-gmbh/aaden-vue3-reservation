@@ -118,11 +118,11 @@ function toggleTheme() {
     </template>
     <template v-else>
       <place-holder
-        title="User not found"
-        hint="Maybe this link is broken"
+        :title="$t('UserNotFound')"
+        :hint="$t('MaybeTheLinkIsBroken')"
       >
         <v-btn class="mt-4">
-          refresh
+          {{ $t('Refresh') }}
         </v-btn>
       </place-holder>
     </template>

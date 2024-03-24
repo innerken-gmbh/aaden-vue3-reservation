@@ -21,7 +21,7 @@ onMounted(() => {
           {{ $t('Notifications') }}
         </div>
         <div class="text-body-2">
-          last update:{{ controller.lastUpdateTime }}
+          {{ $t('LastUpdate') }}:{{ controller.lastUpdateTime }}
         </div>
       </div>
       <v-spacer />

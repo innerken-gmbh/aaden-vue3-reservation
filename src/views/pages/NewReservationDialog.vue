@@ -108,7 +108,7 @@ const displayPerson = computed(() => {
               v-else
               class="text-h5 font-weight-black bg-error"
             >
-              Not avaliable
+              {{ $t('NotAvailable') }}
             </div>
           </form-container>
         </inline-two-row-container>
@@ -142,7 +142,7 @@ const displayPerson = computed(() => {
             />
           </form-container>
         </inline-two-row-container>
-        <form-container :label="$t('Note')+'(optional)'">
+        <form-container :label="$t('Note')+'('+$t('optional')+')'">
           <v-textarea
             v-model="controller.reservationExtraInfo.note"
             auto-grow

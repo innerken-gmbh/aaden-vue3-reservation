@@ -43,7 +43,7 @@ function confirmTime(time) {
     </inline-two-row-container>
     <place-holder
       v-else
-      :title="'目前没有可用时间'"
+      :title="$t('CurrentlyNoAppointmentsAvailable')"
     />
   </base-dialog>
 </template>
