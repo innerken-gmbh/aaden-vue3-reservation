@@ -1,9 +1,11 @@
 import de from './translations/locales/de.json'
 import en from './translations/locales/en.json'
 import nl from './translations/locales/nl.json'
+import zh from './translations/locales/zh.json'
 import dayNl from 'dayjs/locale/nl'
 import dayDe from 'dayjs/locale/de'
 import dayEn from 'dayjs/locale/en'
+import dayZh from 'dayjs/locale/zh'
 import dayjs from 'dayjs'
 const supported = ['en', 'de', 'nl']
 let locale = 'en'
@@ -41,6 +43,13 @@ export default {
             label: 'Nederland',
             messages: nl
         },
+        {
+            code: 'zh',
+            flag: 'cn',
+            dayJS: dayZh,
+            label: '中文',
+            messages: zh
+        }
     ]
 }
 
