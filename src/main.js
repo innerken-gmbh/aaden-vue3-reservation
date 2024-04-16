@@ -7,7 +7,7 @@ import VueDragscroll from "vue-dragscroll";
 import './styles/main.scss';
 import IKUtils from "innerken-js-utils";
 
-const endLanguage = ['en', 'de', 'nl']
+const endLanguage = ['en', 'de', 'nl', 'zh']
 export let endLocale = ''
 if (!endLanguage.includes(i18n.locale)) {
     endLocale = 'en'
