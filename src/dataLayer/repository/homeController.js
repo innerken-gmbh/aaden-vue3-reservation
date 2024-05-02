@@ -34,7 +34,7 @@ export const useHomePageControllerStore
             return Object.assign({
                     fromDateTime: this.date + ' ' +
                         this.startTime,
-                    userId: 1,
+                    userId: userId,
                     personCount: this.personCount,
                 },
                 this.reservationExtraInfo,
