@@ -12,15 +12,17 @@ import logo from './assets/calendar.png'
 import NotificationsDialog from "./views/dialogs/NotificationsDialog.vue";
 import PlaceHolder from "./views/components/PlaceHolder.vue";
 import {onMounted} from "vue";
+import {changeLanguage} from "./plugins/changeLanguage.js";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
 const theme = useThemeStore()
 const vuetifyTheme = useTheme()
-onMounted(()=>{
+onMounted(() => {
   homeController.getUserInfo()
 })
+
 function toggleTheme() {
   theme.toggleTheme()
   vuetifyTheme.global.name.value = theme.themeName
@@ -80,6 +82,26 @@ function toggleTheme() {
           >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
+          <v-menu>
+            <template #activator="{props}">
+              <v-btn
+                v-bind="props"
+                icon=""
+              >
+                <v-icon>mdi-web</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item) in ['de','zh','nl','en']"
+                :key="item"
+                :value="item"
+                @click="changeLanguage(item)"
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
           <v-btn
             @click="qrController.scanQR()"
             icon=""

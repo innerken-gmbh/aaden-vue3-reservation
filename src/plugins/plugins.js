@@ -10,11 +10,8 @@ import duration from 'dayjs/plugin/duration'
 import calendar from 'dayjs/plugin/calendar'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import dayjs from "dayjs";
-import {createI18n} from 'vue-i18n'
-import locales from '../locales'
 import IKUtils from "innerken-js-utils";
-
-import {useThemeStore} from "../dataLayer/repository/useThemeStore.js";
+import {LocalSettingManager} from "biewangle";
 
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
@@ -28,7 +25,7 @@ const aadenTheme = {
         surface: '#35333e',// #30302e
         'on-surface': '#ffffff',// #e8eadd,#eff4f0
         primary: '#ffffff',// #e8eadd,#f9f6ef,#e5e5e5
-        'on-primary':'#1b1c1d',
+        'on-primary': '#1b1c1d',
         secondary: '#51c293',// #54a560,#0bbo4a,#21bf73
         error: '#e74983',// e74983
         info: '#124bbe',// 124bbe
@@ -41,11 +38,11 @@ const aadenTheme = {
         cardCancelledColor: '#ffffff00',//#cbcbcb,#2e303d
         gridOverlayColor: '#000000',
         gridStripeColor: '#000000',
-        currentTimeMarkerColor:'#ffffff',
-        peopleSelectorInactiveColor:'#ffffff',//#000000,
-        peopleSelectorActiveColor:'#9cc0d7',//#000000,
-        appBarColor:'#ffffff',
-        cardNormalColor:'#ffffff',
+        currentTimeMarkerColor: '#ffffff',
+        peopleSelectorInactiveColor: '#ffffff',//#000000,
+        peopleSelectorActiveColor: '#9cc0d7',//#000000,
+        appBarColor: '#ffffff',
+        cardNormalColor: '#ffffff',
     },
 }
 const aadenLightTheme = {
@@ -55,7 +52,7 @@ const aadenLightTheme = {
         surface: '#edf4f9',//底色 #e8eadd,#ccd0cf,#eff4f0,#f6f2e4,#fcf9f7//#f6f4fa,#edf4f9
         'on-surface': '#000000',//字体颜色 #30302e,#dbb2b3,#121315,#1b1c1d，#2b638b
         primary: '#ffffff',//'#b4c5ff #30302e,#e8dcd2,#f6f4fa,#dad8e5
-        'on-primary':'#221534', //方框箭头的颜色#1b1c1d,#e7eaff,#b4c5ff,#124bbe,#221534
+        'on-primary': '#221534', //方框箭头的颜色#1b1c1d,#e7eaff,#b4c5ff,#124bbe,#221534
         secondary: '#51c293',// #54a560,#51c293
         error: '#d13873',// #e74983,#d13873(选一个)
         info: '#ffffff',// #124bbe,#2b5bce
@@ -68,15 +65,15 @@ const aadenLightTheme = {
         cardCancelledColor: '#cbcbcb',// transparent,#44615f
         gridOverlayColor: '#edf4f9',//网线底色 #ffffff,,#edf4f9
         gridStripeColor: '#e0e0e0',//网线色 #9cc0d7,
-        currentTimeMarkerColor:'#000000',//#000000,#364eb0
-        peopleSelectorInactiveColor:'#f6f4fa',//#000000,
-        peopleSelectorActiveColor:'#9cc0d7',//#000000,
-        appBarColor:'#d7e3f1',//最上面#d7e3f1
-        cardNormalColor:'#ffffff',
+        currentTimeMarkerColor: '#000000',//#000000,#364eb0
+        peopleSelectorInactiveColor: '#f6f4fa',//#000000,
+        peopleSelectorActiveColor: '#9cc0d7',//#000000,
+        appBarColor: '#d7e3f1',//最上面#d7e3f1
+        cardNormalColor: '#ffffff',
     },
 }
 
-export const linkColors=[//在这里添加颜色
+export const linkColors = [//在这里添加颜色
     'green-darken-3',
     'red-darken-3',
     'pink-darken-3',
@@ -89,7 +86,7 @@ export const linkColors=[//在这里添加颜色
 ]
 
 //const mainTheme = 'aadenLightTheme'
-const mainTheme='aadenTheme'
+const mainTheme = 'aadenTheme'
 
 export const vuetify = createVuetify({
     icons: {
@@ -123,20 +120,10 @@ export const vuetify = createVuetify({
     },
 })
 
-const {locale, availableLocales, fallbackLocale} = locales
 
-const messages = {}
 
-availableLocales.forEach((l) => {
-    messages[l.code] = l.messages
-})
-
-export const i18n = createI18n({
-    locale,
-    fallbackLocale,
-    messages
-})
-
-i18n.locales = availableLocales
 
 export const pinia = createPinia()
+
+export const Remember = LocalSettingManager.config({lang: "de"})
+

@@ -6,22 +6,11 @@ import dayNl from 'dayjs/locale/nl'
 import dayDe from 'dayjs/locale/de'
 import dayEn from 'dayjs/locale/en'
 import dayZh from 'dayjs/locale/zh'
-import dayjs from 'dayjs'
-const supported = ['en', 'de', 'nl']
-let locale = 'en'
+import {Remember} from "./plugins/plugins.js";
 
-try {
-    const {0: browserLang} = navigator.language.split('-')
 
-    if (supported.includes(browserLang)) {
-        locale = localStorage.getItem('locale') ?? browserLang
-        dayjs.locale(locale)
-    }
-} catch (e) {
-    console.log(e)
-}
 export default {
-    locale,
+    locale: Remember.lang,
     fallbackLocale: 'en',
     availableLocales: [
         {
