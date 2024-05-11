@@ -20,10 +20,10 @@ const timerPicker = useTimePickerStore()
 
 const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
-  await refreshAvaliableTimes()
+  await refreshAvailableTimes()
 })
 
-async function refreshAvaliableTimes() {
+async function refreshAvailableTimes() {
   if(controller.showNewReservationModal){
     controller.startTime = null
     timerPicker.availableTimes =
