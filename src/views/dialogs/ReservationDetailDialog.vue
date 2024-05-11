@@ -159,12 +159,12 @@ async function onCancel() {
         </div>
       </inline-two-row-container>
       <div
-        class="d-flex align-center"
+        class="d-flex align-end  mt-4"
         v-if="info.email"
       >
         <div
 
-          class="text-h5 font-weight-black mt-4"
+          class="text-h5 font-weight-black"
         >
           <div class="text-body-2">
             {{ $t('Mail') }}
@@ -181,12 +181,12 @@ async function onCancel() {
       </div>
 
       <div
-        class="d-flex align-center"
+        class="d-flex align-end mt-4"
         v-if="info.tel"
       >
         <div
 
-          class="text-h5 font-weight-black mt-4"
+          class="text-h5 font-weight-black "
         >
           <div class="text-body-2">
             {{ $t('Phone') }}
@@ -201,9 +201,9 @@ async function onCancel() {
           icon="mdi-phone"
         />
       </div>
-      <div class="d-flex align-center">
+      <div class="d-flex align-end  mt-4">
         <div
-          class="text-h5 font-weight-black mt-4"
+          class="text-h5 font-weight-black"
         >
           <div class="text-body-2">
             {{ $t('DiningTime') }}
