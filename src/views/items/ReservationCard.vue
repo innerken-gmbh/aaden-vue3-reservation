@@ -131,7 +131,6 @@ const backgroundClass = computed(() => {
 })
 
 const cardFrontIcon = computed(() => {
-  console.log(canDrag.value,'value updated')
   return getReservationStatusIcon(props.reservationInfo,canDrag.value)
 })
 
