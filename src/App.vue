@@ -154,7 +154,15 @@ function toggleTheme() {
 ::-webkit-scrollbar {
   display: none;
 }
+html {
+  overflow: hidden;
+  height: 100%;
+}
 
+body {
+  height: 100%;
+  overflow: auto;
+}
 html {
   overflow: hidden;
   overscroll-behavior: none;
@@ -162,5 +170,6 @@ html {
 
 body {
   user-select: none;
+  overscroll-behavior-y: none;
 }
 </style>
