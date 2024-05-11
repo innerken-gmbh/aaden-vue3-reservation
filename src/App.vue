@@ -1,7 +1,7 @@
 <script setup>
 import HomePage from './views/pages/HomePage/HomePage.vue';
 import {useReservationStore, useScanQrStore} from "./dataLayer/repository/reservationRepo";
-import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
+
 import GlobalTimePicker from "./views/dialogs/GlobalTimePicker.vue";
 import ScanQRDialog from "./views/dialogs/ScanQRDialog.vue";
 import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue";
@@ -12,6 +12,7 @@ import NotificationsDialog from "./views/dialogs/NotificationsDialog.vue";
 import PlaceHolder from "./views/components/PlaceHolder.vue";
 import {onMounted} from "vue";
 import {changeLanguage} from "./plugins/changeLanguage.js";
+import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()

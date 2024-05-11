@@ -35,14 +35,12 @@ const action = ref(null)
           :color="headerColor"
         >
           <slot name="header" />
-
-          <v-icon
+          <v-btn
+            :color="headerColor"
+            icon="mdi-close"
             @click="show=false"
-            size="36"
             class="ml-4"
-          >
-            mdi-close
-          </v-icon>
+          />
         </v-card>
         <v-card
           class="pa-6"
