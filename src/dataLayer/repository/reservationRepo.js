@@ -124,9 +124,9 @@ export const useReservationStore = defineStore('reservation', {
                         id: sp.id
                     }
                 })
-                it.seatPlan = it.seatPlan.map(it => {
-                    it.tableName = tableMap[it.tableId]?.tableName ?? ''
-                    return it
+                it.seatPlan = it.seatPlan.map(that => {
+                    that.tableName = tableMap[that.tableId]?.tableName ?? ''
+                    return that
                 })
                 it.tableName = join(it.seatPlan.map(it => it.tableName), ',')
                 it.timeMap = sliceTime(it.fromDateTime, it.toDateTime)
@@ -208,8 +208,16 @@ export const useReservationStore = defineStore('reservation', {
         },
         async showReservationWithId(id) {
             this.activeReservationId = id
-            this.activeReservation = await getOneReservation(id)
-            if(this.activeReservation){
+            const reservation = await getOneReservation(id)
+            const tableMap = keyBy(this.tableList,
+                'tableId')
+            reservation.seatPlan = reservation.seatPlan.map(that => {
+                that.tableName = tableMap[that.tableId]?.tableName ?? ''
+                return that
+            })
+            reservation.tableName = join(reservation.seatPlan.map(it => it.tableName), ',')
+            this.activeReservation = reservation
+            if (this.activeReservation) {
                 this.showDetailDialog = true
             }
 

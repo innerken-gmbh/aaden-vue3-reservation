@@ -293,6 +293,7 @@ async function onCancel() {
                 :loading="controller.loading"
                 @click="onConfirm"
                 color="primary"
+                block
               >
                 <template #prepend>
                   <v-icon>mdi-check</v-icon>
@@ -307,6 +308,7 @@ async function onCancel() {
                 :loading="controller.loading"
                 @click="onConfirm"
                 color="primary"
+                block
               >
                 <template #prepend>
                   <v-icon>mdi-check</v-icon>
