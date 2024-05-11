@@ -24,7 +24,7 @@ const reservationChangeVM = useReservationChangeVM()
 
 
 async function onMoveReservation(r, b, positionInfo) {
-  alert('你拖动了！')
+
   const [x, y] = positionInfo
   if (x === r.grid.x && y === b.y) {
     reservationChangeVM.addToChanges(r.id, null)
@@ -54,6 +54,7 @@ async function onMoveReservation(r, b, positionInfo) {
   b.y = y
   setTimeout(() => {
     if (dragController.draggableItemId != null) {
+      alert('自动停止！')
       dragController.stopDrag()
     }
   }, 50)
