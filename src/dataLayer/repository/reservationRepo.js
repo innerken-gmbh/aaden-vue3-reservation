@@ -154,7 +154,6 @@ export const useReservationStore = defineStore('reservation', {
 
             const batchColorCache = {}
             this.reservationList = []
-            await IKUtils.wait(50)
             this.reservationList = sortBy(list.map(it => {
                 it.haveOverlap = overlaps.includes(it.id)
                 it.haveShareTable = it.seatPlan.length > 1
