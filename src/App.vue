@@ -21,6 +21,9 @@ const theme = useThemeStore()
 const vuetifyTheme = useTheme()
 onMounted(() => {
   homeController.getUserInfo()
+  document.addEventListener('touchmove', e => {
+    e.preventDefalut();
+  }, {passive: false})
 })
 
 function toggleTheme() {

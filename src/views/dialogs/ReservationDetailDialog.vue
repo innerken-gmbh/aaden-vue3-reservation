@@ -288,30 +288,32 @@ async function onCancel() {
             {{ $t('Cancel') }}
           </v-btn>
           <template v-if="status===ReservationStatus.Created">
-            <v-btn
-              :loading="controller.loading"
-              @click="onConfirm"
-              color="primary"
-              class="mt-2"
-            >
-              <template #prepend>
-                <v-icon>mdi-check</v-icon>
-              </template>
-              {{ $t('Accept') }}
-            </v-btn>
+            <div class="mt-2">
+              <v-btn
+                :loading="controller.loading"
+                @click="onConfirm"
+                color="primary"
+              >
+                <template #prepend>
+                  <v-icon>mdi-check</v-icon>
+                </template>
+                {{ $t('Accept') }}
+              </v-btn>
+            </div>
           </template>
           <template v-else>
-            <v-btn
-              :loading="controller.loading"
-              @click="onConfirm"
-              color="primary"
-              class="mt-2"
-            >
-              <template #prepend>
-                <v-icon>mdi-check</v-icon>
-              </template>
-              {{ $t('CheckIn') }}
-            </v-btn>
+            <div class="mt-2">
+              <v-btn
+                :loading="controller.loading"
+                @click="onConfirm"
+                color="primary"
+              >
+                <template #prepend>
+                  <v-icon>mdi-check</v-icon>
+                </template>
+                {{ $t('CheckIn') }}
+              </v-btn>
+            </div>
           </template>
         </template>
       </template>
