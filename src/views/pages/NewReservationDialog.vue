@@ -2,10 +2,7 @@
 
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import FormContainer from "../items/FormContainer.vue";
-import {
-  useDatePickerStore,
-  useTimePickerStore
-} from "../../dataLayer/repository/reservationRepo";
+import {useDatePickerStore, useTimePickerStore} from "../../dataLayer/repository/reservationRepo";
 import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
 import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
@@ -24,7 +21,7 @@ watchEffect(async () => {
 })
 
 async function refreshAvailableTimes() {
-  if(controller.showNewReservationModal){
+  if (controller.showNewReservationModal) {
     controller.startTime = null
     timerPicker.availableTimes =
         await checkTableTimeAvailable(date.value, personCount.value, userId)
@@ -33,6 +30,11 @@ async function refreshAvailableTimes() {
     }
   }
 
+}
+
+async function selectData() {
+  controller.date = await datePicker.selectDate()
+  controller.showNewReservationModal = true
 }
 
 const displayPerson = computed(() => {
@@ -91,7 +93,7 @@ const displayPerson = computed(() => {
           <form-container :label="$t('Date')">
             <div
               class="text-h5 font-weight-black d-flex align-center"
-              @click="async ()=>controller.date=await datePicker.selectDate(),controller.showNewReservationModal=true"
+              @click="selectData"
             >
               {{ toDateDisplayFormat(controller.date) }}
             </div>
