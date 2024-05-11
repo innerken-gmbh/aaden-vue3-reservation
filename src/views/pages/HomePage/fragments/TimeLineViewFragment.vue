@@ -51,6 +51,7 @@ async function onMoveReservation(r, b, positionInfo) {
   }
   r.grid.x = x
   b.y = y
+  dragController.stopDrag()
 }
 
 
