@@ -154,8 +154,10 @@ function toggleTheme() {
 ::-webkit-scrollbar {
   display: none;
 }
-body{
+
+html {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
