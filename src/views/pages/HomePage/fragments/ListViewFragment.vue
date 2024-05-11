@@ -13,7 +13,7 @@ const reservationInfo = useReservationStore()
 <template>
   <div
     class="mt-4"
-    style="max-height: calc(100dvh - 160px);overflow-y: scroll"
+    style="max-height: calc(100vh - 160px);overflow-y: scroll"
   >
     <div
       class="d-flex align-center mb-2"

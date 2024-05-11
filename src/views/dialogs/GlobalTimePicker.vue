@@ -21,7 +21,7 @@ function confirmTime(time) {
     </template>
     <inline-two-row-container
       v-if="timePicker.availableTimes.length>0"
-      style="max-height: 60dvh;overflow-y: scroll"
+      style="max-height: 60vh;overflow-y: scroll"
     >
       <v-card
         @click="confirmTime(t.startTime)"

@@ -28,7 +28,7 @@ const action = ref(null)
     <v-card
       :rounded="xs?0:'xl'"
     >
-      <div style="max-height: 100dvh;overflow-y: scroll">
+      <div style="max-height: 100vh;overflow-y: scroll">
         <v-card
           rounded="0"
           class="text-h4 d-flex  align-center font-weight-black pa-6"
