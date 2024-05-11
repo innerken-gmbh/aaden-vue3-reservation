@@ -88,7 +88,7 @@ onMounted(async () => {
 
 <template>
   <div
-    style="width: calc(100% + 24px);position: fixed;left: 0"
+    style="width: calc(100% + 24px);position: fixed;left: 0;bottom: 0"
     class="d-flex align-start pt-8 pl-2 bg-surface"
   >
     <div
@@ -98,7 +98,7 @@ onMounted(async () => {
       v-dragscroll="dragController.globalDragEnable"
       style="display: grid;grid-gap: 0;position: relative;
           width: 0;overflow:hidden;
-        height:calc(100vh - 200px);"
+        height:calc(100vh - 168px);"
       :style="{gridTemplateColumns:'repeat('+reservationInfo?.timeSlots?.length+','+reservationInfo.xSize+'px)',
                gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
       }"
