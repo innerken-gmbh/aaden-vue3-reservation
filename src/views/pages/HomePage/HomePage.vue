@@ -35,10 +35,6 @@ watchEffect(() => {
 
 })
 watch(currentTime, async () => {
-  if (!changeVM.loading && changeVM.changesCount === 0) {
-    await reservationInfo.reload()
-  }
-
   if (!notificationController.show) {
     await notificationController.reload()
   }
