@@ -100,7 +100,8 @@ import {useReservationChangeVM} from "../../dataLayer/repository/reservationChan
 import {
   getReservationBackgroundClass,
   getReservationStatusColor,
-  getReservationStatusIcon, reservationCanEdit,
+  getReservationStatusIcon,
+  reservationCanEdit,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
 
@@ -108,7 +109,7 @@ const props = defineProps(['reservationInfo', 'xSize', 'ySize', 'yPos', 'personC
 const emit = defineEmits(['open', 'dragStop', 'checkin'])
 
 const dragController = useDragStore()
-const {draggableItemId} = storeToRefs(useDragStore())
+const {draggableItemId} = storeToRefs(dragController)
 const changesVM = useReservationChangeVM()
 
 
@@ -128,8 +129,10 @@ const color = computed(() => {
 const backgroundClass = computed(() => {
   return getReservationBackgroundClass(props.reservationInfo)
 })
+
 const cardFrontIcon = computed(() => {
-  return getReservationStatusIcon(props.reservationInfo)
+  console.log(canDrag.value,'value updated')
+  return getReservationStatusIcon(props.reservationInfo,canDrag.value)
 })
 
 
@@ -142,6 +145,7 @@ const canMove = computed(() => {
 })
 
 function tryUnlock(e) {
+  console.log('unlock')
   e.preventDefault()
   e.stopPropagation()
   if (canDrag.value) {

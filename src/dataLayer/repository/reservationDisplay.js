@@ -20,11 +20,10 @@ export const ReservationStatusFilter = {
 }
 
 
-export function getReservationStatusIcon(reservation) {
+export function getReservationStatusIcon(reservation, canDrag) {
     const overTime = reservation.overTime
     const haveOverlap = reservation.haveOverlap
     const status = reservation.status
-    const canDrag = useDragStore().draggableItemId === reservation.id
     if (canDrag) {
         return 'mdi-cursor-move'
     } else if (haveOverlap) {
