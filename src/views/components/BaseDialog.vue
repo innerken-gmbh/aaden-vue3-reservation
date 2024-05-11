@@ -31,7 +31,7 @@ const action = ref(null)
       <div style="max-height: 100vh;overflow-y: scroll">
         <v-card
           rounded="0"
-          class="text-h4 d-flex  align-center font-weight-black pa-6"
+          class="text-h5 d-flex  align-center font-weight-black pa-6"
           :color="headerColor"
         >
           <slot name="header" />
