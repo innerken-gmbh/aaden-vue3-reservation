@@ -3,9 +3,10 @@ import {useDatePickerStore} from "../../dataLayer/repository/reservationRepo.js"
 import {dateFormat, today} from "../../dataLayer/repository/dateRepo.js";
 import dayjs from "dayjs";
 import BaseDialog from "../components/BaseDialog.vue";
+import {useDisplay} from "vuetify";
 
 const dateStore = useDatePickerStore()
-
+const {xs} = useDisplay()
 function confirm() {
   dateStore.confirm()
 }
@@ -13,8 +14,10 @@ function confirm() {
 </script>
 
 <template>
-  <base-dialog
+  <v-dialog
+    :fullscreen="xs"
     v-model="dateStore.showPicker"
+    max-width="500px"
   >
     <v-card rounded="xl">
       <v-date-picker
@@ -32,7 +35,7 @@ function confirm() {
         {{ $t('OK') }}
       </v-btn>
     </v-card>
-  </base-dialog>
+  </v-dialog>
 </template>
 
 <style scoped>
