@@ -33,7 +33,12 @@ const infoController = useReservationStore()
         </div>
       </div>
       <v-spacer />
+    </div>
+    <div class="mt-2 d-flex">
+      <v-spacer />
       <v-btn
+        class="mr-2"
+        density="default"
         @click="infoController.showReservationWithId(info.reference)"
         icon=""
         v-if="info.reference&&!infoController.showDetailDialog"
@@ -41,6 +46,7 @@ const infoController = useReservationStore()
         <v-icon>mdi-open-in-app</v-icon>
       </v-btn>
       <v-btn
+        density="default"
         @click="controller.readNotification(info)"
         icon=""
         v-if="!info.checked"

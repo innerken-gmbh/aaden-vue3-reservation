@@ -37,14 +37,11 @@ function toggleTheme() {
         color="appBarColor"
       >
         <template v-if="!reservationStore.showSearch">
-          <v-app-bar-nav-icon>
-            <v-img
-              :width="24"
-              :src="logo"
-            />
-          </v-app-bar-nav-icon>
-          <v-app-bar-title>
-            Aaden POS
+          <v-app-bar-title class="text-body-2">
+            <div class="text-body-1 font-weight-black">
+              Reservation
+            </div>
+            <div>Aaden POS</div>
           </v-app-bar-title>
         </template>
         <template v-else>
