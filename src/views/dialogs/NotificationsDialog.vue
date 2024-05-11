@@ -48,7 +48,7 @@ onMounted(() => {
     <template #default>
       <div v-if="!controller.loading">
         <v-lazy
-          :min-height="200"
+          :min-height="100"
           v-for="e in controller.eventList"
           :key="e.id"
         >
