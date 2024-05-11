@@ -54,7 +54,8 @@ export const useReservationChangeVM = defineStore('reservationChange', {
         },
 
         async cancelAllChanges() {
-            this.changes = {}
+            this.seatPlanChanges = {}
+            this.timeChanges = {}
             const reservationInfo = useReservationStore()
             await reservationInfo.reload()
             useDragStore().stopDrag()
