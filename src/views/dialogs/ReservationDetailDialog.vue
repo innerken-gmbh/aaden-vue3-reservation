@@ -252,7 +252,6 @@ async function onCancel() {
           @click="controller.showLogs=false"
           color="primary"
           block
-          class="mt-2"
         >
           <template #prepend>
             <v-icon>mdi-arrow-left</v-icon>
@@ -267,7 +266,6 @@ async function onCancel() {
             @click="onChangeTime"
             color="primary"
             block
-            class="mt-2"
           >
             <template #prepend>
               <v-icon>mdi-check</v-icon>
@@ -281,6 +279,7 @@ async function onCancel() {
             :loading="controller.loading"
             color="primary"
             variant="outlined"
+            block
           >
             <template #prepend>
               <v-icon>mdi-cancel</v-icon>
