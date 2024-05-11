@@ -117,11 +117,12 @@ function toggleTheme() {
       </v-app-bar>
       <v-main>
         <div
-          style="width: 100%;height: 100%;"
           class="bg-appBarColor pt-2"
         >
           <div
-            style="border-top-left-radius: 24px;z-index: 2;overflow: visible;min-height: calc(100svh - 72px);
+            style="border-top-left-radius: 24px;z-index: 2;
+            overflow: hidden;
+            min-height: calc(100svh - 72px);
           border-top-right-radius: 24px;"
             class="bg-surface"
           >
