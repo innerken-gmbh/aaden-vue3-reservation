@@ -4,7 +4,7 @@ import {useReservationStore} from "../../../../dataLayer/repository/reservationR
 import PlaceHolder from "../../../components/PlaceHolder.vue";
 import ReservationListItem from "../../../items/ReservationListItem.vue";
 import {toOnlyTimeFormat} from "../../../../dataLayer/repository/dateRepo.js";
-import {sortBy} from "lodash-es";
+import {orderBy, sortBy} from "lodash-es";
 
 const reservationInfo = useReservationStore()
 
@@ -61,7 +61,7 @@ const reservationInfo = useReservationStore()
       <template v-if="reservationInfo.filteredReservationList.length > 0">
         <template
           :key="time"
-          v-for="time in sortBy(Object.keys(reservationInfo.groupedReservations))"
+          v-for="time in orderBy(Object.keys(reservationInfo.groupedReservations),[_.identity],['desc'])"
         >
           <div class="text-h5 mt-4 mb-1 px-2 font-weight-black">
             {{ toOnlyTimeFormat(time) }}

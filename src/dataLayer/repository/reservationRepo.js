@@ -10,10 +10,10 @@ import {
     loadAllReservable
 } from "../api/reservationApi.js";
 
-import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sumBy} from "lodash-es";
-import IKUtils from "innerken-js-utils";
+import {groupBy, intersection, join, keyBy, maxBy, reverse, sample, sortBy, sumBy} from "lodash-es";
 import {linkColors} from "../../plugins/plugins.js";
 import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./reservationDisplay.js";
+import IKUtils from "innerken-js-utils";
 
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
