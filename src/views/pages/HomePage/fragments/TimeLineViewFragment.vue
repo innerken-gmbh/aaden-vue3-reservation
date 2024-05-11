@@ -217,7 +217,7 @@ onMounted(async () => {
         color="transparent"
         flat
         tile
-        @click.stop="dragController.stopDrag()"
+
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
         style="position: absolute;z-index: 8;"
@@ -227,6 +227,7 @@ onMounted(async () => {
         }"
       >
         <div
+          @click.stop="dragController.stopDrag()"
           style="position: relative;"
           :style="{
             width:reservationInfo.containerWidth+'px',
