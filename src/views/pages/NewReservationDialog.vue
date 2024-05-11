@@ -91,7 +91,7 @@ const displayPerson = computed(() => {
           <form-container :label="$t('Date')">
             <div
               class="text-h5 font-weight-black d-flex align-center"
-              @click="async ()=>controller.date=await datePicker.selectDate();controller.showNewReservationModal=true"
+              @click="async ()=>controller.date=await datePicker.selectDate(),controller.showNewReservationModal=true"
             >
               {{ toDateDisplayFormat(controller.date) }}
             </div>
