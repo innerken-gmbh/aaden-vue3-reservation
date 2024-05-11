@@ -18,6 +18,7 @@ function confirmTime(time) {
   >
     <template #header>
       {{ $t('SelectPreferredTime') }}
+      <v-spacer />
     </template>
     <inline-two-row-container
       v-if="timePicker.availableTimes.length>0"
