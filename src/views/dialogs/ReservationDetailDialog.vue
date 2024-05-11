@@ -12,9 +12,10 @@ import {
 } from "../../dataLayer/repository/reservationDisplay.js";
 import {confirm} from "../../dataLayer/api/reservationApi.js";
 import EventLogListItem from "../items/EventLogListItem.vue";
-import {reverse} from "lodash-es";
+import {storeToRefs} from "pinia";
 
 const controller = useReservationStore()
+const {showDetailDialog} = storeToRefs(controller)
 
 const info = computed(() => {
   return controller.activeReservation
@@ -40,6 +41,11 @@ const overrideDiningTime = ref(0)
 watch(currentDiningTime, (val) => {
   overrideDiningTime.value = val
 })
+watch(showDetailDialog, (val) => {
+
+  if (val) overrideDiningTime.value = currentDiningTime.value
+})
+
 
 const timeChanged = computed(() => {
   return currentDiningTime.value !== overrideDiningTime.value
