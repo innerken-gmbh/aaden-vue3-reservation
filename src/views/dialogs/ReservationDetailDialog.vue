@@ -79,7 +79,7 @@ async function onCancel() {
 <template>
   <base-dialog
     :header-color="color==='transparent'?'white':color"
-    :show-action="canEdit"
+    :show-action="canEdit||controller.showLogs"
     v-model="controller.showDetailDialog"
   >
     <template #header>
