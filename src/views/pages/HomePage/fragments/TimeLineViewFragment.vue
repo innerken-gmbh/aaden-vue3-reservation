@@ -93,12 +93,11 @@ onMounted(async () => {
   >
     <div
       @click="dragController.stopDrag()"
-      class="flex-grow-1"
+      class="flex-grow-1 fullScreen"
       ref="container"
       v-dragscroll="dragController.globalDragEnable"
       style="display: grid;grid-gap: 0;position: relative;
-          width: 0;overflow:hidden;
-        height:calc(100vh - 210px);"
+          width: 0;overflow:hidden;"
       :style="{gridTemplateColumns:'repeat('+reservationInfo?.timeSlots?.length+','+reservationInfo.xSize+'px)',
                gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
       }"
@@ -334,7 +333,10 @@ onMounted(async () => {
   128px 72px
 }
 
-
+.fullScreen{
+  height:calc(100vh - 210px);
+  height: calc(100dvh - 162px);
+}
 .vdr {
   position: absolute;
 }
