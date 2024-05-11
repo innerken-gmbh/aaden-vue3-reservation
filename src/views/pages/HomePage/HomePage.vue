@@ -167,7 +167,7 @@ function toggleListView() {
               </div>
               <div
 
-                class="font-weight-black text-h5 mx-2"
+                class="font-weight-black text-h5 mx-2 text-no-wrap"
               >
                 {{ dayjs(reservationInfo.date).format('DD') }}
               </div>
@@ -182,7 +182,7 @@ function toggleListView() {
             <template v-else>
               <div>
                 <div
-                  class="font-weight-black text-body-1"
+                  class="font-weight-black text-body-1 text-no-wrap"
                 >
                   {{ dayjs(reservationInfo.date).format('MMM DD') }}
                 </div>
