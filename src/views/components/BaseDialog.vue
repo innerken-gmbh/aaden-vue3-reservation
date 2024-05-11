@@ -39,7 +39,6 @@ const action = ref(null)
             :color="headerColor"
             icon="mdi-close"
             @click="show=false"
-            class="ml-2"
           />
         </v-card>
         <v-card

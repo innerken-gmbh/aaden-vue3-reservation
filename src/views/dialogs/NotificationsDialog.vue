@@ -31,7 +31,7 @@ onMounted(() => {
         @click="controller.readAllNotification()"
         color="white"
       >
-        <v-icon size="36">
+        <v-icon>
           mdi-check-all
         </v-icon>
       </v-btn>
@@ -40,7 +40,7 @@ onMounted(() => {
         icon=""
         color="white"
       >
-        <v-icon size="36">
+        <v-icon>
           mdi-refresh
         </v-icon>
       </v-btn>
