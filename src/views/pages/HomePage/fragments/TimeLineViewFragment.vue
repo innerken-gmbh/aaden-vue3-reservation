@@ -24,40 +24,44 @@ const reservationChangeVM = useReservationChangeVM()
 
 
 async function onMoveReservation(r, b, positionInfo) {
-
-  const [x, y] = positionInfo
-  if (x === r.grid.x && y === b.y) {
-    reservationChangeVM.addToChanges(r.id, null)
-    return
-  }
-  if (!r.oldX) {
-    r.oldX = r.grid.x
-  }
-  if (x === r.oldX) {
-    reservationChangeVM.addToChanges(r.id, null)
-  } else {
-    const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
-    const [hour, minute] = timeSlot.split(':')
-    const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute).format(timestampTemplate)
-    reservationChangeVM.addToChanges(r.id, newStart)
-  }
-  if (!b.oldY) {
-    b.oldY = b.y
-  }
-  if (y === b.oldY) {
-    reservationChangeVM.addSeatPlanChanges(b.id, null)
-  } else {
-    const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
-    reservationChangeVM.addSeatPlanChanges(b.id, table.tableId, r.id)
-  }
-  r.grid.x = x
-  b.y = y
-  setTimeout(() => {
-    if (dragController.draggableItemId != null) {
-      alert('自动停止！')
-      dragController.stopDrag()
+  try {
+    const [x, y] = positionInfo
+    if (x === r.grid.x && y === b.y) {
+      reservationChangeVM.addToChanges(r.id, null)
+      return
     }
-  }, 50)
+    if (!r.oldX) {
+      r.oldX = r.grid.x
+    }
+    if (x === r.oldX) {
+      reservationChangeVM.addToChanges(r.id, null)
+    } else {
+      const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
+      const [hour, minute] = timeSlot.split(':')
+      const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute).format(timestampTemplate)
+      reservationChangeVM.addToChanges(r.id, newStart)
+    }
+    if (!b.oldY) {
+      b.oldY = b.y
+    }
+    if (y === b.oldY) {
+      reservationChangeVM.addSeatPlanChanges(b.id, null)
+    } else {
+      const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
+      reservationChangeVM.addSeatPlanChanges(b.id, table.tableId, r.id)
+    }
+    r.grid.x = x
+    b.y = y
+    setTimeout(() => {
+      if (dragController.draggableItemId != null) {
+        alert('自动停止！')
+        dragController.stopDrag()
+      }
+    }, 50)
+  }catch (e) {
+    alert(e.message)
+  }
+
 }
 
 
