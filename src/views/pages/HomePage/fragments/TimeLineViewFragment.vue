@@ -51,6 +51,11 @@ async function onMoveReservation(r, b, positionInfo) {
   }
   r.grid.x = x
   b.y = y
+  setTimeout(() => {
+    if (dragController.draggableItemId != null) {
+      dragController.stopDrag()
+    }
+  }, 50)
 }
 
 
