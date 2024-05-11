@@ -88,7 +88,7 @@ onMounted(async () => {
 
 <template>
   <div
-    style="width: calc(100% + 24px);position: fixed; "
+    style="width: calc(100% + 24px);position: fixed; max-height: calc(100vh - 120px);overscroll-behavior: none"
     class="d-flex align-start mt-8"
   >
     <div
