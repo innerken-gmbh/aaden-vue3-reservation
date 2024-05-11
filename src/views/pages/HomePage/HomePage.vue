@@ -38,7 +38,9 @@ watch(currentTime, async () => {
   if (!notificationController.show) {
     await notificationController.reload()
   }
-
+  if (!changeVM.loading && changeVM.changesCount === 0) {
+    await reservationInfo.reload()
+  }
 })
 
 const {date} = storeToRefs(reservationInfo)
