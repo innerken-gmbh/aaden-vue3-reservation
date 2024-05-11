@@ -337,10 +337,7 @@ onMounted(async () => {
   128px 72px
 }
 
-.fullScreen{
-  height:calc(100vh - 204px);
-  height: calc(100dvh - 146px);
-}
+
 .vdr {
   position: absolute;
 }

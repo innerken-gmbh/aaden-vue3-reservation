@@ -170,4 +170,9 @@ body {
   user-select: none;
 
 }
+
+.fullScreen{
+  height:calc(100vh - 204px);
+  height: calc(100dvh - 146px);
+}
 </style>
