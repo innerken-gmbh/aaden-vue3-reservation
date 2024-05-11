@@ -44,7 +44,8 @@ const defaultReservationInfo = {
     company: 'com',
     note: '',
     childCount: '0',
-    useStroller: '0'
+    useStroller: '0',
+    createdBy: 'Merchant'
 }
 
 export async function addReservation(reservationInfo) {
