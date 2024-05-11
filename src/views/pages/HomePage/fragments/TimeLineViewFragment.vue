@@ -98,7 +98,7 @@ onMounted(async () => {
       v-dragscroll="dragController.globalDragEnable"
       style="display: grid;grid-gap: 0;position: relative;
           width: 0;overflow:hidden;
-        height:calc(100vh - 170px);"
+        height:calc(100vh - 172px);"
       :style="{gridTemplateColumns:'repeat('+reservationInfo?.timeSlots?.length+','+reservationInfo.xSize+'px)',
                gridTemplateRows:'repeat('+(reservationInfo.tableList.length+2)+','+reservationInfo.ySize+'px)',
       }"
