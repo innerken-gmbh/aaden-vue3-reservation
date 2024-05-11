@@ -24,9 +24,6 @@ export function toDateDisplayFormat(str) {
 export function toBeautiful(str) {
     return dayjs(str).format("DD MMMM, HH:mm:ss")
 }
-export function timeDisplay(str) {
-    return dayjs(str).format(timestampTemplate)
-}
 
 export function sliceTime(startTimeString, endTimeString, duration = 'PT15M') {
     const [startTime, endTime] = dayjs(startTimeString, timestampTemplate)
@@ -45,9 +42,6 @@ export function sliceTime(startTimeString, endTimeString, duration = 'PT15M') {
     return res
 }
 
-export function timeFromNowInMinute(hour, minute) {
-    return -dayjs().set('h', hour).set('m', minute).diff(dayjs(), 'm')
-}
 
 
 export const useCurrentTime = () => {
