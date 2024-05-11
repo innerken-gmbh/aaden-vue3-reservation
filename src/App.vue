@@ -114,9 +114,10 @@ function toggleTheme() {
           </v-btn>
         </template>
       </v-app-bar>
-      <v-main>
+      <v-main style="overflow: hidden">
         <div
           class="bg-appBarColor pt-2"
+          style="overflow: hidden"
         >
           <div
             style="border-top-left-radius: 24px;z-index: 2;
