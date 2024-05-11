@@ -121,10 +121,6 @@ function toggleTheme() {
         >
           <div
             style="border-top-left-radius: 24px;z-index: 2;
-            overflow: hidden;
-            overscroll-behavior: none;
-            min-height: calc(100vh - 72px);
-            height:calc(100vh - 72px) ;
           border-top-right-radius: 24px;"
             class="bg-surface"
           >
@@ -158,23 +154,20 @@ function toggleTheme() {
   display: none;
 }
 
-html {
-  overflow: hidden;
-  height: 100%;
-}
-
+html,
 body {
-  height: 100%;
-  overflow: auto;
-}
-
-html {
+  position: fixed;
   overflow: hidden;
-  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
-
+body > #app {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; /* enables “momentum” (smooth) scrolling */
+}
 body {
   user-select: none;
-  overscroll-behavior-y: none;
+
 }
 </style>
