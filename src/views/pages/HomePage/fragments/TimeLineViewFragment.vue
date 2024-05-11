@@ -88,8 +88,8 @@ onMounted(async () => {
 
 <template>
   <div
-    style="width: calc(100% + 24px);position: relative;"
-    class="ml-n4 mt-8 pl-4 d-flex align-start"
+    style="width: calc(100% + 24px);position: fixed;"
+    class="d-flex align-start"
   >
     <div
       @click="dragController.stopDrag()"
