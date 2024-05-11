@@ -19,22 +19,29 @@ function confirm() {
     v-model="dateStore.showPicker"
     max-width="500px"
   >
-    <v-card rounded="xl">
+    <v-card
+      title=""
+      width="100%"
+    >
       <v-date-picker
+        width="100%"
         color="primary"
         :min="today()"
         :max="dayjs(today()).add(14,'days')
           .format(dateFormat)"
         v-model="dateStore.currentDate"
       />
-      <v-btn
-        block
-        @click="confirm"
-        color="primary"
-        size="large"
-      >
-        {{ $t('OK') }}
-      </v-btn>
+      <v-spacer />
+      <div>
+        <v-btn
+          block
+          @click="confirm"
+          color="primary"
+          size="large"
+        >
+          {{ $t('OK') }}
+        </v-btn>
+      </div>
     </v-card>
   </v-dialog>
 </template>
