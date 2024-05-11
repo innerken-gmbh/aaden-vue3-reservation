@@ -20,6 +20,7 @@ function onDetect(e) {
       controller.error = true
     }
   } catch (e) {
+    alert(e.message)
     controller.error = true
   }
 
