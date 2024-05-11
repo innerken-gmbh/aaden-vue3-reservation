@@ -22,7 +22,10 @@ const reservationInfo = useReservationStore()
       <v-tabs
         v-model="reservationInfo.listViewTab"
       >
-        <v-tab @click="reservationInfo.listViewTab=0">
+        <div
+          class="d-flex"
+          @click="reservationInfo.listViewTab=0"
+        >
           <v-icon
             start
           >
@@ -31,8 +34,8 @@ const reservationInfo = useReservationStore()
           <div>
             {{ reservationInfo.listSorted[0].length }}
           </div>
-        </v-tab>
-        <v-tab @click="reservationInfo.listViewTab=1">
+        </div>
+        <div @click="reservationInfo.listViewTab=1">
           <v-icon
             start
             v-if="reservationInfo.listSorted[1].length>0"
@@ -46,13 +49,13 @@ const reservationInfo = useReservationStore()
             mdi-bell-outline
           </v-icon>
           {{ reservationInfo.listSorted[1].length }}
-        </v-tab>
-        <v-tab @click="reservationInfo.listViewTab=2">
+        </div>
+        <div @click="reservationInfo.listViewTab=2">
           <v-icon start>
             mdi-dots-horizontal
           </v-icon>
           {{ reservationInfo.listSorted[2].length }}
-        </v-tab>
+        </div>
       </v-tabs>
     </div>
     <template v-if="reservationInfo.filteredReservationList.length > 0">
