@@ -35,6 +35,7 @@ const action = ref(null)
           :color="headerColor"
         >
           <slot name="header" />
+          <v-spacer />
           <v-icon
             @click="show=false"
             size="36"
