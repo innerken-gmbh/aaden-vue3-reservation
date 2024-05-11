@@ -21,9 +21,6 @@ const theme = useThemeStore()
 const vuetifyTheme = useTheme()
 onMounted(() => {
   homeController.getUserInfo()
-  document.addEventListener('touchmove', e => {
-    e.preventDefalut();
-  }, {passive: false})
 })
 
 function toggleTheme() {
@@ -156,6 +153,9 @@ function toggleTheme() {
 <style>
 ::-webkit-scrollbar {
   display: none;
+}
+body{
+  overflow: hidden;
 }
 
 body {
