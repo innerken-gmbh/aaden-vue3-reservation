@@ -12,8 +12,7 @@ const reservationInfo = useReservationStore()
 
 <template>
   <div
-    class="mt-4  pb-16"
-    style="overflow-y: scroll"
+    class="mt-4"
   >
     <div
       class="d-flex align-center mb-2"
@@ -55,7 +54,10 @@ const reservationInfo = useReservationStore()
         </v-tab>
       </v-tabs>
     </div>
-    <div class="fullScreen">
+    <div
+      class="fullScreen pb-16"
+      style="overflow-y: scroll"
+    >
       <template v-if="reservationInfo.filteredReservationList.length > 0">
         <template
           :key="time"
@@ -83,7 +85,7 @@ const reservationInfo = useReservationStore()
 
 <style scoped>
 .fullScreen{
-  height:calc(100vh - 300px);
-  height: calc(100dvh - 276px);
+  height:calc(100vh - 264px);
+  height: calc(100dvh - 206px);
 }
 </style>
