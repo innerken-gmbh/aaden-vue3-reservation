@@ -2,11 +2,11 @@
 import {useDatePickerStore} from "../../dataLayer/repository/reservationRepo.js";
 import {dateFormat, today} from "../../dataLayer/repository/dateRepo.js";
 import dayjs from "dayjs";
-import BaseDialog from "../components/BaseDialog.vue";
 import {useDisplay} from "vuetify";
 
 const dateStore = useDatePickerStore()
 const {xs} = useDisplay()
+
 function confirm() {
   dateStore.confirm()
 }
@@ -28,6 +28,7 @@ function confirm() {
         v-model="dateStore.currentDate"
       />
       <v-btn
+        block
         @click="confirm"
         color="primary"
         size="large"
