@@ -32,6 +32,12 @@ async function refreshAvailableTimes() {
 
 }
 
+
+async function selectTime() {
+  controller.startTime = await timerPicker.selectTime()
+  controller.showNewReservationModal = true
+}
+
 async function selectData() {
   controller.date = await datePicker.selectDate()
   controller.showNewReservationModal = true
@@ -102,7 +108,7 @@ const displayPerson = computed(() => {
             <div
               v-if="timerPicker.availableTimes.length>0"
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
-              @click="async ()=>controller.startTime=await timerPicker.selectTime()"
+              @click="selectTime"
             >
               {{ controller?.startTime ?? $t('Checking') }}
             </div>
