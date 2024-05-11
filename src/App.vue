@@ -8,7 +8,6 @@ import ReservationDetailDialog from "./views/dialogs/ReservationDetailDialog.vue
 import {useThemeStore} from "./dataLayer/repository/useThemeStore.js";
 import {useTheme} from "vuetify";
 import {useHomePageControllerStore} from "./dataLayer/repository/homeController.js";
-import logo from './assets/calendar.png'
 import NotificationsDialog from "./views/dialogs/NotificationsDialog.vue";
 import PlaceHolder from "./views/components/PlaceHolder.vue";
 import {onMounted} from "vue";
@@ -122,7 +121,8 @@ function toggleTheme() {
           <div
             style="border-top-left-radius: 24px;z-index: 2;
             overflow: hidden;
-            min-height: calc(100svh - 72px);
+            min-height: calc(100vh - 72px);
+            height:calc(100vh - 72px) ;
           border-top-right-radius: 24px;"
             class="bg-surface"
           >
@@ -155,6 +155,7 @@ function toggleTheme() {
 ::-webkit-scrollbar {
   display: none;
 }
+
 html {
   overflow: hidden;
   height: 100%;
@@ -164,6 +165,7 @@ body {
   height: 100%;
   overflow: auto;
 }
+
 html {
   overflow: hidden;
   overscroll-behavior: none;
