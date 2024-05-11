@@ -38,7 +38,7 @@
       </v-card>
       <v-card
         :style="{marginLeft:ySize+6+'px'}"
-        @click="tryUnlock"
+        @click.stop="tryUnlock"
         :disabled="!canMove"
         rounded="md"
         :height="ySize"

@@ -203,6 +203,7 @@ onMounted(async () => {
         </div>
       </div>
       <div
+        @click.stop="dragController.stopDrag()"
         class="gridBackground"
         :style="{
           height:(reservationInfo.containerHeight+1)+'px',
@@ -216,6 +217,7 @@ onMounted(async () => {
         color="transparent"
         flat
         tile
+        @click.stop="dragController.stopDrag()"
         :width="reservationInfo.containerWidth"
         :height="reservationInfo.containerHeight"
         style="position: absolute;z-index: 8;"
