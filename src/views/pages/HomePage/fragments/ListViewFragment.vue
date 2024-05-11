@@ -12,7 +12,7 @@ const reservationInfo = useReservationStore()
 
 <template>
   <div
-    class="mt-4 fullScreen pb-16"
+    class="mt-4  pb-16"
     style="overflow-y: scroll"
   >
     <div
@@ -22,10 +22,7 @@ const reservationInfo = useReservationStore()
       <v-tabs
         v-model="reservationInfo.listViewTab"
       >
-        <div
-          class="d-flex"
-          @click="reservationInfo.listViewTab=0"
-        >
+        <v-tab @click="reservationInfo.listViewTab=0">
           <v-icon
             start
           >
@@ -34,8 +31,8 @@ const reservationInfo = useReservationStore()
           <div>
             {{ reservationInfo.listSorted[0].length }}
           </div>
-        </div>
-        <div @click="reservationInfo.listViewTab=1">
+        </v-tab>
+        <v-tab @click="reservationInfo.listViewTab=1">
           <v-icon
             start
             v-if="reservationInfo.listSorted[1].length>0"
@@ -49,39 +46,44 @@ const reservationInfo = useReservationStore()
             mdi-bell-outline
           </v-icon>
           {{ reservationInfo.listSorted[1].length }}
-        </div>
-        <div @click="reservationInfo.listViewTab=2">
+        </v-tab>
+        <v-tab @click="reservationInfo.listViewTab=2">
           <v-icon start>
             mdi-dots-horizontal
           </v-icon>
           {{ reservationInfo.listSorted[2].length }}
-        </div>
+        </v-tab>
       </v-tabs>
     </div>
-    <template v-if="reservationInfo.filteredReservationList.length > 0">
-      <template
-        :key="time"
-        v-for="time in sortBy(Object.keys(reservationInfo.groupedReservations))"
-      >
-        <div class="text-h5 mt-4 mb-1 px-2 font-weight-black">
-          {{ toOnlyTimeFormat(time) }}
-        </div>
+    <div class="fullScreen">
+      <template v-if="reservationInfo.filteredReservationList.length > 0">
+        <template
+          :key="time"
+          v-for="time in sortBy(Object.keys(reservationInfo.groupedReservations))"
+        >
+          <div class="text-h5 mt-4 mb-1 px-2 font-weight-black">
+            {{ toOnlyTimeFormat(time) }}
+          </div>
 
-        <reservation-list-item
-          v-for="r in reservationInfo.groupedReservations[time]"
-          :key="r.id"
-          :info="r"
-        />
+          <reservation-list-item
+            v-for="r in reservationInfo.groupedReservations[time]"
+            :key="r.id"
+            :info="r"
+          />
+        </template>
       </template>
-    </template>
-    <place-holder
-      icon="mdi-noodles"
-      :hint="$t('NoReservationsATM')"
-      v-else
-    />
+      <place-holder
+        icon="mdi-noodles"
+        :hint="$t('NoReservationsATM')"
+        v-else
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
-
+.fullScreen{
+  height:calc(100vh - 300px);
+  height: calc(100dvh - 276px);
+}
 </style>
