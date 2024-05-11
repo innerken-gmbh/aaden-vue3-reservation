@@ -36,7 +36,7 @@ async function onMoveReservation(r, b, positionInfo) {
     if (x === r.oldX) {
       reservationChangeVM.addToChanges(r.id, null)
     } else {
-      const timeSlot = reservationInfo.timeSlots.at(x / reservationInfo.xSize)
+      const timeSlot = reservationInfo.timeSlots[(x / reservationInfo.xSize)]
       const [hour, minute] = timeSlot.split(':')
       const newStart = dayjs(r.fromDateTime).set('hour', hour).set('minute', minute).format(timestampTemplate)
       reservationChangeVM.addToChanges(r.id, newStart)
@@ -47,7 +47,7 @@ async function onMoveReservation(r, b, positionInfo) {
     if (y === b.oldY) {
       reservationChangeVM.addSeatPlanChanges(b.id, null)
     } else {
-      const table = reservationInfo.tableList.at(y / reservationInfo.ySize)
+      const table = reservationInfo.tableList[(y / reservationInfo.ySize)]
       reservationChangeVM.addSeatPlanChanges(b.id, table.tableId, r.id)
     }
     r.grid.x = x
@@ -58,7 +58,7 @@ async function onMoveReservation(r, b, positionInfo) {
         dragController.stopDrag()
       }
     }, 50)
-  }catch (e) {
+  } catch (e) {
     alert(e.message)
   }
 
