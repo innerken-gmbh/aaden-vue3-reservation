@@ -116,7 +116,7 @@ function toggleTheme() {
       </v-app-bar>
       <v-main style="overflow: hidden;overscroll-behavior-y: none">
         <div
-          class="bg-appBarColor pt-2"
+          class="bg-appBarColor pt-1"
           style="overflow: hidden;overscroll-behavior: none"
         >
           <div
