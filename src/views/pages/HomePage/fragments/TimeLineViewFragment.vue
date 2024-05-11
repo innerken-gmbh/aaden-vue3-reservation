@@ -24,6 +24,7 @@ const reservationChangeVM = useReservationChangeVM()
 
 
 async function onMoveReservation(r, b, positionInfo) {
+  alert('你拖动了！')
   const [x, y] = positionInfo
   if (x === r.grid.x && y === b.y) {
     reservationChangeVM.addToChanges(r.id, null)
