@@ -54,7 +54,6 @@ async function onMoveReservation(r, b, positionInfo) {
     b.y = y
     setTimeout(() => {
       if (dragController.draggableItemId != null) {
-        alert('自动停止！')
         dragController.stopDrag()
       }
     }, 50)
