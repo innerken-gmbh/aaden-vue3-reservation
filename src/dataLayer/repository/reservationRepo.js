@@ -338,7 +338,6 @@ export const useDragStore = defineStore('drag', {
             }
         },
         stopDrag() {
-            console.trace()
             this.globalDragEnable = true
             this.draggableItemId = null
         }
