@@ -39,7 +39,10 @@ watch(currentTime, async () => {
     await notificationController.reload()
   }
   if (!changeVM.loading && changeVM.changesCount === 0) {
-    await reservationInfo.reload()
+    if(dayjs(reservationInfo.lastClickTimestamp).isBefore(dayjs().subtract(1,'minute'))){
+      await reservationInfo.reload()
+    }
+
   }
 })
 

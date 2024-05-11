@@ -13,6 +13,7 @@ import PlaceHolder from "./views/components/PlaceHolder.vue";
 import {onMounted} from "vue";
 import {changeLanguage} from "./plugins/changeLanguage.js";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
+import dayjs from "dayjs";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
@@ -27,10 +28,15 @@ function toggleTheme() {
   theme.toggleTheme()
   vuetifyTheme.global.name.value = theme.themeName
 }
+
+function recordTouch() {
+  console.log("record touch")
+  reservationStore.lastClickTimestamp = dayjs().valueOf()
+}
 </script>
 
 <template>
-  <v-app>
+  <v-app @mousedown="recordTouch">
     <template v-if="homeController.userInfo">
       <v-app-bar
         flat
@@ -161,19 +167,21 @@ body {
   overflow: hidden;
   overscroll-behavior-y: none;
 }
+
 body > #app {
   width: 100vw;
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch; /* enables “momentum” (smooth) scrolling */
 }
+
 body {
   user-select: none;
 
 }
 
-.fullScreen{
-  height:calc(100vh - 204px);
+.fullScreen {
+  height: calc(100vh - 204px);
   height: calc(100dvh - 146px);
 }
 </style>

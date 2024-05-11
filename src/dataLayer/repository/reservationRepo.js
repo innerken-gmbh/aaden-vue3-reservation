@@ -18,6 +18,7 @@ import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./
 export const useReservationStore = defineStore('reservation', {
     state: () => ({
         showSearch: false,
+        lastClickTimestamp: dayjs().valueOf(),
         reservationList: [],
         listView: false,
         date: today(),
