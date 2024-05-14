@@ -1,4 +1,13 @@
 {
+  "ReservationNoShow" : "Termin verpasst",
+  "ReservationReminded" : "Terminerinnerung",
+  "ReservationCheckIn" : "Kunde eingecheckt",
+  "ReservationSeatPlanChanged" : "Gäste bearbeitet",
+  "ReservationTimeChanged" : "Zeit bearbeitet",
+  "ReservationConfirmedByUser" : "Kundenbestätigung",
+  "ReservationConfirmedByMerchant" : "Händlerbestätigung",
+  "ReservationCanceled" : "Termin storniert",
+  "ReservationCreated" : "Termin erstellt",
   "Accept" : "Akzeptieren",
   "Refresh" : "Erneut laden",
   "MaybeTheLinkIsBroken" : "Eventuell ist der Link beschädigt oder inkorrekt.",

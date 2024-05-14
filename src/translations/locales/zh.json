@@ -1,4 +1,13 @@
 {
+  "ReservationNoShow" : "错过预约",
+  "ReservationReminded" : "预约提醒",
+  "ReservationCheckIn" : "顾客签到",
+  "ReservationSeatPlanChanged" : "已处理客人",
+  "ReservationTimeChanged" : "编辑时间",
+  "ReservationConfirmedByUser" : "客户确认",
+  "ReservationConfirmedByMerchant" : "经销商确认",
+  "ReservationCanceled" : "预约已取消",
+  "ReservationCreated" : "已创建约会",
   "Accept" : "接受",
   "Refresh" : "刷新",
   "MaybeTheLinkIsBroken" : "也许这个链接已损坏",

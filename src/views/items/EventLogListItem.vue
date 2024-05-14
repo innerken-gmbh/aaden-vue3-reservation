@@ -21,7 +21,7 @@ const infoController = useReservationStore()
         </div>
 
         <div class="text-body-1 font-weight-black">
-          {{ info.eventType }}
+          {{ $t(info.eventType) }}
         </div>
 
 

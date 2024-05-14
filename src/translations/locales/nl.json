@@ -1,4 +1,13 @@
 {
+  "ReservationNoShow" : "Afspraak gemist",
+  "ReservationReminded" : "Afspraakherinnering",
+  "ReservationCheckIn" : "Klant heeft ingecheckt",
+  "ReservationSeatPlanChanged" : "Gasten verwerkt",
+  "ReservationTimeChanged" : "Bewerkte tijd",
+  "ReservationConfirmedByUser" : "Klantbevestiging",
+  "ReservationConfirmedByMerchant" : "Bevestiging dealer",
+  "ReservationCanceled" : "Afspraak geannuleerd",
+  "ReservationCreated" : "Afspraak gemaakt",
   "Accept" : "Aanvaarden",
   "Refresh" : "Opnieuw laden",
   "MaybeTheLinkIsBroken" : "De link mag niet verbroken of onjuist zijn.",
