@@ -58,7 +58,7 @@ export const useReservationStore = defineStore('reservation', {
                     const [start, end] = [r.fromDateTime, r.toDateTime].map(t => dayjs(t))
                     if (target.isBefore(end) && target.add(30, 'm')
                         .isAfter(start)) {
-                        seatCount += parseInt(r.personCount)
+                        seatCount += 1
                     }
                 })
                 return {
