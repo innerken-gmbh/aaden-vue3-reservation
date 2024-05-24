@@ -12,7 +12,7 @@ export const useThemeStore = defineStore('theme', {
     },
     getters: {
         themeName() {
-            return this.currentTheme ? 'aadenTheme' : 'aadenLightTheme'
+            return 'aadenTheme'
         }
     }
 

@@ -148,7 +148,7 @@ onMounted(async () => {
             >
               <div
                 class="font-weight-black pa-1 px-2 rounded-lg"
-                style="margin-left: -25%;background: rgba(255,255,255,.02)"
+                style="background: rgba(255,255,255,.02)"
                 v-if="i!==0"
               >
                 {{ t }}
@@ -168,8 +168,8 @@ onMounted(async () => {
               top: 28px;z-index: 10"
           :style="{
             borderLeft:t.time.endsWith('00')?
-              '3px inset rgba(var(--v-theme-background),.2) !important':
-              '2px inset rgba(var(--v-theme-background),.2) !important'
+              '4px inset rgba(var(--v-theme-background),.2) !important':
+              '4px inset rgba(var(--v-theme-background),.2) !important'
           }"
         >
           <div
@@ -338,8 +338,8 @@ onMounted(async () => {
       transparent 1px),
   linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 1px,
       transparent 1px),
-  linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 1px,
-      transparent 1px);
+  linear-gradient(to right, rgba(var(--v-theme-gridStripeColor), 1) 4px,
+      transparent 4px);
   background-size: 32px 28px,
   32px 28px,
   64px 72px,
