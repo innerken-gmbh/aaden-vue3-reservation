@@ -321,6 +321,49 @@ export const useScanQrStore =
         }
     })
 
+export const useTableSelectorStore =
+    defineStore('tableSelector', {
+        state: () => {
+            return {
+                showPicker: false,
+                loading: false,
+                result: [],
+                neededTableCount: 1,
+                resolve: null,
+            }
+        },
+        actions: {
+            toggle(tableId) {
+                if (this.result.includes(tableId)) {
+                    this.result = this.result.filter(it => it !== tableId)
+                } else {
+                    if (this.neededTableCount > this.result.length) {
+                        this.result.push(tableId)
+                    } else {
+                        this.result.shift()
+                        this.result.push(tableId)
+                    }
+
+                }
+            },
+            async scanQR(tableCount = 1) {
+                return await new Promise(resolve => {
+                    this.neededTableCount = tableCount
+                    this.result = []
+                    this.showPicker = true
+                    this.resolve = resolve
+                })
+            },
+            confirm() {
+                if (this.resolve) {
+                    this.resolve(this.result)
+                    this.showPicker = false
+                }
+
+            }
+        }
+    })
+
 export const useDragStore = defineStore('drag', {
     state: () => {
         return {

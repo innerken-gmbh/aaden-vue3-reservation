@@ -14,6 +14,7 @@ import {onMounted} from "vue";
 import {changeLanguage} from "./plugins/changeLanguage.js";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import dayjs from "dayjs";
+import TableListDialog from "./views/dialogs/TableListDialog.vue";
 
 const homeController = useHomePageControllerStore()
 const qrController = useScanQrStore()
@@ -134,6 +135,7 @@ function recordTouch() {
             <home-page />
           </div>
         </div>
+        <table-list-dialog />
         <notifications-dialog />
         <scan-q-r-dialog />
         <global-date-picker />

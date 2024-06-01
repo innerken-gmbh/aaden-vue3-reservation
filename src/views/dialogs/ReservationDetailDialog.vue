@@ -1,5 +1,5 @@
 <script setup>
-import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {useReservationStore, useTableSelectorStore} from "../../dataLayer/repository/reservationRepo.js";
 import {computed, ref, watch} from "vue";
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import {timeFormat, toDateDisplayFormat, toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
@@ -10,10 +10,11 @@ import {
   reservationCanEdit,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
-import {confirm} from "../../dataLayer/api/reservationApi.js";
+import {changeSeatPlan, confirm} from "../../dataLayer/api/reservationApi.js";
 import EventLogListItem from "../items/EventLogListItem.vue";
 import {storeToRefs} from "pinia";
 
+const tableSelector = useTableSelectorStore()
 const controller = useReservationStore()
 const {showDetailDialog} = storeToRefs(controller)
 
@@ -55,9 +56,24 @@ const overrideTime = computed(() => {
   return timeChanged.value ? dayjs(info.value.fromDateTime).add(overrideDiningTime.value, 'minute').format(timeFormat) : null;
 })
 
+
+async function changeTable() {
+  const newTableArr = await tableSelector.scanQR(info.value.seatPlan.length)
+  const oldSeatPlan = info.value.seatPlan
+  oldSeatPlan.forEach((r, i) => {
+    r.tableId = newTableArr[i]
+  })
+  await controller.actionAnd(async () =>{
+    await changeSeatPlan(info.value.id, oldSeatPlan)
+    controller.showDetailDialog = false
+  }
+
+)
+}
+
 async function onConfirm() {
-  console.log(status.value)
   if (status.value === ReservationStatus.Confirmed) {
+
     await controller.checkIn(info.value?.id)
   } else {
     await controller.actionAnd(
@@ -147,7 +163,10 @@ async function onCancel() {
 
 
       <inline-two-row-container class="mt-4">
-        <div class="text-h5 font-weight-black">
+        <div
+          class="text-h5 font-weight-black"
+          @click="changeTable()"
+        >
           <div class="text-body-2">
             {{ $t('Table') }}
           </div>
