@@ -27,7 +27,7 @@ function confirm() {
         width="100%"
         color="primary"
         :min="today()"
-        :max="dayjs(today()).add(14,'days')
+        :max="dayjs(today()).add(31,'days')
           .format(dateFormat)"
         v-model="dateStore.currentDate"
       />
