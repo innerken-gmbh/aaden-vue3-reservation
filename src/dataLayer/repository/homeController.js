@@ -41,7 +41,7 @@ export const useHomePageControllerStore
                 {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
         },
         readyToSubmit() {
-            return this.reservationExtraInfo.firstName && this.reservationExtraInfo.lastName && (this.reservationExtraInfo.email || this.reservationExtraInfo.phone)
+            return this.reservationExtraInfo.firstName && this.reservationExtraInfo.lastName
         }
     },
     actions: {

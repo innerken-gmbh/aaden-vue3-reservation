@@ -20,7 +20,6 @@ function confirm() {
     max-width="500px"
   >
     <v-card
-      title=""
       width="100%"
     >
       <v-date-picker
