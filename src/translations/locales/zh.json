@@ -7,7 +7,7 @@
   "ReservationConfirmedByUser" : "客户确认",
   "ReservationConfirmedByMerchant" : "经销商确认",
   "ReservationCanceled" : "预约已取消",
-  "ReservationCreated" : "已创建约会",
+  "ReservationCreated" : "已创建",
   "Accept" : "接受",
   "Refresh" : "刷新",
   "MaybeTheLinkIsBroken" : "也许这个链接已损坏",
