@@ -13,7 +13,7 @@
   "MaybeTheLinkIsBroken" : "也许这个链接已损坏",
   "Back" : "后退",
   "Notifications" : "通知",
-  "Checking" : "检查..",
+  "Checking" : "查询中..",
   "NotAvailable" : "无法使用",
   "Optional" : "选填",
   "LastUpdate" : "最后更新于",
@@ -23,7 +23,7 @@
   "SelectTime" : "选择时间",
   "Time" : "时间",
   "People" : "人",
-  "Guests" : "顾客",
+  "Guests" : "顾客人数",
   "Date" : "日期",
   "NoReservationsATM" : "目前没有预定。吃个面条放松一下",
   "Table" : "桌子",
@@ -56,5 +56,7 @@
   "SelectPreferredTime": "选择您喜欢的时间",
   "OK" : "好的",
   "Oops" : "好的!",
-  "SearchHere" : "在这里搜索"
+  "SearchHere" : "在这里搜索",
+  "Merchant": "门店",
+  "Customer": "顾客"
 }

@@ -150,7 +150,7 @@ const displayPerson = computed(() => {
             />
           </form-container>
         </inline-two-row-container>
-        <form-container :label="$t('Note')+'('+$t('optional')+')'">
+        <form-container :label="$t('Note')+'('+$t('Optional')+')'">
           <v-textarea
             v-model="controller.reservationExtraInfo.note"
             auto-grow

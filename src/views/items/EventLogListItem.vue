@@ -26,7 +26,7 @@ const infoController = useReservationStore()
 
 
         <div class="text-body-2">
-          {{ info.createdUser }}
+          {{ $t(info.createdUser) }}
         </div>
         <div class="text-body-2">
           {{ info.note }}
