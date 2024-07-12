@@ -111,7 +111,7 @@ export const useReservationStore = defineStore('reservation', {
     },
     actions: {
         async loadReservations() {
-            this.tableList = await loadAllReservable()
+            this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableId})
             const tableMap = keyBy(this.tableList, 'tableId')
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)

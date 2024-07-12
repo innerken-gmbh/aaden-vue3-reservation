@@ -16,7 +16,6 @@ const props = defineProps({
   }
 })
 const reservationInfo = useReservationStore()
-console.log(reservationInfo.timeSlots.length, 'lenght')
 const dragController = useDragStore()
 
 
