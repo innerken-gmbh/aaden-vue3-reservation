@@ -61,7 +61,7 @@ const reservationInfo = useReservationStore()
       <template v-if="reservationInfo.filteredReservationList.length > 0">
         <template
           :key="time"
-          v-for="time in orderBy(Object.keys(reservationInfo.groupedReservations),[_.identity],['desc'])"
+          v-for="time in orderBy(Object.keys(reservationInfo.groupedReservations),[_.identity],['asc'])"
         >
           <div class="text-body-2 mt-4 mb-1 px-2 font-weight-black">
             {{ toOnlyTimeFormat(time) }}
