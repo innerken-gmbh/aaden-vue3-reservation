@@ -3,9 +3,11 @@
 import {ReservationStatus} from "../../dataLayer/repository/reservationDisplay.js";
 import {toOnlyTimeFormat} from "../../dataLayer/repository/dateRepo.js";
 import {useReservationStore} from "../../dataLayer/repository/reservationRepo.js";
+import {useDisplay} from "vuetify";
 
 const reservationInfo = useReservationStore()
 defineProps({info: Object})
+const {mdAndUp}=useDisplay()
 </script>
 
 <template>
@@ -25,7 +27,10 @@ defineProps({info: Object})
       </div>
 
       <v-spacer />
-      <div class="mr-4 text-body-2 font-weight-black">
+      <div
+        v-if="mdAndUp"
+        class="mr-4 text-body-2 font-weight-black"
+      >
         Tel: {{ info.tel }}
       </div>
       <div
