@@ -87,6 +87,8 @@ export const linkColors = [//在这里添加颜色
 
 //const mainTheme = 'aadenLightTheme'
 const mainTheme = 'aadenTheme'
+export const Remember = LocalSettingManager.config({lang: "de", themMode: true})
+
 
 export const vuetify = createVuetify({
     icons: {
@@ -112,7 +114,7 @@ export const vuetify = createVuetify({
             lighten: 5,
             darken: 5,
         },
-        defaultTheme: mainTheme,
+        defaultTheme: Remember.themMode?'aadenTheme':'aadenLightTheme',
         themes: {
             aadenTheme,
             aadenLightTheme,
@@ -121,9 +123,5 @@ export const vuetify = createVuetify({
 })
 
 
-
-
 export const pinia = createPinia()
-
-export const Remember = LocalSettingManager.config({lang: "de"})
 
