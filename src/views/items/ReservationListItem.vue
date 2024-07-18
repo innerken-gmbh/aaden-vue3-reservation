@@ -23,7 +23,11 @@ defineProps({info: Object})
           {{ info.firstName }} {{ info.lastName }}
         </div>
       </div>
+
       <v-spacer />
+      <div class="mr-4 text-body-2 font-weight-black">
+        Tel: {{ info.tel }}
+      </div>
       <div
         style="display: grid;grid-auto-flow: column;grid-gap: 8px;width: fit-content"
         class="text-body-2"

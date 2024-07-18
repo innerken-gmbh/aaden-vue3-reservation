@@ -63,7 +63,7 @@ const reservationInfo = useReservationStore()
           :key="time"
           v-for="time in orderBy(Object.keys(reservationInfo.groupedReservations),[_.identity],['desc'])"
         >
-          <div class="text-h5 mt-4 mb-1 px-2 font-weight-black">
+          <div class="text-body-2 mt-4 mb-1 px-2 font-weight-black">
             {{ toOnlyTimeFormat(time) }}
           </div>
 

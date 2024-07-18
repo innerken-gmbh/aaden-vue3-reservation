@@ -115,6 +115,7 @@ export const vuetify = createVuetify({
         defaultTheme: mainTheme,
         themes: {
             aadenTheme,
+            aadenLightTheme,
         },
     },
 })
