@@ -179,7 +179,7 @@ async function onCancel() {
             {{ $t('NeedStroller') }}
           </div>
           <div>
-            {{ info.useStroller === '1' ? $t('Yes') : $t('No') }}
+            {{ info.useStroller.toString() === '1' ? $t('Yes') : $t('No') }}
           </div>
         </div>
       </inline-two-row-container>
