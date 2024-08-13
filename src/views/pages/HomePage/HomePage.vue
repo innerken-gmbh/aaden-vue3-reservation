@@ -17,6 +17,7 @@ import ListViewFragment from "./fragments/ListViewFragment.vue";
 import TimeLineViewFragment from "./fragments/TimeLineViewFragment.vue";
 import {useReservationChangeVM} from "../../../dataLayer/repository/reservationChangesVM.js";
 import {useNotificationStore} from "../../../dataLayer/repository/homeController.js";
+import {Howl} from "howler";
 
 
 const reservationInfo = useReservationStore()
@@ -37,6 +38,11 @@ watchEffect(() => {
 watch(currentTime, async () => {
   if (!notificationController.show) {
     await notificationController.reload()
+    const lastEvent = notificationController.eventList[0]
+    const timeRange = dayjs(currentTime.value).diff(lastEvent.createdAt,'minute')
+    if (timeRange < 1) {
+      doSpeak()
+    }
   }
   if (!changeVM.loading && changeVM.changesCount === 0) {
     if(dayjs(reservationInfo.lastClickTimestamp).isBefore(dayjs().subtract(1,'minute'))){
@@ -44,6 +50,9 @@ watch(currentTime, async () => {
     }
 
   }
+},{
+  deep: true,
+  immediate: true,
 })
 
 const {date} = storeToRefs(reservationInfo)
@@ -66,6 +75,15 @@ onMounted(() => {
   init()
 })
 const datePicker = useDatePickerStore()
+
+
+function doSpeak() {
+  try {
+    new Howl({src: ['sound.mp3']}).play()
+  } catch (e) {
+    console.log(e)
+  }
+}
 
 async function selectNewDate() {
   const newDate = await datePicker.selectDate()

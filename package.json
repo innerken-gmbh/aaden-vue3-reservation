@@ -24,7 +24,8 @@
     "vue-i18n": "9",
     "vue-qrcode-reader": "^5.5.1",
     "vue-router": "4",
-    "vuetify": "^3.5.1"
+    "vuetify": "^3.5.1",
+    "howler": "^2.2.4"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",

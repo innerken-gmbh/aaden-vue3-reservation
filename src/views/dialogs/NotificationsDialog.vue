@@ -5,8 +5,8 @@ import {onMounted} from "vue";
 import EventLogListItem from "../items/EventLogListItem.vue";
 
 const controller = useNotificationStore()
-onMounted(() => {
-  controller.reload()
+onMounted(async () => {
+  await controller.reload()
 })
 
 </script>
