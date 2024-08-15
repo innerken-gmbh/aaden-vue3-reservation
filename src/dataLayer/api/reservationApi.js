@@ -1,8 +1,8 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
 
-// const host = 'https://reservation-api.aaden.io/'
-const host = 'http://localhost/'
+const host = 'https://reservation-api.aaden.io/'
+// const host = 'http://localhost/'
 
 hillo.initial(host)
 
