@@ -1,8 +1,8 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
 
-const host = 'https://reservation-api.aaden.io/'
-// const host = 'http://localhost/'
+// const host = 'https://reservation-api.aaden.io/'
+const host = 'http://localhost/'
 
 hillo.initial(host)
 
@@ -12,6 +12,11 @@ export async function loadAllEvent() {
 
 export async function readEvent(id) {
     return (await hillo.jsonPost('reservation/event/' + id + '/read',
+        {}))
+}
+
+export async function notifyEvent(id) {
+    return (await hillo.jsonPost('reservation/event/' + id + '/notified',
         {}))
 }
 

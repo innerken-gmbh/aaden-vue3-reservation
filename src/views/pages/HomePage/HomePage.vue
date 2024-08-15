@@ -18,6 +18,7 @@ import TimeLineViewFragment from "./fragments/TimeLineViewFragment.vue";
 import {useReservationChangeVM} from "../../../dataLayer/repository/reservationChangesVM.js";
 import {useNotificationStore} from "../../../dataLayer/repository/homeController.js";
 import {Howl} from "howler";
+import {notifyEvent} from "../../../dataLayer/api/reservationApi.js";
 
 
 const reservationInfo = useReservationStore()
@@ -27,7 +28,6 @@ const notificationController = useNotificationStore()
 const loading = ref(true)
 const currentTimeX = ref(0)
 const {currentTime} = useCurrentTime()
-
 watchEffect(() => {
   currentTimeX.value = Math.ceil((dayjs(currentTime.value)
           .subtract(2, "hours")
@@ -36,24 +36,26 @@ watchEffect(() => {
 
 })
 watch(currentTime, async () => {
-  if (!notificationController.show) {
-    await notificationController.reload()
-    const lastEvent = notificationController.eventList[0]
-    const timeRange = dayjs(currentTime.value).diff(lastEvent.createdAt,'minute')
-    if (timeRange < 1) {
-      doSpeak()
+      if (!notificationController.show) {
+        await notificationController.reload()
+        const lastEvent = notificationController.eventList[0]
+        if (!lastEvent.notified) {
+            doSpeak()
+          await notifyEvent(lastEvent.id)
+        }
+      }
+      if (!changeVM.loading && changeVM.changesCount === 0) {
+        if (dayjs(reservationInfo.lastClickTimestamp).isBefore(dayjs().subtract(1, 'minute'))) {
+          await reservationInfo.reload()
+        }
+      }
+    },
+    {
+      deep: true,
+      immediate:
+          true,
     }
-  }
-  if (!changeVM.loading && changeVM.changesCount === 0) {
-    if(dayjs(reservationInfo.lastClickTimestamp).isBefore(dayjs().subtract(1,'minute'))){
-      await reservationInfo.reload()
-    }
-
-  }
-},{
-  deep: true,
-  immediate: true,
-})
+)
 
 const {date} = storeToRefs(reservationInfo)
 watch(date, async () => {
