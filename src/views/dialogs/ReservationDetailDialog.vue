@@ -171,7 +171,7 @@ async function onCancel() {
             {{ $t('Table') }}
           </div>
           <div>
-            {{ info.tableName }}
+            {{ info.tableName }}/{{ info.personCount }}
           </div>
         </div>
         <div class="text-h5 font-weight-black">
@@ -331,6 +331,7 @@ async function onCancel() {
               <v-btn
                 :loading="controller.loading"
                 @click="onConfirm"
+
                 color="primary"
                 block
               >
