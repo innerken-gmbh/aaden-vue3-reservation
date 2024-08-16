@@ -171,7 +171,7 @@ async function onCancel() {
             {{ $t('Table') }}
           </div>
           <div>
-            {{ info.tableName }}/{{ info.personCount }}
+            {{ info.tableName }} / {{ info.personCount }} P
           </div>
         </div>
         <div class="text-h5 font-weight-black">
