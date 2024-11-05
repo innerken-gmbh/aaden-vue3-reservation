@@ -51,7 +51,7 @@ const defaultReservationInfo = {
     childCount: '0',
     useStroller: '0',
     createdBy: 'Merchant',
-    internal:true,
+    internal: true,
 }
 
 export async function addReservation(reservationInfo) {
@@ -95,7 +95,7 @@ export async function checkTableTimeAvailable(date,
                                               personCount, id) {
     const getTableTime = (await hillo.jsonPost('reservableTable/getTableTime', {
         reserveDate: date, peopleCount: personCount,
-        userId: id
+        userId: id, internal: true
     }))
     if (getTableTime.code === 200) {
         return getTableTime.data
