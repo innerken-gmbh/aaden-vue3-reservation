@@ -25,6 +25,16 @@ onMounted(() => {
   homeController.getUserInfo()
 })
 
+function changeSort () {
+  const sortByName = localStorage.getItem('sortByName')
+  if (sortByName === '1') {
+    localStorage.setItem('sortByName', '0')
+  } else {
+    localStorage.setItem('sortByName', '1')
+  }
+  location.reload()
+}
+
 function toggleTheme() {
   theme.toggleTheme()
   vuetifyTheme.global.name.value = theme.themeName
@@ -68,6 +78,12 @@ function recordTouch() {
         </template>
 
         <template v-if="!reservationStore.showSearch">
+          <v-btn
+            @click="changeSort"
+            icon=""
+          >
+            <v-icon>mdi-sort</v-icon>
+          </v-btn>
           <v-btn
             @click="toggleTheme()"
             icon=""

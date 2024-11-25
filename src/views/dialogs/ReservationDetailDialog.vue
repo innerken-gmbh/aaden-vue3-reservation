@@ -26,6 +26,10 @@ const canEdit = computed(() => {
   return reservationCanEdit(info.value)
 })
 
+const canCheckIn = computed(() => {
+  return dayjs().format('YYYY-MM-DD') === dayjs(info.value?.fromDateTime).format('YYYY-MM-DD');
+})
+
 const status = computed(() => {
   return info.value?.status ?? ''
 })
@@ -331,7 +335,7 @@ async function onCancel() {
               <v-btn
                 :loading="controller.loading"
                 @click="onConfirm"
-
+                :disabled="!canCheckIn"
                 color="primary"
                 block
               >

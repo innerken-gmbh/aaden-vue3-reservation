@@ -111,7 +111,12 @@ export const useReservationStore = defineStore('reservation', {
     },
     actions: {
         async loadReservations() {
-            this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableId})
+            const sortByName = localStorage.getItem('sortByName')
+            if (sortByName === '1') {
+                this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableName})
+            } else {
+                this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableId})
+            }
             const tableMap = keyBy(this.tableList, 'tableId')
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
