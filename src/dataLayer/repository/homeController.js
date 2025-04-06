@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {toBeautiful, today} from "./dateRepo.js";
-import {addReservation, getUserList, loadAllEvent, readEvent} from "../api/reservationApi.js";
+import {addReservation, checkActiveStatus, getUserList, loadAllEvent, readEvent} from "../api/reservationApi.js";
 import {useReservationStore} from "./reservationRepo.js";
 import dayjs from "dayjs";
 import {userId} from "../../main.js";
@@ -76,7 +76,7 @@ export const useHomePageControllerStore
             this.showNewReservationModal = true
         },
         async getUserInfo() {
-            this.userInfo = (await getUserList()).find(it => it.id === parseInt(userId))
+            this.userInfo = await checkActiveStatus(userId)
         }
 
     }

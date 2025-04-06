@@ -11,8 +11,7 @@ import {i18n} from "./plugins/i18n.js";
 
 
 
-const id = IKUtils.getQueryString("userId") || 1
-console.log(id, 'id')
+const id = IKUtils.getQueryString("userId") || 9101
 export const userId = parseInt(id)
 dayjs.locale(Remember.lang)
 

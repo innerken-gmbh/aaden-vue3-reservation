@@ -1,7 +1,7 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
 
-const host = 'https://reservation-api.aaden.io/'
+const host = import.meta.env.DEV ? "http://192.168.178.41:8080" : "https://cloud-v2.aaden.io"
 // const host = 'http://localhost/'
 
 hillo.initial(host)
@@ -103,6 +103,11 @@ export async function checkTableTimeAvailable(date,
         return '请设置该人数的规则'
     }
 }
+
+export async function checkActiveStatus(deviceId) {
+    return (await hillo.jsonPost("/cloudUser/reservationUser/check", {deviceId})).data
+}
+
 
 export async function getUserList() {
     return (await hillo.post('user/getList')).data
