@@ -1,7 +1,8 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
 
-const host = import.meta.env.DEV ? "http://192.168.178.41:8080" : "https://cloud-v2.aaden.io"
+// const host = import.meta.env.DEV ? "http://192.168.178.41:8080" : "https://cloud-v2.aaden.io"
+const host ="https://cloud-v2.aaden.io"
 // const host = 'http://localhost/'
 
 hillo.initial(host)
