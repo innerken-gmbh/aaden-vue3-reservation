@@ -10,7 +10,7 @@ import {
   reservationCanEdit,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
-import {changeSeatPlan, confirm} from "../../dataLayer/api/reservationApi.js";
+import {changeSeatPlan, confirm, priceDisplay} from "../../dataLayer/api/reservationApi.js";
 import EventLogListItem from "../items/EventLogListItem.vue";
 import {storeToRefs} from "pinia";
 
@@ -114,7 +114,10 @@ async function onCancel() {
           {{ $t('Reservation') }}
         </div>
         <div class="text-body-2">
-          #{{ controller.activeReservationId }}/{{ $t(status) }}
+          #{{ controller.activeReservationId }}/{{ $t(status) }}<span v-if="controller.paymentIntentId">{{controller.paymentIntentId}}</span>
+        </div>
+        <div class="text-body-2">
+          <span>{{priceDisplay(info.totalPrice)}}</span><span v-if="info.paymentIntentId">{{info.paymentIntentId}}</span>
         </div>
       </div>
       <v-spacer />

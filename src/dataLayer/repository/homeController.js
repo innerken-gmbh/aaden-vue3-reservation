@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {toBeautiful, today} from "./dateRepo.js";
-import {addReservation, checkActiveStatus, getUserList, loadAllEvent, readEvent} from "../api/reservationApi.js";
-import {useReservationStore} from "./reservationRepo.js";
+import {addReservation, addRoomReservation, checkActiveStatus, loadAllEvent, readEvent} from "../api/reservationApi.js";
+import {useReservationStore, useRoomPickerStore} from "./reservationRepo.js";
 import dayjs from "dayjs";
 import {userId} from "../../main.js";
 
@@ -20,6 +20,7 @@ export const useHomePageControllerStore
         otherTime: [],
         error: false,
         errorMessage: '',
+        tableType: 'Table',
         reservationExtraInfo: {
             firstName: '',
             lastName: '',
@@ -34,7 +35,7 @@ export const useHomePageControllerStore
             return Object.assign({
                     fromDateTime: this.date + ' ' +
                         this.startTime,
-                    userId: userId,
+                    deviceId: userId,
                     personCount: this.personCount,
                 },
                 this.reservationExtraInfo,
@@ -47,7 +48,18 @@ export const useHomePageControllerStore
     actions: {
         async addReservation() {
             this.loading = true
-            const res = await addReservation(this.reservationAddModel)
+            const obj = this.reservationAddModel
+            let res = null
+            if (this.tableType === 'Room') {
+                const roomPicker = useRoomPickerStore()
+                obj.totalPrice = roomPicker.totalPrice
+                obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
+                obj.duration = roomPicker.neededSlots30
+                obj.requestFrom = ''
+                res = await addRoomReservation(obj)
+            } else {
+                res = await addReservation(obj)
+            }
             if (res.code === 200) {
                 await useReservationStore().reload()
                 this.showNewReservationModal = false
@@ -73,6 +85,8 @@ export const useHomePageControllerStore
                 note: '',
                 useStroller: false
             }
+            this.tableType = 'Table'
+            useRoomPickerStore().selectedRoom = null
             this.showNewReservationModal = true
         },
         async getUserInfo() {

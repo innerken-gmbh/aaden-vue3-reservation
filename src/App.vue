@@ -10,7 +10,7 @@ import {useTheme} from "vuetify";
 import {useHomePageControllerStore} from "./dataLayer/repository/homeController.js";
 import NotificationsDialog from "./views/dialogs/NotificationsDialog.vue";
 import PlaceHolder from "./views/components/PlaceHolder.vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {changeLanguage} from "./plugins/changeLanguage.js";
 import GlobalDatePicker from "./views/dialogs/GlobalDatePicker.vue";
 import dayjs from "dayjs";
@@ -21,10 +21,19 @@ const qrController = useScanQrStore()
 const reservationStore = useReservationStore()
 const theme = useThemeStore()
 const vuetifyTheme = useTheme()
+const items = ref([{icon: 'mdi-sort'},{icon: 'mdi-theme-light-dark'},{icon: 'mdi-qrcode-scan'}])
 onMounted(() => {
   homeController.getUserInfo()
 })
-
+function justDoIt (item) {
+  if (item.icon === 'mdi-sort') {
+    changeSort()
+  } else if (item.icon === 'mdi-theme-light-dark') {
+    toggleTheme()
+  } else if (item.icon === 'mdi-qrcode-scan') {
+    qrController.scanQR()
+  }
+}
 function changeSort () {
   const sortByName = localStorage.getItem('sortByName')
   if (sortByName === '1') {
@@ -78,30 +87,41 @@ function recordTouch() {
         </template>
 
         <template v-if="!reservationStore.showSearch">
-          <v-btn
-            @click="changeSort"
-            icon=""
-          >
-            <v-icon>mdi-sort</v-icon>
-          </v-btn>
-          <v-btn
-            @click="toggleTheme()"
-            icon=""
-          >
-            <v-icon>mdi-theme-light-dark</v-icon>
-          </v-btn>
-          <v-btn
-            @click="reservationStore.showSearch=true"
-            icon=""
-          >
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
-          <v-btn
-            @click="homeController.showNewModal()"
-            icon=""
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
+          <div class="text-center">
+            <v-menu>
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  icon=""
+                >
+                  <v-icon>mdi-cog</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in items"
+                  :key="index"
+                  :value="index"
+                  @click="justDoIt(item)"
+                >
+                  <v-list-item-title><v-icon>{{ item.icon }}</v-icon></v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-btn
+                @click="reservationStore.showSearch=true"
+                icon=""
+            >
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+            <v-btn
+                @click="homeController.showNewModal()"
+                icon=""
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </div>
           <v-menu>
             <template #activator="{props}">
               <v-btn
@@ -122,12 +142,6 @@ function recordTouch() {
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn
-            @click="qrController.scanQR()"
-            icon=""
-          >
-            <v-icon>mdi-qrcode-scan</v-icon>
-          </v-btn>
         </template>
         <template v-else>
           <v-btn

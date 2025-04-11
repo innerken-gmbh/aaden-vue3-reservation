@@ -10,9 +10,10 @@ import {
     loadAllReservable
 } from "../api/reservationApi.js";
 
-import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sumBy} from "lodash-es";
+import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sum, sumBy} from "lodash-es";
 import {linkColors} from "../../plugins/plugins.js";
 import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./reservationDisplay.js";
+import {useHomePageControllerStore} from "./homeController.js";
 
 
 export const useReservationStore = defineStore('reservation', {
@@ -25,6 +26,7 @@ export const useReservationStore = defineStore('reservation', {
         search: '',
         showAll: true,
         tableList: [],
+        roomList: [],
         xSize: 32,
         loading: false,
         ySize: 28,
@@ -112,11 +114,19 @@ export const useReservationStore = defineStore('reservation', {
     actions: {
         async loadReservations() {
             const sortByName = localStorage.getItem('sortByName')
+            const allList = await loadAllReservable()
+            const tableList = allList.filter(it => it.tableType === 'Table')
+            const roomList = allList.filter(it => it.tableType === 'Room')
             if (sortByName === '1') {
-                this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableName})
+                const sortTableList = tableList.sort((a,b) => a.tableName.localeCompare(b.tableName, undefined, {numeric: true}))
+                const sortRoomList = roomList.sort((a,b) => a.tableName.localeCompare(b.tableName, undefined, {numeric: true}))
+                this.tableList = sortTableList.concat(sortRoomList)
             } else {
-                this.tableList = sortBy((await loadAllReservable()),(x) => {return x.tableId})
+                const sortTableList = sortBy((tableList),(x) => {return x.tableId})
+                const sortRoomList = sortBy((roomList),(x) => {return x.tableId})
+                this.tableList = sortTableList.concat(sortRoomList)
             }
+            console.log(this.tableList, 'list')
             const tableMap = keyBy(this.tableList, 'tableId')
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
@@ -287,6 +297,48 @@ export const useTimePickerStore = defineStore('timePicker', {
         }
     }
 })
+
+export const useRoomPickerStore = defineStore('roomPicker', {
+    state: () => {
+        return {
+            availableRooms: null,
+            selectedRoom: null,
+            resolve: null,
+            neededSlots30: 2,
+        }
+    },
+    actions: {
+        async selectRoom(room) {
+            console.log(room,'room')
+            this.selectedRoom = room
+            useTimePickerStore.availableTimes = room.availableSlots.map(it => it.times)
+        },
+
+    },
+    getters: {
+        maxHours: (state) => {
+            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().startTime + ':00'))
+            if (slot) {
+                const allTimes = slot?.times.map(it => it.time) ?? []
+                const index = allTimes.findIndex(it => it === useHomePageControllerStore().startTime + ':00')
+                return Math.floor((allTimes.length - index) / 2)
+            }
+            return 0
+        },
+        totalPrice:(state) => {
+            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().startTime + ':00'))
+            if (slot) {
+                const allTimes = slot?.times.map(it => it.time) ?? []
+                const index = allTimes.findIndex(it => it === useHomePageControllerStore().startTime + ':00')
+                const realSlots = slot.times.slice(index, index + state.neededSlots30 * 2)
+                return sum(realSlots.map(it => it.price))
+            }
+            return 0
+        }
+    }
+})
+
+
 export const useScanQrStore =
     defineStore('scanQR', {
         state: () => {

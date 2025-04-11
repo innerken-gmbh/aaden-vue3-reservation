@@ -49,7 +49,7 @@ const defaultReservationInfo = {
     tel: '0123',
     company: 'com',
     note: '',
-    childCount: '0',
+    childCount: 0,
     useStroller: '0',
     createdBy: 'Merchant',
     internal: true,
@@ -57,6 +57,10 @@ const defaultReservationInfo = {
 
 export async function addReservation(reservationInfo) {
     return (await hillo.jsonPost('reservation/add', Object.assign({}, defaultReservationInfo, reservationInfo)))
+}
+
+export async function addRoomReservation(reservationInfo) {
+    return (await hillo.jsonPost('reservation/addRoom', Object.assign({}, defaultReservationInfo, reservationInfo)))
 }
 
 export async function checkIn(id) {
@@ -96,7 +100,7 @@ export async function checkTableTimeAvailable(date,
                                               personCount, id) {
     const getTableTime = (await hillo.jsonPost('reservableTable/getTableTime', {
         reserveDate: date, peopleCount: personCount,
-        userId: id, internal: true
+        deviceId: id, internal: true
     }))
     if (getTableTime.code === 200) {
         return getTableTime.data
@@ -115,3 +119,29 @@ export async function getUserList() {
 }
 
 
+export async function getRoomList(date,
+                                  personCount, id) {
+    const getTableTime = (await hillo.jsonPost('reservableTable/getRoomList',
+        {
+            reserveDate: date,
+            peopleCount: personCount,
+            deviceId: id,
+            internal: false
+        }))
+    if (getTableTime.code === 200) {
+        return getTableTime.data
+    } else {
+        return []
+    }
+}
+
+export function priceDisplay (price) {
+    if (isNaN(parseFloat(price)) || (price === Infinity || price === -Infinity)) {
+        return ' - '
+    }
+    if (price.includes && price.includes(',')) {
+        price = price.replace('.', '').replace(',', '.')
+    }
+    const res = parseFloat(price).toFixed(2) === '-0.00' ? '0.00' : parseFloat(price).toFixed(2)
+    return res.replace('.', ',') + ' €'
+}

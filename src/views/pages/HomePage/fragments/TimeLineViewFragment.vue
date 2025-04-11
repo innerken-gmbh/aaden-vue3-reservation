@@ -202,7 +202,10 @@ onMounted(async () => {
         v-for="(t,i) in reservationInfo.tableList"
         :key="t.id"
       >
-        {{ t.tableName }}
+        <span :style="t.tableType === 'Room'?'color:yellow':''">
+          {{ t.tableName }}
+        </span>
+
         <v-spacer />
         <v-icon :color="t.active?'secondary':'grey'">
           mdi-circle-small

@@ -2,18 +2,20 @@
 
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import FormContainer from "../items/FormContainer.vue";
-import {useDatePickerStore, useTimePickerStore} from "../../dataLayer/repository/reservationRepo";
-import {checkTableTimeAvailable} from "../../dataLayer/api/reservationApi.js";
+import {useDatePickerStore, useRoomPickerStore, useTimePickerStore} from "../../dataLayer/repository/reservationRepo";
+import {checkTableTimeAvailable, getRoomList, priceDisplay} from "../../dataLayer/api/reservationApi.js";
 import {computed, watchEffect} from "vue";
 import {storeToRefs} from "pinia";
 import BaseDialog from "../components/BaseDialog.vue";
 import {toDateDisplayFormat} from "../../dataLayer/repository/dateRepo.js";
 import {useHomePageControllerStore} from "../../dataLayer/repository/homeController.js";
 import {userId} from "../../main.js";
+import RoomListItem from "./HomePage/fragments/RoomListItem.vue";
 
 const controller = useHomePageControllerStore()
 const datePicker = useDatePickerStore()
 const timerPicker = useTimePickerStore()
+const roomPicker = useRoomPickerStore()
 
 const {personCount, date,} = storeToRefs(controller)
 watchEffect(async () => {
@@ -25,6 +27,8 @@ async function refreshAvailableTimes() {
     controller.startTime = null
     timerPicker.availableTimes =
         await checkTableTimeAvailable(date.value, personCount.value, userId)
+    roomPicker.availableRooms = (await getRoomList(date.value, personCount.value, userId)).filter(it => it.availableSlots.length > 0)
+    roomPicker.showOtherInfo = false
     if (timerPicker.availableTimes.length > 0) {
       controller.startTime = timerPicker.availableTimes[0].startTime
     }
@@ -42,6 +46,11 @@ async function selectData() {
   controller.date = await datePicker.selectDate()
   controller.showNewReservationModal = true
 }
+
+// async function selectType() {
+//   controller.date = await datePicker.selectDate()
+//   controller.showNewReservationModal = true
+// }
 
 const displayPerson = computed(() => {
   return 18
@@ -104,7 +113,29 @@ const displayPerson = computed(() => {
               {{ toDateDisplayFormat(controller.date) }}
             </div>
           </form-container>
-          <form-container :label="$t('Time')">
+          <form-container :label="'Type'">
+            <div
+              class="mt-2 text-body-1 font-weight-black"
+              style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 12px"
+            >
+              <v-card
+                @click="controller.tableType=i"
+                rounded="pill"
+                :key="i"
+                :color="controller.tableType===i?'peopleSelectorActiveColor':'peopleSelectorInactiveColor'"
+                v-for="i in ['Table','Room']"
+                class="d-flex align-center justify-center"
+              >
+                {{ i }}
+              </v-card>
+            </div>
+          </form-container>
+        </inline-two-row-container>
+        <template v-if="controller.tableType === 'Table'">
+          <form-container
+            class="mt-2"
+            :label="$t('Time')"
+          >
             <div
               v-if="timerPicker.availableTimes.length>0"
               class="text-h5 font-weight-black d-flex align-center text-no-wrap"
@@ -118,6 +149,88 @@ const displayPerson = computed(() => {
             >
               {{ $t('NotAvailable') }}
             </div>
+          </form-container>
+        </template>
+        <template v-else>
+          <div class="text-body-2 mt-2">
+            包厢选择
+          </div>
+          <div
+            v-if="roomPicker.availableRooms.length>0"
+            class="mt-2 text-body-1 font-weight-black"
+            style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 12px"
+          >
+            <room-list-item
+                :color="roomPicker.selectedRoom===r?'peopleSelectorActiveColor':''"
+              v-for="(r,index) in roomPicker.availableRooms"
+              :key="index"
+              :room-with-time-info="r"
+            />
+          </div>
+          <div
+            v-else
+            class="text-h5 font-weight-black bg-error mt-1"
+          >
+            暂无合适包厢
+          </div>
+        </template>
+        <inline-two-row-container
+          v-if="roomPicker.selectedRoom"
+          class="mt-2"
+        >
+          <form-container
+            class="mt-2"
+            :label="$t('Time')"
+          >
+            <div
+              v-if="timerPicker.availableTimes.length>0"
+              class="text-h5 font-weight-black d-flex align-center text-no-wrap"
+              @click="selectTime"
+            >
+              {{ controller?.startTime ?? $t('Checking') }}
+            </div>
+            <div
+              v-else
+              class="text-h5 font-weight-black bg-error"
+            >
+              {{ $t('NotAvailable') }}
+            </div>
+          </form-container>
+          <form-container
+            :label="$t('时长')"
+          >
+            <v-card
+              class="align-center d-flex"
+              flat
+            >
+              <div class="d-flex flex-column">
+                <div>
+                  {{ (roomPicker.neededSlots30 / 2).toFixed(1) }} {{ $t('Hours') }}
+                </div>
+                <div>
+                  {{ priceDisplay(roomPicker.totalPrice) }}
+                </div>
+              </div>
+
+              <v-spacer />
+              <v-btn
+                icon="mdi-minus"
+                class="mr-2"
+                color="grey-lighten-2"
+                @click="roomPicker.neededSlots30>2?roomPicker.neededSlots30--:''"
+                rounded
+                flat
+                size="24"
+              />
+              <v-btn
+                icon="mdi-plus"
+                color="primary"
+                size="24"
+                @click="roomPicker.neededSlots30<roomPicker.maxHours?roomPicker.neededSlots30++:''"
+                rounded
+                flat
+              />
+            </v-card>
           </form-container>
         </inline-two-row-container>
       </template>
