@@ -304,12 +304,11 @@ export const useRoomPickerStore = defineStore('roomPicker', {
             availableRooms: null,
             selectedRoom: null,
             resolve: null,
-            neededSlots30: 2,
+            neededSlots30: 6,
         }
     },
     actions: {
         async selectRoom(room) {
-            console.log(room,'room')
             this.selectedRoom = room
             useTimePickerStore.availableTimes = room.availableSlots.map(it => it.times)
         },

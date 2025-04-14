@@ -199,37 +199,16 @@ const displayPerson = computed(() => {
           <form-container
             :label="$t('时长')"
           >
-            <v-card
-              class="align-center d-flex"
-              flat
-            >
+            <v-card>
               <div class="d-flex flex-column">
                 <div>
                   {{ (roomPicker.neededSlots30 / 2).toFixed(1) }} {{ $t('Hours') }}
                 </div>
+                <v-spacer></v-spacer>
                 <div>
                   {{ priceDisplay(roomPicker.totalPrice) }}
                 </div>
               </div>
-
-              <v-spacer />
-              <v-btn
-                icon="mdi-minus"
-                class="mr-2"
-                color="grey-lighten-2"
-                @click="roomPicker.neededSlots30>2?roomPicker.neededSlots30--:''"
-                rounded
-                flat
-                size="24"
-              />
-              <v-btn
-                icon="mdi-plus"
-                color="primary"
-                size="24"
-                @click="roomPicker.neededSlots30<roomPicker.maxHours?roomPicker.neededSlots30++:''"
-                rounded
-                flat
-              />
             </v-card>
           </form-container>
         </inline-two-row-container>
