@@ -25,17 +25,25 @@ watchEffect(async () => {
 async function refreshAvailableTimes() {
   if (controller.showNewReservationModal) {
     controller.startTime = null
-    timerPicker.availableTimes =
-        await checkTableTimeAvailable(date.value, personCount.value, userId)
-    roomPicker.availableRooms = (await getRoomList(date.value, personCount.value, userId)).filter(it => it.availableSlots.length > 0)
-    roomPicker.showOtherInfo = false
-    if (timerPicker.availableTimes.length > 0) {
-      controller.startTime = timerPicker.availableTimes[0].startTime
+    if (controller.tableType === 'Table') {
+      timerPicker.availableTimes =
+          await checkTableTimeAvailable(date.value, personCount.value, userId)
+      if (timerPicker.availableTimes.length > 0) {
+        controller.startTime = timerPicker.availableTimes[0].startTime
+      }
+    } else {
+      roomPicker.availableRooms = (await getRoomList(date.value, personCount.value, userId)).filter(it => it.availableSlots.length > 0)
     }
   }
 
 }
 
+function selectedType (type) {
+  controller.tableType = type
+  if (type === 'Table') {
+    roomPicker.selectedRoom = null
+  }
+}
 
 async function selectTime() {
   controller.startTime = await timerPicker.selectTime()
@@ -54,6 +62,10 @@ async function selectData() {
 
 const displayPerson = computed(() => {
   return 18
+})
+
+const displayType = computed(() => {
+  return ['Table','Room']
 })
 
 </script>
@@ -119,11 +131,11 @@ const displayPerson = computed(() => {
               style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 12px"
             >
               <v-card
-                @click="controller.tableType=i"
+                @click="selectedType(i)"
                 rounded="pill"
                 :key="i"
                 :color="controller.tableType===i?'peopleSelectorActiveColor':'peopleSelectorInactiveColor'"
-                v-for="i in ['Table','Room']"
+                v-for="i in displayType"
                 class="d-flex align-center justify-center"
               >
                 {{ i }}
@@ -156,7 +168,7 @@ const displayPerson = computed(() => {
             包厢选择
           </div>
           <div
-            v-if="roomPicker.availableRooms.length>0"
+            v-if="roomPicker.availableRooms?.length>0"
             class="mt-2 text-body-1 font-weight-black"
             style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 12px"
           >

@@ -309,8 +309,11 @@ export const useRoomPickerStore = defineStore('roomPicker', {
     },
     actions: {
         async selectRoom(room) {
+            useTimePickerStore().availableTimes = room.availableSlots.flatMap(it => it.times).map(it => {
+                return {startTime:it.time.split(':').slice(0, 2).join(':')}
+            })
+            useHomePageControllerStore().startTime = useTimePickerStore().availableTimes[0].startTime
             this.selectedRoom = room
-            useTimePickerStore.availableTimes = room.availableSlots.map(it => it.times)
         },
 
     },

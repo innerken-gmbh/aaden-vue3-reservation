@@ -56,6 +56,7 @@ export const useHomePageControllerStore
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
                 obj.duration = roomPicker.neededSlots30
                 obj.requestFrom = ''
+                obj.internal = false
                 res = await addRoomReservation(obj)
             } else {
                 res = await addReservation(obj)
