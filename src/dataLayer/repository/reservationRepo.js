@@ -328,14 +328,15 @@ export const useRoomPickerStore = defineStore('roomPicker', {
             return 0
         },
         totalPrice:(state) => {
+            const minConsumePrice = state.selectedRoom.room.minConsumePrice
             const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().startTime + ':00'))
             if (slot) {
                 const allTimes = slot?.times.map(it => it.time) ?? []
                 const index = allTimes.findIndex(it => it === useHomePageControllerStore().startTime + ':00')
                 const realSlots = slot.times.slice(index, index + state.neededSlots30 * 2)
-                return sum(realSlots.map(it => it.price))
+                return minConsumePrice > sum(realSlots.map(it => it.price)) ? minConsumePrice : sum(realSlots.map(it => it.price))
             }
-            return 0
+            return minConsumePrice ? minConsumePrice : 0
         }
     }
 })

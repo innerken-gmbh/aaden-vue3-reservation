@@ -202,7 +202,7 @@ onMounted(async () => {
         v-for="(t,i) in reservationInfo.tableList"
         :key="t.id"
       >
-        <span :style="t.tableType === 'Room'?'color:yellow':''">
+        <span :style="`${t.tableType === 'Room' ? 'color: yellow;' : ''} white-space: nowrap;`">
           {{ t.tableName }}
         </span>
 

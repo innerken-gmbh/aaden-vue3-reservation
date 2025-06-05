@@ -57,6 +57,7 @@ export const useHomePageControllerStore
                 obj.duration = roomPicker.neededSlots30
                 obj.requestFrom = ''
                 obj.internal = false
+                obj.stripeConnectKey = this.userInfo.setting.stripeConnectKey
                 res = await addRoomReservation(obj)
             } else {
                 res = await addReservation(obj)
