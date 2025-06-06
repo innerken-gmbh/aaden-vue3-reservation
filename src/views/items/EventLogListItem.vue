@@ -28,7 +28,9 @@ const infoController = useReservationStore()
         <div class="text-body-2">
           {{ $t(info.createdUser) }}
         </div>
-        <div class="text-body-2">
+        <div
+          class="text-body-2"
+          style="overflow-wrap: break-word;max-width: 75%">
           {{ info.note }}
         </div>
       </div>

@@ -21,6 +21,7 @@ export const useHomePageControllerStore
         error: false,
         errorMessage: '',
         tableType: 'Table',
+        reservationHost: '',
         reservationExtraInfo: {
             firstName: '',
             lastName: '',
@@ -52,10 +53,11 @@ export const useHomePageControllerStore
             let res = null
             if (this.tableType === 'Room') {
                 const roomPicker = useRoomPickerStore()
+                obj.toDateTime = dayjs(obj.fromDateTime).add(3,'hour').format('YYYY-MM-DD HH:mm')
                 obj.totalPrice = roomPicker.totalPrice
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
-                obj.duration = roomPicker.neededSlots30
-                obj.requestFrom = ''
+                obj.duration = 12
+                obj.requestFrom = this.reservationHost
                 obj.internal = false
                 obj.stripeConnectKey = this.userInfo.setting.stripeConnectKey
                 res = await addRoomReservation(obj)
@@ -93,6 +95,7 @@ export const useHomePageControllerStore
         },
         async getUserInfo() {
             this.userInfo = await checkActiveStatus(userId)
+            this.reservationHost = 'https://' + this.userInfo.setting.subDomainName + '.reservation.beta.aaden.io'
         }
 
     }

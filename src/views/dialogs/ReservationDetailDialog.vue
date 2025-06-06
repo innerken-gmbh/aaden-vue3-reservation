@@ -117,7 +117,7 @@ async function onCancel() {
           #{{ controller.activeReservationId }}/{{ $t(status) }}<span v-if="controller.paymentIntentId">{{controller.paymentIntentId}}</span>
         </div>
         <div class="text-body-2">
-          <span>{{priceDisplay(info.totalPrice)}}</span><span v-if="info.paymentIntentId">{{info.paymentIntentId}}</span>
+          <span>{{priceDisplay(info.totalPrice)}}</span>
         </div>
       </div>
       <v-spacer />
