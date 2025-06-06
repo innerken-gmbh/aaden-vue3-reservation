@@ -346,7 +346,6 @@ export const useScanQrStore =
     defineStore('scanQR', {
         state: () => {
             return {
-
                 showPicker: false,
                 loading: false,
                 error: false,
