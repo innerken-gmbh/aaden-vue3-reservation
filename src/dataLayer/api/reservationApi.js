@@ -109,3 +109,10 @@ export async function getUserList() {
 }
 
 
+export async function getActiveCodes (deviceId) {
+    try {
+        return await hillo.get('https://cloud-v2.aaden.io/subscriptions/activeProductCodes/' + deviceId)
+    } catch (e) {
+        return []
+    }
+}

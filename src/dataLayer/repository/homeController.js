@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {toBeautiful, today} from "./dateRepo.js";
-import {addReservation, getUserList, loadAllEvent, readEvent} from "../api/reservationApi.js";
+import {addReservation, getActiveCodes, getUserList, loadAllEvent, readEvent} from "../api/reservationApi.js";
 import {useReservationStore} from "./reservationRepo.js";
 import dayjs from "dayjs";
 import {userId} from "../../main.js";
@@ -8,6 +8,7 @@ import {userId} from "../../main.js";
 export const useHomePageControllerStore
     = defineStore('homePageController', {
     state: () => ({
+        activeUser: true,
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
@@ -77,6 +78,10 @@ export const useHomePageControllerStore
         },
         async getUserInfo() {
             this.userInfo = (await getUserList()).find(it => it.id === parseInt(userId))
+            const res = await getActiveCodes(userId)
+            if (!res.includes('reservation')) {
+                this.activeUser = false
+            }
         }
 
     }

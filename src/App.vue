@@ -48,7 +48,7 @@ function recordTouch() {
 
 <template>
   <v-app @mousedown="recordTouch">
-    <template v-if="homeController.userInfo">
+    <template v-if="homeController.userInfo && homeController.activeUser">
       <v-app-bar
         flat
         color="appBarColor"
@@ -64,75 +64,75 @@ function recordTouch() {
         <template v-else>
           <v-app-bar-title>
             <v-text-field
-              autofocus
-              v-model="reservationStore.search"
-              prepend-inner-icon="mdi-magnify"
-              variant="outlined"
-              flat
-              :placeholder="$t('SearchHere')"
-              density="compact"
-              clearable
-              hide-details
+                autofocus
+                v-model="reservationStore.search"
+                prepend-inner-icon="mdi-magnify"
+                variant="outlined"
+                flat
+                :placeholder="$t('SearchHere')"
+                density="compact"
+                clearable
+                hide-details
             />
           </v-app-bar-title>
         </template>
 
         <template v-if="!reservationStore.showSearch">
           <v-btn
-            @click="changeSort"
-            icon=""
+              @click="changeSort"
+              icon=""
           >
             <v-icon>mdi-sort</v-icon>
           </v-btn>
           <v-btn
-            @click="toggleTheme()"
-            icon=""
+              @click="toggleTheme()"
+              icon=""
           >
             <v-icon>mdi-theme-light-dark</v-icon>
           </v-btn>
           <v-btn
-            @click="reservationStore.showSearch=true"
-            icon=""
+              @click="reservationStore.showSearch=true"
+              icon=""
           >
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
           <v-btn
-            @click="homeController.showNewModal()"
-            icon=""
+              @click="homeController.showNewModal()"
+              icon=""
           >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-menu>
             <template #activator="{props}">
               <v-btn
-                v-bind="props"
-                icon=""
+                  v-bind="props"
+                  icon=""
               >
                 <v-icon>mdi-web</v-icon>
               </v-btn>
             </template>
             <v-list>
               <v-list-item
-                v-for="(item) in ['de','zh','nl','en']"
-                :key="item"
-                :value="item"
-                @click="changeLanguage(item)"
+                  v-for="(item) in ['de','zh','nl','en']"
+                  :key="item"
+                  :value="item"
+                  @click="changeLanguage(item)"
               >
                 <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
           <v-btn
-            @click="qrController.scanQR()"
-            icon=""
+              @click="qrController.scanQR()"
+              icon=""
           >
             <v-icon>mdi-qrcode-scan</v-icon>
           </v-btn>
         </template>
         <template v-else>
           <v-btn
-            @click="reservationStore.showSearch=false"
-            icon=""
+              @click="reservationStore.showSearch=false"
+              icon=""
           >
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -140,13 +140,13 @@ function recordTouch() {
       </v-app-bar>
       <v-main style="overflow: hidden;overscroll-behavior-y: none">
         <div
-          class="bg-appBarColor pt-1"
-          style="overflow: hidden;overscroll-behavior: none"
+            class="bg-appBarColor pt-1"
+            style="overflow: hidden;overscroll-behavior: none"
         >
           <div
-            style="border-top-left-radius: 24px;z-index: 2;
+              style="border-top-left-radius: 24px;z-index: 2;
           border-top-right-radius: 24px;"
-            class="bg-surface"
+              class="bg-surface"
           >
             <home-page />
           </div>
@@ -161,14 +161,15 @@ function recordTouch() {
     </template>
     <template v-else>
       <place-holder
-        :title="$t('UserNotFound')"
-        :hint="$t('MaybeTheLinkIsBroken')"
+          :title="$t('UserNotFound')"
+          :hint="$t('MaybeTheLinkIsBroken')"
       >
         <v-btn class="mt-4">
           {{ $t('Refresh') }}
         </v-btn>
       </place-holder>
     </template>
+
   </v-app>
 </template>
 
