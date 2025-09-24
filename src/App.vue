@@ -55,10 +55,12 @@ function recordTouch() {
       >
         <template v-if="!reservationStore.showSearch">
           <v-app-bar-title class="text-body-2">
-            <div class="text-body-1 font-weight-black">
-              Reservation
+            <div class="d-flex align-center justify-start">
+              <v-avatar>
+                <v-img :src="homeController?.userInfo?.logoUrl"/>
+              </v-avatar>
+              <div class="text-body-1 font-weight-black ml-2">{{ homeController.userInfo?.shopName }}</div>
             </div>
-            <div>Aaden POS</div>
           </v-app-bar-title>
         </template>
         <template v-else>
