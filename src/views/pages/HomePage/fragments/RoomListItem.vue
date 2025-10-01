@@ -12,7 +12,7 @@ const roomPicker = useRoomPickerStore()
   <v-card
       class="pa-2"
     @click="roomPicker.selectRoom(roomWithTimeInfo)"
-    rounded="lg"
+      variant="outlined"
     flat
   >
     <div class="d-flex align-center">
@@ -21,15 +21,12 @@ const roomPicker = useRoomPickerStore()
       </div>
     </div>
     <div class="d-flex flex-column">
-      <div class="text-body-2 ">
+      <div class="text-body-2 d-flex align-center">
+        <v-icon class="mr-4">mdi-human-male-female</v-icon>
+        <v-spacer></v-spacer>
         <span
-          class="text-green-darken-2 font-weight-black"
-        >{{ priceDisplay(roomWithTimeInfo.room.pricePer15Min * 4) }}</span>/小时
-      </div>
-      <div class="text-body-2">
-        最低消费 {{
-          priceDisplay(roomWithTimeInfo.room.minConsumePrice)
-        }}
+          class="font-weight-black"
+        >{{ roomWithTimeInfo.room.seatCount }}</span>
       </div>
     </div>
   </v-card>

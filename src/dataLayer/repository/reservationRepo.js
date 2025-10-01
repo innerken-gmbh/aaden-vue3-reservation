@@ -126,7 +126,6 @@ export const useReservationStore = defineStore('reservation', {
                 const sortRoomList = sortBy((roomList),(x) => {return x.tableId})
                 this.tableList = sortTableList.concat(sortRoomList)
             }
-            console.log(this.tableList, 'list')
             const tableMap = keyBy(this.tableList, 'tableId')
             const list = (await getReservation(this.date)).map(it => {
                 const xIndex = this.timeSlots.findIndex(t => dayjs(it.fromDateTime)
@@ -231,6 +230,8 @@ export const useReservationStore = defineStore('reservation', {
                 return that
             })
             reservation.tableName = join(reservation.seatPlan.map(it => it.tableName), ',')
+            reservation.fromDateTime = dayjs(reservation.fromDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+            reservation.toDateTime = dayjs(reservation.toDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
             this.activeReservation = reservation
             if (this.activeReservation) {
                 this.showDetailDialog = true
@@ -304,13 +305,15 @@ export const useRoomPickerStore = defineStore('roomPicker', {
             availableRooms: null,
             selectedRoom: null,
             resolve: null,
-            neededSlots30: 6,
+            neededSlots30: 8,
         }
     },
     actions: {
         async selectRoom(room) {
-            useTimePickerStore().availableTimes = room.availableSlots.flatMap(it => it.times).map(it => {
-                return {startTime:it.time.split(':').slice(0, 2).join(':')}
+            useTimePickerStore().availableTimes = room.availableSlots.map(it => {
+                const [hours, minutes] = it.startTime.split(':').map(Number);
+                const newHours = (hours + (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24;
+                return {startTime:`${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`, eatingTimeMinute: 240}
             })
             useHomePageControllerStore().startTime = useTimePickerStore().availableTimes[0].startTime
             this.selectedRoom = room
@@ -328,15 +331,15 @@ export const useRoomPickerStore = defineStore('roomPicker', {
             return 0
         },
         totalPrice:(state) => {
-            const minConsumePrice = state.selectedRoom.room.minConsumePrice
-            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().startTime + ':00'))
-            if (slot) {
-                const allTimes = slot?.times.map(it => it.time) ?? []
-                const index = allTimes.findIndex(it => it === useHomePageControllerStore().startTime + ':00')
-                const realSlots = slot.times.slice(index, index + state.neededSlots30 * 2)
-                return minConsumePrice > sum(realSlots.map(it => it.price)) ? minConsumePrice : sum(realSlots.map(it => it.price))
+            if (useHomePageControllerStore().startTime) {
+                const [hours, minutes] = useHomePageControllerStore().startTime.split(':').map(Number);
+                const newHours = (hours - (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24;
+                useHomePageControllerStore().originStartTime = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
+                const timeList = state.selectedRoom.availableSlots.find(it => it.startTime === useHomePageControllerStore().originStartTime)
+                return sumBy(timeList.times, 'price')
+            } else {
+                return 0
             }
-            return minConsumePrice ? minConsumePrice : 0
         }
     }
 })

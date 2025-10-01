@@ -14,6 +14,7 @@ export const useHomePageControllerStore
         showMorePerson: false,
         date: today(),
         startTime: null,
+        originStartTime: null,
         userInfo: null,
         loading: false,
         timeGap: [],
@@ -53,10 +54,11 @@ export const useHomePageControllerStore
             let res = null
             if (this.tableType === 'Room') {
                 const roomPicker = useRoomPickerStore()
-                obj.toDateTime = dayjs(obj.fromDateTime).add(3,'hour').format('YYYY-MM-DD HH:mm')
+                obj.fromDateTime = dayjs(this.date + ' ' + this.originStartTime).format('YYYY-MM-DD HH:mm')
+                obj.toDateTime = dayjs(obj.fromDateTime).add(4, 'hour').format('YYYY-MM-DD HH:mm')
                 obj.totalPrice = roomPicker.totalPrice
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
-                obj.duration = 12
+                obj.duration = 16
                 obj.requestFrom = this.reservationHost
                 obj.internal = false
                 obj.stripeConnectKey = this.userInfo.setting.stripeConnectKey

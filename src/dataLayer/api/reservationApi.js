@@ -1,5 +1,7 @@
 import hillo from "hillo";
 import {userId} from "../../main.js";
+import dayjs from "dayjs";
+import {useHomePageControllerStore} from "../repository/homeController.js";
 
 // const host = import.meta.env.DEV ? "http://192.168.178.41:8080" : "https://cloud-v2.aaden.io"
 const host ="https://cloud-v2.aaden.io"
@@ -33,7 +35,11 @@ export async function loadAllReservation(fromDateTime, toDateTime) {
 }
 
 export async function getReservation(date) {
-    return (await loadAllReservation(date + ' 00:00:00', date + ' 23:59:59'))
+    return (await loadAllReservation(date + ' 00:00:00', date + ' 23:59:59')).map(it => {
+        it.fromDateTime = dayjs(it.fromDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+        it.toDateTime = dayjs(it.toDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+        return it
+    })
 }
 
 

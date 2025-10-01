@@ -39,9 +39,9 @@ watch(currentTime, async () => {
       if (!notificationController.show) {
         await notificationController.reload()
         const lastEvent = notificationController.eventList[0]
-        if (!lastEvent.notified) {
+        if (!lastEvent?.notified) {
             doSpeak()
-          await notifyEvent(lastEvent.id)
+          await notifyEvent(lastEvent?.id)
         }
       }
       if (!changeVM.loading && changeVM.changesCount === 0) {
