@@ -10,7 +10,7 @@ import {
     loadAllReservable
 } from "../api/reservationApi.js";
 
-import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sum, sumBy} from "lodash-es";
+import {groupBy, intersection, join, keyBy, maxBy, sample, sortBy, sumBy} from "lodash-es";
 import {linkColors} from "../../plugins/plugins.js";
 import {reservationCanEdit, ReservationStatus, ReservationStatusFilter} from "./reservationDisplay.js";
 import {useHomePageControllerStore} from "./homeController.js";
@@ -280,6 +280,8 @@ export const useTimePickerStore = defineStore('timePicker', {
             ],
             showPicker: false,
             resolve: null,
+            originStartTime: null,
+            useFulTime: 8,
         }
     },
     actions: {
@@ -312,35 +314,46 @@ export const useRoomPickerStore = defineStore('roomPicker', {
         async selectRoom(room) {
             useTimePickerStore().availableTimes = room.availableSlots.map(it => {
                 const [hours, minutes] = it.startTime.split(':').map(Number);
-                const newHours = (hours + (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24;
-                return {startTime:`${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`, eatingTimeMinute: 240}
+                // const newHours = (hours + (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24;
+                const rawHours = hours + (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0);
+                // Check if the time is for tomorrow
+                const isTomorrow = rawHours >= 24;
+                // Handle wrap-around
+                const newHours = rawHours % 24;
+                // Format back to "HH:MM" format with tomorrow's date if needed
+                let timeStr = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+                // If it's tomorrow, show tomorrow's date instead of "Tomorrow" text
+                if (isTomorrow) {
+                    const tomorrowDate = dayjs(useHomePageControllerStore().date).add(1, 'day').format('MM-DD');
+                    timeStr =  `${timeStr} (${tomorrowDate})`;
+                }
+                return {startTime:timeStr, eatingTimeMinute: it.times.length * 15}
             })
             useHomePageControllerStore().startTime = useTimePickerStore().availableTimes[0].startTime
+            useHomePageControllerStore().originStartTime = room.availableSlots[0].startTime
             this.selectedRoom = room
         },
 
     },
     getters: {
         maxHours: (state) => {
-            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().startTime + ':00'))
+            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().originStartTime))
             if (slot) {
                 const allTimes = slot?.times.map(it => it.time) ?? []
-                const index = allTimes.findIndex(it => it === useHomePageControllerStore().startTime + ':00')
-                return Math.floor((allTimes.length - index) / 2)
+                const index = allTimes.findIndex(it => it === useHomePageControllerStore().originStartTime)
+                return Math.floor((allTimes.length - index) / 4)
             }
             return 0
         },
         totalPrice:(state) => {
-            if (useHomePageControllerStore().startTime) {
-                const [hours, minutes] = useHomePageControllerStore().startTime.split(':').map(Number);
-                const newHours = (hours - (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24;
-                useHomePageControllerStore().originStartTime = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
-                const timeList = state.selectedRoom.availableSlots.find(it => it.startTime === useHomePageControllerStore().originStartTime)
-                return sumBy(timeList.times, 'price')
+            const slot = state.selectedRoom?.availableSlots?.find(it => it.times.find(that => that.time === useHomePageControllerStore().originStartTime))
+            if (slot) {
+                // const timeList = state.selectedRoom.availableSlots.find(it => it.startTime === useHomePageControllerStore().originStartTime)
+                return sumBy(slot.times, 'price')
             } else {
                 return 0
             }
-        }
+        },
     }
 })
 

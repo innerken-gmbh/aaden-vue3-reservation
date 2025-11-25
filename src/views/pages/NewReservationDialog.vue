@@ -214,7 +214,7 @@ const displayType = computed(() => {
             <v-card>
               <div class="d-flex flex-column">
                 <div>
-                  {{ (roomPicker.neededSlots30 / 2).toFixed(1) }} {{ $t('Hours') }}
+                  {{ roomPicker.maxHours }} {{ $t('Hours') }}
                 </div>
                 <v-spacer></v-spacer>
                 <div>

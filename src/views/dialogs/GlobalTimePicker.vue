@@ -3,11 +3,29 @@ import {useTimePickerStore} from "../../dataLayer/repository/reservationRepo.js"
 import InlineTwoRowContainer from "../items/InlineTwoRowContainer.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import PlaceHolder from "../components/PlaceHolder.vue";
+import {useHomePageControllerStore} from "../../dataLayer/repository/homeController.js";
 
 const timePicker = useTimePickerStore()
 
 function confirmTime(time) {
+  let timeValue = time;
+  let shouldAdd24 = false;
+
+  // Check if the time value contains a date part in parentheses (MM-DD)
+  if (timeValue.includes('(')) {
+    // Extract just the time part before the parenthesis
+    timeValue = timeValue.split('(')[0].trim();
+    // Since it has a date part, it's for the next day, so we need to add 24 to hours
+    shouldAdd24 = true;
+  }
+
+  const [hours, minutes] = timeValue.split(':').map(Number);
+  // If it's for the next day, add 24 to hours before subtracting the offset
+  const adjustedHours = shouldAdd24 ? hours + 24 : hours;
+  const newHours = (adjustedHours - (useHomePageControllerStore().userInfo.setting.businessHourOffset || 0)) % 24
   timePicker.currentTime = time
+  useHomePageControllerStore().originStartTime = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
+  console.log(useHomePageControllerStore().originStartTime, 'originStartTime1')
   timePicker.confirm()
 }
 </script>
