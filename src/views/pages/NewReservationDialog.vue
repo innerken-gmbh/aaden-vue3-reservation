@@ -262,14 +262,14 @@ const displayType = computed(() => {
           />
         </form-container>
         <v-chip
-          @click="controller.reservationExtraInfo.useStroller
+            @click="controller.reservationExtraInfo.useStroller
             =!controller.reservationExtraInfo.useStroller"
-          variant="tonal"
-          rounded="sm"
+            variant="tonal"
+            rounded="sm"
         >
           <template #prepend>
             <v-icon
-              class="mr-2"
+                class="mr-2"
             >
               <template v-if="controller.reservationExtraInfo.useStroller">
                 mdi-checkbox-marked
@@ -281,6 +281,28 @@ const displayType = computed(() => {
           </template>
 
           {{ $t('NeedStroller') }}
+        </v-chip>
+        <v-chip
+            class="ml-2"
+            @click="controller.adminMode
+            =!controller.adminMode"
+            variant="tonal"
+            rounded="sm"
+        >
+          <template #prepend>
+            <v-icon
+                class="mr-2"
+            >
+              <template v-if="controller.adminMode">
+                mdi-checkbox-marked
+              </template>
+              <template v-else>
+                mdi-checkbox-blank-outline
+              </template>
+            </v-icon>
+          </template>
+
+          无定金
         </v-chip>
         <v-sheet
           rounded

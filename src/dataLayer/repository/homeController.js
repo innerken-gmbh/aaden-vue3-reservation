@@ -8,6 +8,7 @@ import {userId} from "../../main.js";
 export const useHomePageControllerStore
     = defineStore('homePageController', {
     state: () => ({
+        adminMode: false,
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
@@ -56,7 +57,7 @@ export const useHomePageControllerStore
                 const roomPicker = useRoomPickerStore()
                 obj.fromDateTime = dayjs(this.date + ' ' + this.originStartTime).format('YYYY-MM-DD HH:mm')
                 obj.toDateTime = dayjs(obj.fromDateTime).add(4, 'hour').format('YYYY-MM-DD HH:mm')
-                obj.totalPrice = roomPicker.totalPrice
+                obj.totalPrice = this.adminMode ? 0 : roomPicker.totalPrice
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
                 obj.duration = 16
                 obj.requestFrom = this.reservationHost

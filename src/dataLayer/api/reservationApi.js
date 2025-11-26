@@ -151,3 +151,7 @@ export function priceDisplay (price) {
     const res = parseFloat(price).toFixed(2) === '-0.00' ? '0.00' : parseFloat(price).toFixed(2)
     return res.replace('.', ',') + ' €'
 }
+
+export async function updateReservationInfo(infoData) {
+    return (await hillo.jsonPost('reservation/updateInfo', infoData))
+}

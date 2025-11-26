@@ -13,6 +13,7 @@ import {
 import {changeSeatPlan, confirm, priceDisplay} from "../../dataLayer/api/reservationApi.js";
 import EventLogListItem from "../items/EventLogListItem.vue";
 import {storeToRefs} from "pinia";
+import EditReservationInfoDialog from "./EditReservationInfoDialog.vue";
 
 const tableSelector = useTableSelectorStore()
 const controller = useReservationStore()
@@ -59,6 +60,12 @@ const timeChanged = computed(() => {
 const overrideTime = computed(() => {
   return timeChanged.value ? dayjs(info.value.fromDateTime).add(overrideDiningTime.value, 'minute').format(timeFormat) : null;
 })
+
+const showEditInfoDialog = ref(false);
+
+function editInfo() {
+  showEditInfoDialog.value = true;
+}
 
 
 async function changeTable() {
@@ -122,10 +129,17 @@ async function onCancel() {
       </div>
       <v-spacer />
       <v-btn
-        @click="controller.showLogs=!controller.showLogs"
-        icon=""
-        color="white"
-        v-if="info?.logs?.length>0"
+          @click="editInfo"
+          icon=""
+          color="white"
+      >
+        <v-icon>mdi-lead-pencil</v-icon>
+      </v-btn>
+      <v-btn
+          @click="controller.showLogs=!controller.showLogs"
+          icon=""
+          color="white"
+          v-if="info?.logs?.length>0"
       >
         <v-icon>mdi-message-processing</v-icon>
       </v-btn>
@@ -353,6 +367,12 @@ async function onCancel() {
       </template>
     </template>
   </base-dialog>
+
+  <!-- Edit Reservation Info Dialog -->
+  <edit-reservation-info-dialog
+    v-model="showEditInfoDialog"
+    :reservation-info="info"
+  />
 </template>
 
 <style scoped>
