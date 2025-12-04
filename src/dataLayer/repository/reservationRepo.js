@@ -327,7 +327,7 @@ export const useRoomPickerStore = defineStore('roomPicker', {
                     const tomorrowDate = dayjs(useHomePageControllerStore().date).add(1, 'day').format('MM-DD');
                     timeStr =  `${timeStr} (${tomorrowDate})`;
                 }
-                return {startTime:timeStr, eatingTimeMinute: it.times.length * 15}
+                return {startTime:timeStr, eatingTimeMinute: it.times.length * 15, maxTimeGap: it.maxTimeGap}
             })
             useHomePageControllerStore().startTime = useTimePickerStore().availableTimes[0].startTime
             useHomePageControllerStore().originStartTime = room.availableSlots[0].startTime

@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {toBeautiful, today} from "./dateRepo.js";
 import {addReservation, addRoomReservation, checkActiveStatus, loadAllEvent, readEvent} from "../api/reservationApi.js";
-import {useReservationStore, useRoomPickerStore} from "./reservationRepo.js";
+import {useReservationStore, useRoomPickerStore, useTimePickerStore} from "./reservationRepo.js";
 import dayjs from "dayjs";
 import {userId} from "../../main.js";
 
@@ -59,7 +59,7 @@ export const useHomePageControllerStore
                 obj.toDateTime = dayjs(obj.fromDateTime).add(4, 'hour').format('YYYY-MM-DD HH:mm')
                 obj.totalPrice = this.adminMode ? 0 : roomPicker.totalPrice
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
-                obj.duration = 16
+                obj.duration = useTimePickerStore().availableTimes.find(it => it.startTime === useHomePageControllerStore().startTime).maxTimeGap
                 obj.requestFrom = this.reservationHost
                 obj.internal = false
                 obj.stripeConnectKey = this.userInfo.setting.stripeConnectKey
