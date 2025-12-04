@@ -56,7 +56,6 @@ export const useHomePageControllerStore
             if (this.tableType === 'Room') {
                 const roomPicker = useRoomPickerStore()
                 obj.fromDateTime = dayjs(this.date + ' ' + this.originStartTime).format('YYYY-MM-DD HH:mm')
-                obj.toDateTime = dayjs(obj.fromDateTime).add(4, 'hour').format('YYYY-MM-DD HH:mm')
                 obj.totalPrice = this.adminMode ? 0 : roomPicker.totalPrice
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
                 obj.duration = useTimePickerStore().availableTimes.find(it => it.startTime === useHomePageControllerStore().startTime).maxTimeGap
