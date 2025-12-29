@@ -36,8 +36,8 @@ export async function loadAllReservation(fromDateTime, toDateTime) {
 
 export async function getReservation(date) {
     return (await loadAllReservation(date + ' 00:00:00', date + ' 23:59:59')).map(it => {
-        it.fromDateTime = dayjs(it.fromDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
-        it.toDateTime = dayjs(it.toDateTime).add(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+        it.fromDateTime = dayjs(it.fromDateTime).add(it.currentBusinessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+        it.toDateTime = dayjs(it.toDateTime).add(it.currentBusinessHourOffset, 'hour').format('YYYY-MM-DDTHH:mm:ss')
         return it
     })
 }
