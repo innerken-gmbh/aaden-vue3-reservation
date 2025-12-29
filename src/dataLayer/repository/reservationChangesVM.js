@@ -2,6 +2,8 @@ import {defineStore} from "pinia";
 import {changeSeatPlan, changeStartTime} from "../api/reservationApi.js";
 import {useDragStore, useReservationStore} from "./reservationRepo.js";
 import {groupBy, keyBy} from "lodash-es";
+import dayjs from "dayjs";
+import {useHomePageControllerStore} from "./homeController.js";
 
 export const useReservationChangeVM = defineStore('reservationChange', {
     state: () => ({
@@ -32,6 +34,7 @@ export const useReservationChangeVM = defineStore('reservationChange', {
                 const timeChanges = Object.entries(this.timeChanges)
                     .map(([key, value]) => ({...value, id: key}))
                 for (const info of timeChanges) {
+                    info.start = dayjs(info.start).subtract(useHomePageControllerStore().userInfo.setting.businessHourOffset, 'hour').format('YYYY-MM-DD HH:mm:ss')
                     await changeStartTime(info.id, info.start)
                 }
                 const seatPlanChanges = Object.entries(this.seatPlanChanges).map(([key, value]) => ({
