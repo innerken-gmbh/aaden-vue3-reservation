@@ -47,16 +47,12 @@ function confirmTime(time) {
         :color="timePicker.currentTime===t?'primary':'surface'"
         :key="t"
         elevation="0"
-        class="px-4 text-body-1 pa-2 d-flex"
+        class="text-caption d-flex align-center"
         v-for="t in timePicker.availableTimes"
       >
-        <div class="font-weight-black">
-          {{ t.startTime }}
-        </div>
-
-        <v-spacer />
-        <div class="text-body-2">
-          ⌛{{ t.eatingTimeMinute }}m
+        <v-icon>mdi-clock-outline</v-icon>
+        <div class="font-weight-black ml-2">
+          {{ t.startTime }} - {{ t.endTime }}
         </div>
       </v-card>
     </inline-two-row-container>

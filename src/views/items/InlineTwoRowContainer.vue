@@ -5,7 +5,7 @@
 <template>
   <div
     style="display: grid;grid-template-columns:
-   repeat(auto-fit,minmax(200px,1fr));grid-gap: 12px"
+   repeat(auto-fit,minmax(220px,1fr));grid-gap: 12px"
   >
     <slot />
   </div>

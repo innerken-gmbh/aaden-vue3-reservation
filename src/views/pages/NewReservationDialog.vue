@@ -22,6 +22,10 @@ watchEffect(async () => {
   await refreshAvailableTimes()
 })
 
+const timeRange = computed(() => {
+  return timerPicker.availableTimes.find(it => it.startTime === controller.startTime)
+})
+
 async function refreshAvailableTimes() {
   if (controller.showNewReservationModal) {
     controller.startTime = null
@@ -196,10 +200,10 @@ const displayType = computed(() => {
           >
             <div
               v-if="timerPicker.availableTimes.length>0"
-              class="text-h5 font-weight-black d-flex align-center text-no-wrap"
+              class="text-body-1 font-weight-black d-flex align-center"
               @click="selectTime"
             >
-              {{ controller?.startTime ?? $t('Checking') }}
+              {{timeRange.startTime}} - {{timeRange.endTime}}
             </div>
             <div
               v-else

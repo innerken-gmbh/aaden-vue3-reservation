@@ -34,7 +34,7 @@ export const useReservationStore = defineStore('reservation', {
         showDetailDialog: false,
         showLogs: false,
         activeReservation: null,
-        timeSlots: Array.from(Array(24 - 7 + 3).keys())
+        timeSlots: Array.from(Array(24 - 7 + 5).keys())
             .map(it => (it + 7) % 24).map(it => Array
                 .from(Array(4).keys())
                 .map(minute => it.toString().padStart(2, '0') +
@@ -55,7 +55,11 @@ export const useReservationStore = defineStore('reservation', {
             const list = this.timeSlots.filter(it =>
                 it.endsWith('00') || it.endsWith('30')).map(it => {
                 let seatCount = 0
-                const target = dayjs(this.date + ' ' + it)
+                // For times between 00:00 and 04:00, add one day to represent the next day
+                const hourPart = parseInt(it.split(':')[0], 10)
+                const isNextDay = hourPart >= 0 && hourPart < 4
+                const targetDate = isNextDay ? dayjs(this.date).add(1, 'day').format('YYYY-MM-DD') : this.date
+                const target = dayjs(targetDate + ' ' + it)
                 this.reservationList.forEach(r => {
                     const [start, end] = [r.fromDateTime, r.toDateTime].map(t => dayjs(t))
                     if (target.isBefore(end) && target.add(30, 'm')
@@ -68,6 +72,7 @@ export const useReservationStore = defineStore('reservation', {
                     count: seatCount
                 }
             })
+            console.log(list,'list')
             const maxCount = maxBy(list, 'count').count
             return list.map(it => {
                 it.ratio = it.count / maxCount * 100
@@ -322,12 +327,32 @@ export const useRoomPickerStore = defineStore('roomPicker', {
                 const newHours = rawHours % 24;
                 // Format back to "HH:MM" format with tomorrow's date if needed
                 let timeStr = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+                // Calculate end time by adding eating time minutes to start time
+                const eatingTimeMinutes = it.times.length * 15;
+                const endTimeMinutes = newHours * 60 + minutes + eatingTimeMinutes;
+                const endHours = Math.floor(endTimeMinutes / 60) % 24;
+                const endMinutes = endTimeMinutes % 60;
+                let endTimeStr = `${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
+
+                // Check if end time is for tomorrow
+                const isEndTimeTomorrow = (rawHours * 60 + minutes + eatingTimeMinutes) >= 24 * 60;
+
                 // If it's tomorrow, show tomorrow's date instead of "Tomorrow" text
                 if (isTomorrow) {
                     const tomorrowDate = dayjs(useHomePageControllerStore().date).add(1, 'day').format('MM-DD');
                     timeStr =  `${timeStr} (${tomorrowDate})`;
+
+                    // If end time is also tomorrow, add the date to it as well
+                    if (isEndTimeTomorrow) {
+                        endTimeStr = `${endTimeStr} (${tomorrowDate})`;
+                    }
+                } else if (isEndTimeTomorrow) {
+                    // If only end time is tomorrow
+                    const tomorrowDate = dayjs(useHomePageControllerStore().date).add(1, 'day').format('MM-DD');
+                    endTimeStr = `${endTimeStr} (${tomorrowDate})`;
                 }
-                return {startTime:timeStr, eatingTimeMinute: it.times.length * 15, maxTimeGap: it.maxTimeGap}
+                return {startTime:timeStr, eatingTimeMinute: it.times.length * 15, maxTimeGap: it.maxTimeGap, endTime: endTimeStr}
             })
             useHomePageControllerStore().startTime = useTimePickerStore().availableTimes[0].startTime
             useHomePageControllerStore().originStartTime = room.availableSlots[0].startTime
@@ -462,4 +487,3 @@ export const useDragStore = defineStore('drag', {
         }
     }
 })
-
