@@ -308,6 +308,28 @@ const displayType = computed(() => {
 
           无定金
         </v-chip>
+        <v-chip
+            class="ml-2"
+            @click="controller.offlinePaid
+            =!controller.offlinePaid"
+            variant="tonal"
+            rounded="sm"
+        >
+          <template #prepend>
+            <v-icon
+                class="mr-2"
+            >
+              <template v-if="controller.offlinePaid">
+                mdi-checkbox-marked
+              </template>
+              <template v-else>
+                mdi-checkbox-blank-outline
+              </template>
+            </v-icon>
+          </template>
+
+          线下支付
+        </v-chip>
         <v-sheet
           rounded
           class="mt-4 bg-red pa-4 text-body-2 d-flex align-center"

@@ -10,7 +10,7 @@ import {
   reservationCanEdit,
   ReservationStatus
 } from "../../dataLayer/repository/reservationDisplay.js";
-import {changeSeatPlan, confirm, priceDisplay} from "../../dataLayer/api/reservationApi.js";
+import {changeSeatPlan, confirm, priceDisplay, resendConfirmEmail} from "../../dataLayer/api/reservationApi.js";
 import EventLogListItem from "../items/EventLogListItem.vue";
 import {storeToRefs} from "pinia";
 import EditReservationInfoDialog from "./EditReservationInfoDialog.vue";
@@ -82,6 +82,19 @@ async function changeTable() {
 )
 }
 
+const emailLoading = ref(false)
+
+async function resendEmail() {
+  try {
+    emailLoading.value = true
+    await resendConfirmEmail(info.value.id)
+    emailLoading.value = false
+  } catch (e) {
+    console.log(e,'e')
+  }
+
+}
+
 async function onConfirm() {
   if (status.value === ReservationStatus.Confirmed) {
 
@@ -128,6 +141,15 @@ async function onCancel() {
         </div>
       </div>
       <v-spacer />
+      <v-btn
+          v-if="status===ReservationStatus.Confirmed"
+          @click="resendEmail"
+          icon=""
+          :loading="emailLoading"
+          color="white"
+      >
+        <v-icon>mdi-email-fast-outline</v-icon>
+      </v-btn>
       <v-btn
           @click="editInfo"
           icon=""

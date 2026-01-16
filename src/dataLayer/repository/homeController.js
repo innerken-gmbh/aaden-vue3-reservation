@@ -9,6 +9,7 @@ export const useHomePageControllerStore
     = defineStore('homePageController', {
     state: () => ({
         adminMode: false,
+        offlinePaid: false,
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
@@ -57,6 +58,7 @@ export const useHomePageControllerStore
                 const roomPicker = useRoomPickerStore()
                 obj.fromDateTime = dayjs(this.date + ' ' + this.originStartTime).format('YYYY-MM-DD HH:mm')
                 obj.totalPrice = this.adminMode ? 0 : roomPicker.totalPrice
+                obj.paid = this.offlinePaid
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
                 obj.duration = useTimePickerStore().availableTimes.find(it => it.startTime === useHomePageControllerStore().startTime).maxTimeGap
                 obj.requestFrom = this.reservationHost

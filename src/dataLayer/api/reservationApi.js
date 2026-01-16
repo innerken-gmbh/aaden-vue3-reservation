@@ -101,6 +101,11 @@ export async function cancelReservation(id) {
         {}))
 }
 
+export async function resendConfirmEmail (id) {
+    return (await hillo.jsonPost('reservation/resendConfirmationEmail/' + id,
+        {}))
+}
+
 
 export async function checkTableTimeAvailable(date,
                                               personCount, id) {
