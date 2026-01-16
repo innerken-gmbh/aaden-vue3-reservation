@@ -306,7 +306,7 @@ const displayType = computed(() => {
             </v-icon>
           </template>
 
-          无定金
+          {{ $t('NoDeposit') }}
         </v-chip>
         <v-chip
             class="ml-2"
@@ -328,7 +328,7 @@ const displayType = computed(() => {
             </v-icon>
           </template>
 
-          线下支付
+          {{ $t('OfflinePayment') }}
         </v-chip>
         <v-sheet
           rounded

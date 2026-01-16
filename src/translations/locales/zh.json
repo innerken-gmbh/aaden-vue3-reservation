@@ -58,5 +58,7 @@
   "Oops" : "好的!",
   "SearchHere" : "在这里搜索",
   "Merchant": "门店",
-  "Customer": "顾客"
+  "Customer": "顾客",
+  "NoDeposit": "无定金",
+  "OfflinePayment": "线下支付"
 }

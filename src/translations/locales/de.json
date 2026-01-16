@@ -56,5 +56,7 @@
   "SelectPreferredTime" : "Wählen Sie Ihre bevorzugte Zeit aus",
   "OK" : "OK",
   "Oops" : "Hoppla!",
-  "SearchHere" : "Hier Suchen"
+  "SearchHere" : "Hier Suchen",
+  "NoDeposit": "Keine Anzahlung",
+  "OfflinePayment": "Offline-Zahlung"
 }

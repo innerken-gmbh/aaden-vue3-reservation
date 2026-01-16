@@ -56,5 +56,7 @@
   "SelectPreferredTime": "Selecteer uw voorkeurstijd",
   "OK" : "Oké",
   "Oops" : "Oeps!",
-  "SearchHere" : "Zoek hier"
+  "SearchHere" : "Zoek hier",
+  "NoDeposit": "Geen aanbetaling",
+  "OfflinePayment": "Offline betaling"
 }

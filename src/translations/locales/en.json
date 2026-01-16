@@ -56,5 +56,7 @@
   "SelectPreferredTime": "Select your preferred time",
   "OK" : "OK",
   "Oops" : "Oops!",
-  "SearchHere" : "Search here"
+  "SearchHere" : "Search here",
+  "NoDeposit": "No Deposit",
+  "OfflinePayment": "Offline Payment"
 }
