@@ -44,7 +44,7 @@ async function selectData() {
 }
 
 const displayPerson = computed(() => {
-  return 18
+  return 20
 })
 
 </script>
