@@ -60,18 +60,26 @@ export const useHomePageControllerStore
         }
     },
     actions: {
+        clearOfflinePayMethodError() {
+            if (this.error && this.errorMessage === i18n.global.t('OfflinePayMethodRequired')) {
+                this.error = false
+                this.errorMessage = ''
+            }
+        },
         toggleOfflinePaid() {
             this.offlinePaid = !this.offlinePaid
             if (!this.offlinePaid) {
                 this.offlinePayMethod = null
             }
+            this.clearOfflinePayMethodError()
+        },
+        toggleAdminMode() {
+            this.adminMode = !this.adminMode
+            this.clearOfflinePayMethodError()
         },
         selectOfflinePayMethod(method) {
             this.offlinePayMethod = method
-            if (this.error && this.errorMessage === i18n.global.t('OfflinePayMethodRequired')) {
-                this.error = false
-                this.errorMessage = ''
-            }
+            this.clearOfflinePayMethodError()
         },
         async addReservation() {
             if (this.offlinePayMethodRequired && !['CASH', 'EC'].includes(this.offlinePayMethod)) {

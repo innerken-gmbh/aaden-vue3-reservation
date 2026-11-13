@@ -48,6 +48,8 @@ async function refreshAvailableTimes() {
 
 function selectedType (type) {
   controller.tableType = type
+  controller.offlinePayMethod = null
+  controller.clearOfflinePayMethodError()
   if (type === 'Table') {
     roomPicker.selectedRoom = null
   }
@@ -292,8 +294,7 @@ const displayType = computed(() => {
         </v-chip>
         <v-chip
             class="ml-2"
-            @click="controller.adminMode
-            =!controller.adminMode"
+            @click="controller.toggleAdminMode()"
             variant="tonal"
             rounded="sm"
         >
