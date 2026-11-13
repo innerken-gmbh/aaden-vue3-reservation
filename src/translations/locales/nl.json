@@ -58,5 +58,10 @@
   "Oops" : "Oeps!",
   "SearchHere" : "Zoek hier",
   "NoDeposit": "Geen aanbetaling",
-  "OfflinePayment": "Offline betaling"
+  "OfflinePayment": "Offline betaling",
+  "OfflinePayMethod": "Betaald met",
+  "OfflineCash": "Contant",
+  "OfflineEc": "Pinpas",
+  "OfflineCashHint": "Leg het contante geld in de kassalade; het wordt vandaag in het kassaldo geboekt.",
+  "OfflinePayMethodRequired": "Kies: contant of met pinpas betaald"
 }

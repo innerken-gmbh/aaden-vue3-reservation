@@ -13,6 +13,10 @@ import {userId} from "../../main.js";
 import RoomListItem from "./HomePage/fragments/RoomListItem.vue";
 
 const controller = useHomePageControllerStore()
+const offlinePayMethods = [
+  {value: 'CASH', label: 'OfflineCash'},
+  {value: 'EC', label: 'OfflineEc'},
+]
 const datePicker = useDatePickerStore()
 const timerPicker = useTimePickerStore()
 const roomPicker = useRoomPickerStore()
@@ -44,6 +48,8 @@ async function refreshAvailableTimes() {
 
 function selectedType (type) {
   controller.tableType = type
+  controller.offlinePayMethod = null
+  controller.clearOfflinePayMethodError()
   if (type === 'Table') {
     roomPicker.selectedRoom = null
   }
@@ -288,8 +294,7 @@ const displayType = computed(() => {
         </v-chip>
         <v-chip
             class="ml-2"
-            @click="controller.adminMode
-            =!controller.adminMode"
+            @click="controller.toggleAdminMode()"
             variant="tonal"
             rounded="sm"
         >
@@ -310,8 +315,7 @@ const displayType = computed(() => {
         </v-chip>
         <v-chip
             class="ml-2"
-            @click="controller.offlinePaid
-            =!controller.offlinePaid"
+            @click="controller.toggleOfflinePaid()"
             variant="tonal"
             rounded="sm"
         >
@@ -330,6 +334,41 @@ const displayType = computed(() => {
 
           {{ $t('OfflinePayment') }}
         </v-chip>
+        <div
+          v-if="controller.offlinePayMethodRequired"
+          class="mt-3"
+        >
+          <div class="d-flex align-center flex-wrap">
+            <span class="text-body-2 mr-2">{{ $t('OfflinePayMethod') }}:</span>
+            <v-chip
+              v-for="m in offlinePayMethods"
+              :key="m.value"
+              class="mr-2"
+              @click="controller.selectOfflinePayMethod(m.value)"
+              variant="tonal"
+              rounded="sm"
+              :color="controller.offlinePayMethod === m.value ? 'primary' : undefined"
+            >
+              <template #prepend>
+                <v-icon class="mr-2">
+                  <template v-if="controller.offlinePayMethod === m.value">
+                    mdi-radiobox-marked
+                  </template>
+                  <template v-else>
+                    mdi-radiobox-blank
+                  </template>
+                </v-icon>
+              </template>
+              {{ $t(m.label) }}
+            </v-chip>
+          </div>
+          <div
+            v-if="controller.offlinePayMethod === 'CASH'"
+            class="mt-2 text-body-2 text-medium-emphasis"
+          >
+            {{ $t('OfflineCashHint') }}
+          </div>
+        </div>
         <v-sheet
           rounded
           class="mt-4 bg-red pa-4 text-body-2 d-flex align-center"

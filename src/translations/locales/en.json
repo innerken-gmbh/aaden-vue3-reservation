@@ -58,5 +58,10 @@
   "Oops" : "Oops!",
   "SearchHere" : "Search here",
   "NoDeposit": "No Deposit",
-  "OfflinePayment": "Offline Payment"
+  "OfflinePayment": "Offline Payment",
+  "OfflinePayMethod": "Paid with",
+  "OfflineCash": "Cash",
+  "OfflineEc": "EC card",
+  "OfflineCashHint": "Please put the cash in the till drawer; it is booked in today's cash balance.",
+  "OfflinePayMethodRequired": "Please choose: paid in cash or by EC card"
 }
