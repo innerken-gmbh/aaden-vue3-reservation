@@ -4,12 +4,15 @@ import {addReservation, addRoomReservation, checkActiveStatus, loadAllEvent, rea
 import {useReservationStore, useRoomPickerStore, useTimePickerStore} from "./reservationRepo.js";
 import dayjs from "dayjs";
 import {userId} from "../../main.js";
+import {i18n} from "../../plugins/i18n.js";
 
 export const useHomePageControllerStore
     = defineStore('homePageController', {
     state: () => ({
         adminMode: false,
         offlinePaid: false,
+        // POS-751: 线下支付时收的是现金还是 EC 卡，取值 'CASH' | 'EC'，云端字段 offlinePayMethod
+        offlinePayMethod: null,
         showNewReservationModal: false,
         personCount: 4,
         reservationStep: 0,
@@ -45,20 +48,49 @@ export const useHomePageControllerStore
                 this.reservationExtraInfo,
                 {useStroller: this.reservationExtraInfo.useStroller ? 1 : 0})
         },
+        depositAmount() {
+            return this.adminMode ? 0 : useRoomPickerStore().totalPrice
+        },
+        // 只有包间预订、勾了「线下支付」且定金大于 0 时，才必须选现金 / EC 卡并传给云端
+        offlinePayMethodRequired() {
+            return this.tableType === 'Room' && this.offlinePaid && this.depositAmount > 0
+        },
         readyToSubmit() {
             return this.reservationExtraInfo.firstName && this.reservationExtraInfo.lastName
         }
     },
     actions: {
+        toggleOfflinePaid() {
+            this.offlinePaid = !this.offlinePaid
+            if (!this.offlinePaid) {
+                this.offlinePayMethod = null
+            }
+        },
+        selectOfflinePayMethod(method) {
+            this.offlinePayMethod = method
+            if (this.error && this.errorMessage === i18n.global.t('OfflinePayMethodRequired')) {
+                this.error = false
+                this.errorMessage = ''
+            }
+        },
         async addReservation() {
+            if (this.offlinePayMethodRequired && !['CASH', 'EC'].includes(this.offlinePayMethod)) {
+                this.error = true
+                this.errorMessage = i18n.global.t('OfflinePayMethodRequired')
+                return
+            }
             this.loading = true
-            const obj = this.reservationAddModel
+            // 复制一份：getter 结果有缓存，直接改会把上一次请求的字段（如 offlinePayMethod）带到下一次
+            const obj = {...this.reservationAddModel}
             let res = null
             if (this.tableType === 'Room') {
                 const roomPicker = useRoomPickerStore()
                 obj.fromDateTime = dayjs(this.date + ' ' + this.originStartTime).format('YYYY-MM-DD HH:mm')
-                obj.totalPrice = this.adminMode ? 0 : roomPicker.totalPrice
+                obj.totalPrice = this.depositAmount
                 obj.paid = this.offlinePaid
+                if (this.offlinePayMethodRequired) {
+                    obj.offlinePayMethod = this.offlinePayMethod
+                }
                 obj.tableId = roomPicker.selectedRoom?.room?.tableId ?? null
                 obj.duration = useTimePickerStore().availableTimes.find(it => it.startTime === useHomePageControllerStore().startTime).maxTimeGap
                 obj.requestFrom = this.reservationHost
@@ -85,6 +117,7 @@ export const useHomePageControllerStore
             this.date = useReservationStore().date
             this.errorMessage = ''
             this.error = false
+            this.offlinePayMethod = null
             this.reservationExtraInfo = {
                 firstName: '',
                 lastName: '',

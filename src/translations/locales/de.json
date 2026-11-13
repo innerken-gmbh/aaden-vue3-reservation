@@ -58,5 +58,10 @@
   "Oops" : "Hoppla!",
   "SearchHere" : "Hier Suchen",
   "NoDeposit": "Keine Anzahlung",
-  "OfflinePayment": "Offline-Zahlung"
+  "OfflinePayment": "Offline-Zahlung",
+  "OfflinePayMethod": "Bezahlt mit",
+  "OfflineCash": "Bar",
+  "OfflineEc": "EC-Karte",
+  "OfflineCashHint": "Bargeld bitte in die Kassenschublade legen; es wird heute im Kassenbestand gebucht.",
+  "OfflinePayMethodRequired": "Bitte wählen: bar oder mit EC-Karte bezahlt"
 }

@@ -60,5 +60,10 @@
   "Merchant": "门店",
   "Customer": "顾客",
   "NoDeposit": "无定金",
-  "OfflinePayment": "线下支付"
+  "OfflinePayment": "线下支付",
+  "OfflinePayMethod": "收的是",
+  "OfflineCash": "现金",
+  "OfflineEc": "EC 卡",
+  "OfflineCashHint": "现金请放进收银机钱柜，会记在今天的现金账上。",
+  "OfflinePayMethodRequired": "请选择线下收的是现金还是 EC 卡"
 }
