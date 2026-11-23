@@ -153,14 +153,26 @@ watch(() => [showDetailDialog.value, info.value?.id], ([show]) => {
   if (show) loadRefundCheck()
 }, {immediate: true})
 
-// 没有线上定金的不显示按钮；已退过的灰掉写原因；已取消的整个操作区本来就不显示
+// 没有线上定金的不显示按钮；已退过、支付待核对或有争议的灰掉写原因；已取消、到店、没来的整个操作区本来就不显示
 const showRefundButton = computed(() => {
   const check = refundCheck.value
-  return !!check && (check.allowed || check.blockedReason === 'ALREADY_REFUNDED')
+  return !!check && (check.allowed || ['ALREADY_REFUNDED', 'PAYMENT_NOT_REFUNDABLE'].includes(check.blockedReason))
 })
 
+// 金额按支付的币种显示：欧元照这个库的老格式（30,00 €），别的币种写代码
+function moneyDisplay(amount, currency) {
+  if (!currency || currency.toUpperCase() === 'EUR') return priceDisplay(String(amount ?? ''))
+  const n = parseFloat(amount)
+  return (isNaN(n) ? ' - ' : n.toFixed(2).replace('.', ',')) + ' ' + currency.toUpperCase()
+}
+
+const KNOWN_BLOCKS = ['CANCELLED', 'STATUS_NOT_ALLOWED', 'NO_ONLINE_DEPOSIT', 'PAYMENT_NOT_REFUNDABLE', 'ALREADY_REFUNDED']
+
+// 用最新的 refundCheck 里的金额（409 之后先 loadRefundCheck 再调）
 function refundBlockedText(reason) {
-  return t('FullRefundBlocked_' + reason, {amount: priceDisplay(String(refundCheck.value?.refundedAmount ?? ''))})
+  if (!KNOWN_BLOCKS.includes(reason)) return t('FullRefundNotDone')
+  const check = refundCheck.value
+  return t('FullRefundBlocked_' + reason, {amount: moneyDisplay(check?.refundedAmount, check?.currency)})
 }
 
 const refundMethodText = computed(() => {
@@ -176,6 +188,16 @@ function openRefundConfirm() {
   showRefundConfirm.value = true
 }
 
+// 刷新可退状态和列表。断网时这两步自己也会失败：吞掉，不能让异常盖过要给店员看的结果
+async function refreshAfterRefund() {
+  await loadRefundCheck()
+  try {
+    await controller.reload()
+  } catch (e) {
+    console.log(e, 'reload after refund')
+  }
+}
+
 async function onFullRefund() {
   const id = info.value?.id
   refundLoading.value = true
@@ -183,18 +205,27 @@ async function onFullRefund() {
     const res = await cancelWithFullRefund(id)
     if (res?.code === 200) {
       refundResult.value = res.data?.refunded
-        ? {type: 'success', text: t('FullRefundDone', {amount: priceDisplay(String(res.data.amount))})}
+        ? {type: 'success', text: t('FullRefundDone', {amount: moneyDisplay(res.data.amount, res.data.currency)})}
         : {type: 'warning', text: t('FullRefundFailedButCancelled')}
-      await controller.reload()
+      // 预订已取消：刷新后 refundCheck 是 CANCELLED，关确认框时连详情一起关
+      await refreshAfterRefund()
     } else if (res?.code === 409) {
+      await refreshAfterRefund()
       refundResult.value = {type: 'error', text: refundBlockedText(res.message)}
-      await loadRefundCheck()
-      await controller.reload()
+    } else if (res?.code) {
+      // 服务端处理了但报错（比如 Stripe 暂时连不上）：整个取消已回滚，可以重试，重试不会重复退。
+      // 服务端的 message 是中文日志，不往德、英、荷界面上放
+      await refreshAfterRefund()
+      refundResult.value = {type: 'error', text: t('FullRefundNotDone')}
     } else {
-      refundResult.value = {type: 'error', text: t('FullRefundError', {message: res?.message ?? ''})}
+      await refreshAfterRefund()
+      refundResult.value = {type: 'warning', text: t('FullRefundUncertain')}
     }
   } catch (e) {
-    refundResult.value = {type: 'error', text: t('FullRefundError', {message: e?.message ?? String(e)})}
+    // 网络断了、超时、网关报错：不知道服务端退没退，刷新后让店员看状态
+    console.log(e, 'cancelWithFullRefund')
+    await refreshAfterRefund()
+    refundResult.value = {type: 'warning', text: t('FullRefundUncertain')}
   } finally {
     refundLoading.value = false
   }
@@ -202,8 +233,8 @@ async function onFullRefund() {
 
 function closeRefundConfirm() {
   showRefundConfirm.value = false
-  // 退成功或已经被别人取消：详情里的状态已经不对了，一起关掉
-  if (refundResult.value && refundResult.value.type !== 'error' || refundCheck.value?.blockedReason === 'CANCELLED') {
+  // 已经取消了（自己退成、退款失败但已取消、别人先退了）：详情里的状态已经不对了，一起关掉
+  if (refundResult.value?.type === 'success' || refundCheck.value?.blockedReason === 'CANCELLED') {
     controller.showDetailDialog = false
   }
 }
@@ -455,7 +486,7 @@ function closeRefundConfirm() {
                 <template #prepend>
                   <v-icon>mdi-cash-refund</v-icon>
                 </template>
-                {{ $t('FullRefund') }} {{ priceDisplay(String(refundCheck.amount)) }}
+                {{ $t('FullRefund') }} {{ moneyDisplay(refundCheck.amount, refundCheck.currency) }}
               </v-btn>
               <div
                 v-if="!refundCheck.allowed"
@@ -520,7 +551,7 @@ function closeRefundConfirm() {
             {{ $t('FullRefundAmount') }}
           </div>
           <div class="text-h5 font-weight-black">
-            {{ priceDisplay(String(refundCheck?.amount ?? '')) }}
+            {{ moneyDisplay(refundCheck?.amount, refundCheck?.currency) }}
           </div>
         </div>
         <div class="mt-3">

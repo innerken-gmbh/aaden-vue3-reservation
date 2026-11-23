@@ -75,11 +75,14 @@
   "FullRefundConfirm": "确认退款",
   "FullRefundDone": "已全额退回 {amount}，预订已取消",
   "FullRefundFailedButCancelled": "预订已取消，但 Stripe 退款没有成功，已通知人工处理，请到 Stripe 后台核对。",
-  "FullRefundError": "退款没有成功：{message}",
   "FullRefundBlocked_CANCELLED": "预订已经取消，不能再退",
   "FullRefundBlocked_ALREADY_REFUNDED": "这笔定金已经退过 {amount}，不能再退",
   "FullRefundBlocked_NO_ONLINE_DEPOSIT": "这个预订没有线上支付的定金",
   "PaymentMethod_card": "银行卡",
   "PaymentMethod_paypal": "PayPal",
-  "PaymentMethod_original": "原付款方式"
+  "PaymentMethod_original": "原付款方式",
+  "FullRefundNotDone": "退款没有完成，预订没有变。请稍后再试，重试不会重复退款。",
+  "FullRefundUncertain": "不确定退款有没有完成，已刷新。请看预订状态后再决定，重试不会重复退款。",
+  "FullRefundBlocked_STATUS_NOT_ALLOWED": "已到店或没来的预订不能在这里退定金",
+  "FullRefundBlocked_PAYMENT_NOT_REFUNDABLE": "这笔付款正在核对或有争议，现在不能退，请到 Stripe 后台处理"
 }

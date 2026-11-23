@@ -73,11 +73,14 @@
   "FullRefundConfirm": "Nu terugbetalen",
   "FullRefundDone": "{amount} volledig terugbetaald, reservering geannuleerd",
   "FullRefundFailedButCancelled": "De reservering is geannuleerd, maar de terugbetaling via Stripe is mislukt. Support is ingelicht – controleer het Stripe-dashboard.",
-  "FullRefundError": "Terugbetaling mislukt: {message}",
   "FullRefundBlocked_CANCELLED": "De reservering is al geannuleerd, geen verdere terugbetaling mogelijk",
   "FullRefundBlocked_ALREADY_REFUNDED": "Van deze aanbetaling is al {amount} terugbetaald, geen verdere terugbetaling mogelijk",
   "FullRefundBlocked_NO_ONLINE_DEPOSIT": "Voor deze reservering is geen aanbetaling online betaald",
   "PaymentMethod_card": "Kaart",
   "PaymentMethod_paypal": "PayPal",
-  "PaymentMethod_original": "Oorspronkelijke betaalmethode"
+  "PaymentMethod_original": "Oorspronkelijke betaalmethode",
+  "FullRefundNotDone": "De terugbetaling is niet uitgevoerd, de reservering is ongewijzigd. Probeer het later opnieuw – er wordt niet dubbel terugbetaald.",
+  "FullRefundUncertain": "Onduidelijk of de terugbetaling is gelukt – de weergave is vernieuwd. Controleer de reserveringsstatus; opnieuw proberen betaalt niet dubbel terug.",
+  "FullRefundBlocked_STATUS_NOT_ALLOWED": "Voor ingecheckte of niet-verschenen reserveringen kan hier niet worden terugbetaald",
+  "FullRefundBlocked_PAYMENT_NOT_REFUNDABLE": "Deze betaling wordt gecontroleerd of is betwist en kan nu niet worden terugbetaald – handel dit af in het Stripe-dashboard"
 }

@@ -73,11 +73,14 @@
   "FullRefundConfirm": "Jetzt erstatten",
   "FullRefundDone": "{amount} vollständig erstattet, Reservierung storniert",
   "FullRefundFailedButCancelled": "Reservierung storniert, aber die Erstattung bei Stripe ist fehlgeschlagen. Der Support wurde informiert – bitte im Stripe-Dashboard prüfen.",
-  "FullRefundError": "Erstattung fehlgeschlagen: {message}",
   "FullRefundBlocked_CANCELLED": "Reservierung ist bereits storniert, keine weitere Erstattung möglich",
   "FullRefundBlocked_ALREADY_REFUNDED": "Von dieser Anzahlung wurden bereits {amount} erstattet, keine weitere Erstattung möglich",
   "FullRefundBlocked_NO_ONLINE_DEPOSIT": "Für diese Reservierung wurde keine Anzahlung online bezahlt",
   "PaymentMethod_card": "Karte",
   "PaymentMethod_paypal": "PayPal",
-  "PaymentMethod_original": "Ursprüngliches Zahlungsmittel"
+  "PaymentMethod_original": "Ursprüngliches Zahlungsmittel",
+  "FullRefundNotDone": "Die Erstattung wurde nicht durchgeführt, die Reservierung ist unverändert. Bitte später erneut versuchen – es wird nicht doppelt erstattet.",
+  "FullRefundUncertain": "Unklar, ob die Erstattung durchgeführt wurde – die Ansicht wurde aktualisiert. Bitte den Reservierungsstatus prüfen; ein erneuter Versuch erstattet nicht doppelt.",
+  "FullRefundBlocked_STATUS_NOT_ALLOWED": "Für eingecheckte oder nicht erschienene Reservierungen ist hier keine Erstattung möglich",
+  "FullRefundBlocked_PAYMENT_NOT_REFUNDABLE": "Diese Zahlung wird geprüft oder ist strittig und kann jetzt nicht erstattet werden – bitte im Stripe-Dashboard klären"
 }

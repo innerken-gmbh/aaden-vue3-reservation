@@ -73,11 +73,14 @@
   "FullRefundConfirm": "Refund now",
   "FullRefundDone": "{amount} refunded in full, reservation cancelled",
   "FullRefundFailedButCancelled": "The reservation is cancelled, but the Stripe refund failed. Support has been notified – please check the Stripe dashboard.",
-  "FullRefundError": "Refund failed: {message}",
   "FullRefundBlocked_CANCELLED": "The reservation is already cancelled, no further refund possible",
   "FullRefundBlocked_ALREADY_REFUNDED": "{amount} of this deposit has already been refunded, no further refund possible",
   "FullRefundBlocked_NO_ONLINE_DEPOSIT": "No deposit was paid online for this reservation",
   "PaymentMethod_card": "Card",
   "PaymentMethod_paypal": "PayPal",
-  "PaymentMethod_original": "Original payment method"
+  "PaymentMethod_original": "Original payment method",
+  "FullRefundNotDone": "The refund was not completed and the reservation is unchanged. Please try again later – it will not be refunded twice.",
+  "FullRefundUncertain": "It is unclear whether the refund went through – the view has been refreshed. Please check the reservation status; retrying will not refund twice.",
+  "FullRefundBlocked_STATUS_NOT_ALLOWED": "Deposits for checked-in or no-show reservations cannot be refunded here",
+  "FullRefundBlocked_PAYMENT_NOT_REFUNDABLE": "This payment is under review or disputed and cannot be refunded now – please handle it in the Stripe dashboard"
 }
