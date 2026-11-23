@@ -63,5 +63,21 @@
   "OfflineCash": "Bar",
   "OfflineEc": "EC-Karte",
   "OfflineCashHint": "Bargeld bitte in die Kassenschublade legen; es wird heute im Kassenbestand gebucht.",
-  "OfflinePayMethodRequired": "Bitte wählen: bar oder mit EC-Karte bezahlt"
+  "OfflinePayMethodRequired": "Bitte wählen: bar oder mit EC-Karte bezahlt",
+  "FullRefund": "Anzahlung voll erstatten",
+  "FullRefundConfirmTitle": "Anzahlung voll erstatten und Reservierung stornieren?",
+  "FullRefundAmount": "Erstattungsbetrag",
+  "FullRefundTo": "Erstattet an",
+  "FullRefundToMethod": "{method} – das Zahlungsmittel des Gastes, über Stripe",
+  "FullRefundCancelNotice": "Die Reservierung wird storniert, der Gast erhält eine Stornierungs-E-Mail. Die Erstattung kann nicht rückgängig gemacht werden.",
+  "FullRefundConfirm": "Jetzt erstatten",
+  "FullRefundDone": "{amount} vollständig erstattet, Reservierung storniert",
+  "FullRefundFailedButCancelled": "Reservierung storniert, aber die Erstattung bei Stripe ist fehlgeschlagen. Der Support wurde informiert – bitte im Stripe-Dashboard prüfen.",
+  "FullRefundError": "Erstattung fehlgeschlagen: {message}",
+  "FullRefundBlocked_CANCELLED": "Reservierung ist bereits storniert, keine weitere Erstattung möglich",
+  "FullRefundBlocked_ALREADY_REFUNDED": "Von dieser Anzahlung wurden bereits {amount} erstattet, keine weitere Erstattung möglich",
+  "FullRefundBlocked_NO_ONLINE_DEPOSIT": "Für diese Reservierung wurde keine Anzahlung online bezahlt",
+  "PaymentMethod_card": "Karte",
+  "PaymentMethod_paypal": "PayPal",
+  "PaymentMethod_original": "Ursprüngliches Zahlungsmittel"
 }

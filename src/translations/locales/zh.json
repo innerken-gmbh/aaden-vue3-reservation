@@ -65,5 +65,21 @@
   "OfflineCash": "现金",
   "OfflineEc": "EC 卡",
   "OfflineCashHint": "现金请放进收银机钱柜，会记在今天的现金账上。",
-  "OfflinePayMethodRequired": "请选择线下收的是现金还是 EC 卡"
+  "OfflinePayMethodRequired": "请选择线下收的是现金还是 EC 卡",
+  "FullRefund": "全额退定金",
+  "FullRefundConfirmTitle": "全额退定金并取消预订？",
+  "FullRefundAmount": "退款金额",
+  "FullRefundTo": "退到哪里",
+  "FullRefundToMethod": "{method}，客人付款时用的方式，经 Stripe 原路退回",
+  "FullRefundCancelNotice": "这个预订会被取消，客人会收到取消邮件。退款不能撤回。",
+  "FullRefundConfirm": "确认退款",
+  "FullRefundDone": "已全额退回 {amount}，预订已取消",
+  "FullRefundFailedButCancelled": "预订已取消，但 Stripe 退款没有成功，已通知人工处理，请到 Stripe 后台核对。",
+  "FullRefundError": "退款没有成功：{message}",
+  "FullRefundBlocked_CANCELLED": "预订已经取消，不能再退",
+  "FullRefundBlocked_ALREADY_REFUNDED": "这笔定金已经退过 {amount}，不能再退",
+  "FullRefundBlocked_NO_ONLINE_DEPOSIT": "这个预订没有线上支付的定金",
+  "PaymentMethod_card": "银行卡",
+  "PaymentMethod_paypal": "PayPal",
+  "PaymentMethod_original": "原付款方式"
 }

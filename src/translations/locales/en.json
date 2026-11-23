@@ -63,5 +63,21 @@
   "OfflineCash": "Cash",
   "OfflineEc": "EC card",
   "OfflineCashHint": "Please put the cash in the till drawer; it is booked in today's cash balance.",
-  "OfflinePayMethodRequired": "Please choose: paid in cash or by EC card"
+  "OfflinePayMethodRequired": "Please choose: paid in cash or by EC card",
+  "FullRefund": "Refund full deposit",
+  "FullRefundConfirmTitle": "Refund the full deposit and cancel this reservation?",
+  "FullRefundAmount": "Refund amount",
+  "FullRefundTo": "Refunded to",
+  "FullRefundToMethod": "{method} – the guest's original payment method, via Stripe",
+  "FullRefundCancelNotice": "The reservation will be cancelled and the guest gets a cancellation email. The refund cannot be undone.",
+  "FullRefundConfirm": "Refund now",
+  "FullRefundDone": "{amount} refunded in full, reservation cancelled",
+  "FullRefundFailedButCancelled": "The reservation is cancelled, but the Stripe refund failed. Support has been notified – please check the Stripe dashboard.",
+  "FullRefundError": "Refund failed: {message}",
+  "FullRefundBlocked_CANCELLED": "The reservation is already cancelled, no further refund possible",
+  "FullRefundBlocked_ALREADY_REFUNDED": "{amount} of this deposit has already been refunded, no further refund possible",
+  "FullRefundBlocked_NO_ONLINE_DEPOSIT": "No deposit was paid online for this reservation",
+  "PaymentMethod_card": "Card",
+  "PaymentMethod_paypal": "PayPal",
+  "PaymentMethod_original": "Original payment method"
 }

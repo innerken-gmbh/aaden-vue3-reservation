@@ -63,5 +63,21 @@
   "OfflineCash": "Contant",
   "OfflineEc": "Pinpas",
   "OfflineCashHint": "Leg het contante geld in de kassalade; het wordt vandaag in het kassaldo geboekt.",
-  "OfflinePayMethodRequired": "Kies: contant of met pinpas betaald"
+  "OfflinePayMethodRequired": "Kies: contant of met pinpas betaald",
+  "FullRefund": "Aanbetaling volledig terugbetalen",
+  "FullRefundConfirmTitle": "Aanbetaling volledig terugbetalen en reservering annuleren?",
+  "FullRefundAmount": "Terugbetalingsbedrag",
+  "FullRefundTo": "Terugbetaald naar",
+  "FullRefundToMethod": "{method} – de oorspronkelijke betaalmethode van de gast, via Stripe",
+  "FullRefundCancelNotice": "De reservering wordt geannuleerd en de gast ontvangt een annuleringsmail. De terugbetaling kan niet ongedaan worden gemaakt.",
+  "FullRefundConfirm": "Nu terugbetalen",
+  "FullRefundDone": "{amount} volledig terugbetaald, reservering geannuleerd",
+  "FullRefundFailedButCancelled": "De reservering is geannuleerd, maar de terugbetaling via Stripe is mislukt. Support is ingelicht – controleer het Stripe-dashboard.",
+  "FullRefundError": "Terugbetaling mislukt: {message}",
+  "FullRefundBlocked_CANCELLED": "De reservering is al geannuleerd, geen verdere terugbetaling mogelijk",
+  "FullRefundBlocked_ALREADY_REFUNDED": "Van deze aanbetaling is al {amount} terugbetaald, geen verdere terugbetaling mogelijk",
+  "FullRefundBlocked_NO_ONLINE_DEPOSIT": "Voor deze reservering is geen aanbetaling online betaald",
+  "PaymentMethod_card": "Kaart",
+  "PaymentMethod_paypal": "PayPal",
+  "PaymentMethod_original": "Oorspronkelijke betaalmethode"
 }

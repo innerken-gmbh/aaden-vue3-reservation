@@ -101,6 +101,23 @@ export async function cancelReservation(id) {
         {}))
 }
 
+/**
+ * 全额退定金能不能点（POS-1041）：{allowed, blockedReason, amount, currency, paymentMethodType, refundedAmount}
+ * blockedReason：CANCELLED / ALREADY_REFUNDED / NO_ONLINE_DEPOSIT
+ */
+export async function getFullRefundCheck(id) {
+    const res = await hillo.get('reservation/fullRefundCheck/' + id)
+    return res?.code === 200 ? res.data : null
+}
+
+/**
+ * 全额退定金并取消预订（POS-1041）。返回接口原样的 {code, data, message}：
+ * 200 时 data.refunded = false 表示预订已取消但 Stripe 退款失败；409 时 message 是不能退的原因代码
+ */
+export async function cancelWithFullRefund(id) {
+    return await hillo.jsonPost('reservation/cancelWithFullRefund/' + id, {})
+}
+
 export async function resendConfirmEmail (id) {
     return (await hillo.jsonPost('reservation/resendConfirmationEmail/' + id,
         {}))
