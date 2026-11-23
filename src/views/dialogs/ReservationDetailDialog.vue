@@ -21,7 +21,7 @@ import {
 import EventLogListItem from "../items/EventLogListItem.vue";
 import {storeToRefs} from "pinia";
 import EditReservationInfoDialog from "./EditReservationInfoDialog.vue";
-import {useI18n} from "vue-i18n";
+import {i18n} from "../../plugins/i18n.js";
 
 const tableSelector = useTableSelectorStore()
 const controller = useReservationStore()
@@ -129,7 +129,8 @@ async function onCancel() {
 }
 
 // 全额退定金（POS-1041）：能不能退、退多少由服务端判断，打开详情时问一次，点之前弹确认框
-const {t} = useI18n()
+// 这个库的 vue-i18n 是 legacy 模式，不能用 useI18n()，和 homeController 一样用 i18n.global.t
+const t = (key, values) => i18n.global.t(key, values)
 const refundCheck = ref(null)
 const showRefundConfirm = ref(false)
 const refundLoading = ref(false)
